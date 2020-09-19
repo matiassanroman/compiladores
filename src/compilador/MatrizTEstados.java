@@ -1,4 +1,4 @@
-package paquete1;
+package compilador;
 
 
 public class MatrizTEstados {
