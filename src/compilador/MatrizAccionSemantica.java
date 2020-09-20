@@ -14,7 +14,7 @@ public class MatrizAccionSemantica {
 	//Acciones Semanticas
 	static AccionSemantica as1_inic_Buffer = new AS1_inic_Buffer();
 	static AccionSemantica as2_add_Buffer = new AS2_add_Buffer();
-	static AccionSemantica as3_check_Longitud = new AS3_check_Longitud(); 
+	static AccionSemantica as3_check_Longitud = new AS3_check_Longitud(tablaSimbolo, tablaToken); 
 	static AccionSemantica as4_return_Last_Caracter_PR = new AS4_return_Last_Caracter_PR();
 	static AccionSemantica as5_count_Line = new AS5_count_Line();
 	static AccionSemantica as6_inic_Cadena_Comentario = new AS6_inic_Cadena_Comentario();
