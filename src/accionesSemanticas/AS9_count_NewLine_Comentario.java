@@ -1,10 +1,13 @@
 package accionesSemanticas;
 
+import compilador.Compilador;
+
 public class AS9_count_NewLine_Comentario extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {
-		// TODO Auto-generated method stub
+		buffer = new StringBuffer();
+		Compilador.limpiarBuffer();
 		return 0;
 	}
 

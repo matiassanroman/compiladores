@@ -6,6 +6,7 @@ import accionesSemanticas.*;
 
 public class MatrizAccionSemantica {
 	
+	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
 	static StringBuffer buffer = new StringBuffer();
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
@@ -32,17 +33,17 @@ public class MatrizAccionSemantica {
 	
 	
 	
-	static AccionSemantica AgregarBuffer = new AS_AgregarBuffer();
-	static AccionSemantica Fin_ID_PR = new AS_Fin_ID_PR(TablaSimbolo, TablaToken);
-	static AccionSemantica FinCons = new AS_FinConst(TablaSimbolo, TablaToken);
-	static AccionSemantica FinSimbolo = new AS_FinSimbolo();
-	static AccionSemantica FinSimboloComp = new AS_FinSimboloCompuesto(TablaToken);
-	static AccionSemantica FinSimboloSimple = new AS_FinSimboloSimple();
-	static AccionSemantica NoAction = new AS_NoAction();
-	static AccionSemantica FinCadena = new AS_FinCadena(TablaSimbolo, TablaToken);
-	static AccionSemantica Error = new AS_Error();
-	static AccionSemantica Error_AL = new AS_Error_AL();	
-	static AccionSemantica FinComentario = new AS_FinComentario();
+//	static AccionSemantica AgregarBuffer = new AS_AgregarBuffer();
+//	static AccionSemantica Fin_ID_PR = new AS_Fin_ID_PR(TablaSimbolo, TablaToken);
+//	static AccionSemantica FinCons = new AS_FinConst(TablaSimbolo, TablaToken);
+//	static AccionSemantica FinSimbolo = new AS_FinSimbolo();
+//	static AccionSemantica FinSimboloComp = new AS_FinSimboloCompuesto(TablaToken);
+//	static AccionSemantica FinSimboloSimple = new AS_FinSimboloSimple();
+//	static AccionSemantica NoAction = new AS_NoAction();
+//	static AccionSemantica FinCadena = new AS_FinCadena(TablaSimbolo, TablaToken);
+//	static AccionSemantica Error = new AS_Error();
+//	static AccionSemantica Error_AL = new AS_Error_AL();	
+//	static AccionSemantica FinComentario = new AS_FinComentario();
 	
 										// Mapeado caracter_columna
 										//  < > ! = . % " flmin lmay blanco nl tab c  d  +  -  _  *  /  {  }  (  )  i  ,  ;  eof
