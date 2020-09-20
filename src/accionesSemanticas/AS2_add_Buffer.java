@@ -4,7 +4,7 @@ public class AS2_add_Buffer extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {
-		// TODO Auto-generated method stub
+		buffer.append(c);
 		return 0;
 	}
 
