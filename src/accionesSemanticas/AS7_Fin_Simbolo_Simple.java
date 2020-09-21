@@ -1,6 +1,6 @@
 package accionesSemanticas;
 
-public class AS6_End_Simbolo extends AccionSemantica{
+public class AS7_Fin_Simbolo_Simple extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {

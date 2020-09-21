@@ -10,7 +10,6 @@ public class AS1_Agregar_Buffer extends AccionSemantica{
 
 	@Override
 	public boolean acomodarLinea() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

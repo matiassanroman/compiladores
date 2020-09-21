@@ -2,8 +2,7 @@ package accionesSemanticas;
 
 import java.util.HashMap;
 import java.util.Hashtable;
-
-import compilador.*;
+import compilador.Simbolo;
 
 public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 
