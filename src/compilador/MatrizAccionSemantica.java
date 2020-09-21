@@ -12,37 +12,15 @@ public class MatrizAccionSemantica {
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 	
 	//Acciones Semanticas
-	static AccionSemantica as1_inic_Buffer = new AS1_inic_Buffer();
-	static AccionSemantica as2_add_Buffer = new AS2_add_Buffer();
-	static AccionSemantica as3_check_Longitud = new AS3_check_Longitud(tablaSimbolo, tablaToken); 
-	static AccionSemantica as4_return_Last_Caracter_PR = new AS4_return_Last_Caracter_PR();
-	static AccionSemantica as5_count_Line = new AS5_count_Line();
-	static AccionSemantica as6_inic_Cadena_Comentario = new AS6_inic_Cadena_Comentario();
-	static AccionSemantica as7_end_Cadena = new AS7_end_Cadena();
-	static AccionSemantica as8_delete_Caracter = new AS8_delete_Caracter();
-	static AccionSemantica as9_count_NewLine_Comentario = new AS9_count_NewLine_Comentario();
-	static AccionSemantica as10_inic_BufferSimple = new AS10_inic_BufferSimple();
-	static AccionSemantica as11_skip_Caracter = new AS11_skip_Caracter();
-	static AccionSemantica as12_not_Return_Last_Caracter = new AS12_not_Return_Last_Caracter();
-	static AccionSemantica as13_return_Last_Caracter = new AS13_return_Last_Caracter();
-	static AccionSemantica as14_range_Value = new AS14_range_Value();
-	static AccionSemantica as15_count_New_Line = new AS15_count_New_Line();
-
-	
-	
-	
-	
-	static AccionSemantica AgregarBuffer = new AS_AgregarBuffer();
-	static AccionSemantica Fin_ID_PR = new AS_Fin_ID_PR(TablaSimbolo, TablaToken);
-	static AccionSemantica FinCons = new AS_FinConst(TablaSimbolo, TablaToken);
-	static AccionSemantica FinSimbolo = new AS_FinSimbolo();
-	static AccionSemantica FinSimboloComp = new AS_FinSimboloCompuesto(TablaToken);
-	static AccionSemantica FinSimboloSimple = new AS_FinSimboloSimple();
-	static AccionSemantica NoAction = new AS_NoAction();
-	static AccionSemantica FinCadena = new AS_FinCadena(TablaSimbolo, TablaToken);
-	static AccionSemantica Error = new AS_Error();
-	static AccionSemantica Error_AL = new AS_Error_AL();	
-	static AccionSemantica FinComentario = new AS_FinComentario();
+	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
+	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
+	static AccionSemantica as3_devolver_pr = new AS3_Devolver_PR(tablaSimbolo, tablaToken);
+	static AccionSemantica as4_end_comentario = new AS4_End_Comentario();
+	static AccionSemantica as5_end_cadena = new AS5_End_Cadena();
+	static AccionSemantica as6_end_simbolo = new AS6_End_Simbolo();
+	static AccionSemantica as7_end_simbolo_simple = new AS7_End_Simbolo_Simple();
+	static AccionSemantica as8_end_simbolo_complejo = new AS8_End_Simbolo_Complejo();
+	static AccionSemantica as9_verificar_rango_number = new AS9_Verificar_Rango_Number();
 	
 										// Mapeado caracter_columna
 										//  < > ! = . % " flmin lmay blanco nl tab c  d  +  -  _  *  /  {  }  (  )  i  ,  ;  eof

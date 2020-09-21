@@ -1,6 +1,6 @@
 package accionesSemanticas;
 
-public class AS9_count_NewLine_Comentario extends AccionSemantica{
+public class AS6_End_Simbolo extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {

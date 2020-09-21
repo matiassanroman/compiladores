@@ -1,6 +1,6 @@
 package accionesSemanticas;
 
-public class AS15_count_New_Line extends AccionSemantica{
+public class AS9_Verificar_Rango_Number extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {

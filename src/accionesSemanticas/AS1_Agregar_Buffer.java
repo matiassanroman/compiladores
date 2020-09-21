@@ -1,10 +1,10 @@
 package accionesSemanticas;
 
-public class AS12_not_Return_Last_Caracter extends AccionSemantica{
+public class AS1_Agregar_Buffer extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {
-		// TODO Auto-generated method stub
+		buffer.append(c);
 		return 0;
 	}
 

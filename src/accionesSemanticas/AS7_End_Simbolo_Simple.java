@@ -1,10 +1,10 @@
 package accionesSemanticas;
 
-public class AS1_inic_Buffer extends AccionSemantica{
+public class AS7_End_Simbolo_Simple extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {
-		buffer.append(c);
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
