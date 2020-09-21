@@ -6,6 +6,7 @@ import accionesSemanticas.*;
 
 public class MatrizAccionSemantica {
 	
+	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
 	static StringBuffer buffer = new StringBuffer();
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
@@ -21,6 +22,7 @@ public class MatrizAccionSemantica {
 	static AccionSemantica as7_end_simbolo_simple = new AS7_End_Simbolo_Simple();
 	static AccionSemantica as8_end_simbolo_complejo = new AS8_End_Simbolo_Complejo();
 	static AccionSemantica as9_verificar_rango_number = new AS9_Verificar_Rango_Number();
+
 	
 										// Mapeado caracter_columna
 										//  < > ! = . % " flmin lmay blanco nl tab c  d  +  -  _  *  /  {  }  (  )  i  ,  ;  eof
