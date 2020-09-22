@@ -1,6 +1,6 @@
 package accionesSemanticas;
 
-public class AS10_No_Accion extends AccionSemantica{
+public class AS11_No_Accion extends AccionSemantica{
 
 	@Override
 	public int execute(StringBuffer buffer, char c) {
