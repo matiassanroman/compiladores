@@ -5,6 +5,7 @@ package compilador;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
+
 import accionesSemanticas.*;
 
 public class Compilador {
@@ -22,11 +23,12 @@ public class Compilador {
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
 	static AccionSemantica as3_devolver_pr = new AS3_Devolver_PR(tablaSimbolo, tablaToken);
 	static AccionSemantica as4_end_comentario = new AS4_Fin_Comentario();
-	static AccionSemantica as5_end_cadena = new AS5_Fin_Cadena();
+	static AccionSemantica as5_end_cadena = new AS5_Fin_Cadena(tablaSimbolo, tablaToken);
 	static AccionSemantica as6_end_simbolo = new AS6_Fin_Simbolo();
 	static AccionSemantica as7_end_simbolo_simple = new AS7_Fin_Simbolo_Simple();
-	static AccionSemantica as8_end_simbolo_complejo = new AS8_Fin_Simbolo_Complejo();
+	static AccionSemantica as8_end_simbolo_complejo = new AS8_Fin_Simbolo_Complejo(tablaToken);
 	static AccionSemantica as9_verificar_rango_number = new AS9_Verificar_Rango_Number();
+	static AccionSemantica as10_no_accion = new AS10_No_Accion();
 	
 	int[][] matrizTEstados = 
 // Mapeado caracter-columna
@@ -78,14 +80,28 @@ public class Compilador {
 /*17*/	//	 {as16_No_action, as16_No_action, as16_No_action, as16_No_action, as16_No_action, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
 /*18*/	//	 {as16_No_action, as16_No_action, as16_No_action, as16_No_action, as16_No_action, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
 /*19*/	//	 {as16_No_action, as16_No_action, as16_No_action, as16_No_action, as16_No_action, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19}, };
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		
 		// Obtengo la ruta del archivo de los argumentos de programa
-		String ruta = args[0];
-		Archivo archivo = new Archivo();
-		// Cargo el archivo para poder usarlo
-		archivo.cargarArchivo(ruta);
-
+		if(args.length > 0) {
+			try {
+				String ruta = args[0];
+				String strCurrentLine;   
+				System.out.print("Hola " + args[0]);
+				Archivo archivo = new Archivo();
+				//Cargo el archivo para poder usarlo
+				archivo.cargarArchivo(ruta);
+				
+				while ((strCurrentLine = archivo.getBufferLectura().readLine ()) != null) {   
+					System.out.println (strCurrentLine);
+				}				
+			} catch (IOException e) {
+				System.out.print("Hubo un error con el Archivo.");
+			}
+		}
+		else
+			System.out.print("No se pudo cargar Archivo.");
+		
 	}
 
 }
