@@ -14,10 +14,10 @@ public class Compilador {
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
 	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
-
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
-
+	Archivo archivo = new Archivo();
+	protected static int asciiAnterior = 0;
 	
 	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
@@ -96,18 +96,17 @@ public class Compilador {
 	// Metodo que sirve para pedir tokens, EXPLICACION A COMPLETAR
 	public Token getToken() throws IOException {
 		Token token = new Token();
-		
-		int estadoSiguiente = 0;
-		int estadoActual = 0;
-		boolean hayToken = false;
-		int asciiActual;
-		int asciiAnterior;
-		
+		//int asciiAnterior; 
 		
 		if(asciiAnterior == -1){    	//Fin del archivo, devuelve 0
 			token.setToken(0); 
 			return token;
 		}		
+		
+		int estadoSiguiente = 0;
+		int estadoActual = 0;
+		boolean hayToken = false;
+		int asciiActual;
 		
 		do{	
 			if (acomodarLinea){
@@ -115,7 +114,7 @@ public class Compilador {
 				acomodarLinea = false;
 			}
 			else {
-				asciiActual = br.read(); 
+				asciiActual = archivo.leerBuffer(); 
 				if(asciiActual == 13) { nroLinea++; }
 			}
 			
@@ -126,8 +125,8 @@ public class Compilador {
 			token.setToken(AS.execute(buffer, (char)asciiActual));
 			boolean acomodarLinea = AS.acomodarLinea();
 			estadoActual = estadoSiguiente;
-			if(token.getToken() > 0)
-			{
+			
+			if(token.getToken() > 0) {
 				//if (buffer.length() > 0)
 				token.setLexema(buffer.toString());
 				token.setLinea(nroLinea);
@@ -148,6 +147,7 @@ public class Compilador {
 	}
 	
 	
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		
 		// Obtengo la ruta del archivo de los argumentos de programa
@@ -169,6 +169,5 @@ public class Compilador {
 		}
 		else
 			System.out.print("No se pudo cargar Archivo.");
-		
 	}
 }
