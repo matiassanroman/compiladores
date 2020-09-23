@@ -1,0 +1,6 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: ariel	 Value: ariel	 Uso: ID
+Clave: matias	 Value: matias	 Uso: CADENA

@@ -31,6 +31,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 				return TablaToken.get("CTE");
 			}
 			else{                                			// Si la cte no está en la TS
+				s.setUso("CTE");
 				TablaSimbolo.put(s.getValor(),s);
 				return TablaToken.get("CTE");
 			}
