@@ -14,10 +14,15 @@ public class Compilador {
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
 	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
+
+	static Diccionario diccionario = new Diccionario();
+	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
+
 	
 	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
+
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
@@ -81,6 +86,67 @@ public class Compilador {
 /*17*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*18*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as9_verificar_rango_cte  , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*19*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion}, };
+	
+	
+	// Metodo que retorna la tabla de simbolos
+	public Hashtable<String,Simbolo> getTablaSimbolo(){
+		return this.tablaSimbolo;
+	}
+
+	// Metodo que sirve para pedir tokens, EXPLICACION A COMPLETAR
+	public Token getToken() throws IOException {
+		Token token = new Token();
+		
+		int estadoSiguiente = 0;
+		int estadoActual = 0;
+		boolean hayToken = false;
+		int asciiActual;
+		int asciiAnterior;
+		
+		
+		if(asciiAnterior == -1){    	//Fin del archivo, devuelve 0
+			token.setToken(0); 
+			return token;
+		}		
+		
+		do{	
+			if (acomodarLinea){
+				asciiActual = asciiAnterior;
+				acomodarLinea = false;
+			}
+			else {
+				asciiActual = br.read(); 
+				if(asciiActual == 13) { nroLinea++; }
+			}
+			
+			asciiAnterior = asciiActual;
+			int columna = diccionario.asciiToColumna(asciiActual);
+			estadoSiguiente = matrizTEstados[estadoActual][columna];
+			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
+			token.setToken(AS.execute(buffer, (char)asciiActual));
+			boolean acomodarLinea = AS.acomodarLinea();
+			estadoActual = estadoSiguiente;
+			if(token.getToken() > 0)
+			{
+				//if (buffer.length() > 0)
+				token.setLexema(buffer.toString());
+				token.setLinea(nroLinea);
+				hayToken = true;
+				buffer.delete(0, buffer.length());	
+			}
+			else if (asciiAnterior == -1) {	
+				token.setToken(0); 
+				return token;
+			}									//TRATAMIENTO DE ERRORES LÉXICOS
+			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
+				else if (token.getToken() == -3){ System.out.println("Warning en la linea "+nroLinea+": identificador supera la longitud máxima"); }
+					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }
+		}
+		while (!hayToken);
+		//System.out.println(t);
+		return token;		
+	}
+	
 	
 	public static void main(String[] args) throws IOException {
 		
