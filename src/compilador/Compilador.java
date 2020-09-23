@@ -3,6 +3,7 @@
 
 package compilador;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -90,7 +91,7 @@ public class Compilador {
 	
 	// Metodo que retorna la tabla de simbolos
 	public Hashtable<String,Simbolo> getTablaSimbolo(){
-		return this.tablaSimbolo;
+		return Compilador.tablaSimbolo;
 	}
 
 	// Metodo que sirve para pedir tokens, EXPLICACION A COMPLETAR
@@ -123,7 +124,7 @@ public class Compilador {
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
-			boolean acomodarLinea = AS.acomodarLinea();
+			acomodarLinea = AS.acomodarLinea();
 			estadoActual = estadoSiguiente;
 			
 			if(token.getToken() > 0) {
@@ -155,13 +156,14 @@ public class Compilador {
 			try {
 				String ruta = args[0];
 				String strCurrentLine;   
-				System.out.print("Hola " + args[0]);
+				System.out.print("El archivos de texto está en la ruta: " + args[0]);
 				Archivo archivo = new Archivo();
 				//Cargo el archivo para poder usarlo
 				archivo.cargarArchivo(ruta);
 				
 				while ((strCurrentLine = archivo.getBufferLectura().readLine ()) != null) {   
 					System.out.println (strCurrentLine);
+				
 				}				
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");

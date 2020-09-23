@@ -8,18 +8,18 @@ public class Diccionario {
 	
 	public Diccionario() {
 		// REVISAR CADA SIMBOLO Y AGREGAR O SACAR LO QUE CORRESPONDA
-		diccionario.put(1, 0);		//L
-		diccionario.put(2, 1);		//D
+		diccionario.put(1, 0);		// Letras
+		diccionario.put(2, 1);		// Digitos
 		diccionario.put(10, 2);		// /n
 		diccionario.put(13, 2);		// /n
-		diccionario.put(32, 3);		// espacio
-		diccionario.put(9, 3);		// tab
-		diccionario.put(45, 4);		//-
+		diccionario.put(32, 3);		// Espacio
+		diccionario.put(9, 3);		// Tabulacion
+		diccionario.put(45, 4);		// - 
 		diccionario.put(43, 5);		// +
-		diccionario.put(60, 6);		//<
-		diccionario.put(62, 7);		//>
-		diccionario.put(61, 8);		//=
-		diccionario.put(42, 9);     //*
+		diccionario.put(60, 6);		// <
+		diccionario.put(62, 7);		// >
+		diccionario.put(61, 8);		// =
+		diccionario.put(42, 9);     // *
 		diccionario.put(47, 10);	// / 
 		diccionario.put(40, 11);	// (	
 		diccionario.put(41, 12);	// )
