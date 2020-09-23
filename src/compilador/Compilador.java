@@ -150,6 +150,11 @@ public class Compilador {
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		
+		Compilador c = new Compilador();
+		
+		CrearSalida.crearTxtSalida(c);
+		
+		/*
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
@@ -169,5 +174,6 @@ public class Compilador {
 		}
 		else
 			System.out.print("No se pudo cargar Archivo.");
+		*/
 	}
 }
