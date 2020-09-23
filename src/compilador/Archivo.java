@@ -8,10 +8,11 @@ public class Archivo {
 
 	private FileReader archivo;
 	private static BufferedReader bufferLectura;
-		
-	public Archivo()                                { }
+	
+	public Archivo() {}
 	public FileReader getArchivo()                                    { return this.archivo; }
 	public static BufferedReader getBufferLectura()                   { return bufferLectura;	}
+	public int leerBuffer() throws IOException 						  { return Archivo.bufferLectura.read(); }
 	public void setArchivo(FileReader archivo)                        { this.archivo = archivo; }
 	public static void setBufferLectura(BufferedReader bufferLectura) { Archivo.bufferLectura = bufferLectura; }
 	public void cargarArchivo(String ruta) throws IOException{
