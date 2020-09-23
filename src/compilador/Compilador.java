@@ -105,5 +105,4 @@ public class Compilador {
 			System.out.print("No se pudo cargar Archivo.");
 		
 	}
-
 }
