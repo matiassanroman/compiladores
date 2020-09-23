@@ -5,6 +5,7 @@ package compilador;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
+
 import accionesSemanticas.*;
 
 public class Compilador {
@@ -13,10 +14,15 @@ public class Compilador {
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
 	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
-	static         Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
-	private static HashMap<String, Integer>  tablaToken   = new HashMap<String,Integer>();
+
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
+
+	
+	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
+	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
+	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
+
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
@@ -26,7 +32,7 @@ public class Compilador {
 	static AccionSemantica as5_end_cadena = new AS5_Fin_Cadena(tablaSimbolo, tablaToken);
 	static AccionSemantica as6_end_simbolo = new AS6_Fin_Simbolo();
 	static AccionSemantica as7_end_simbolo_simple = new AS7_Fin_Simbolo_Simple();
-	static AccionSemantica as8_end_simbolo_complejo = new AS8_Fin_Simbolo_Complejo();
+	static AccionSemantica as8_end_simbolo_complejo = new AS8_Fin_Simbolo_Complejo(tablaToken);
 	static AccionSemantica as9_verificar_rango_cte = new AS9_Verificar_Rango_Constante(tablaSimbolo, tablaToken);
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
@@ -55,7 +61,6 @@ public class Compilador {
 /*17*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
 /*18*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
 /*19*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19}, };
-	
 	
 	AccionSemantica[][] matrizASemanticas =
 // Mapeado caracter-columna
@@ -146,11 +151,25 @@ public class Compilador {
 	public static void main(String[] args) throws IOException {
 		
 		// Obtengo la ruta del archivo de los argumentos de programa
-		String ruta = args[0];
-		Archivo archivo = new Archivo();
-		// Cargo el archivo para poder usarlo
-		archivo.cargarArchivo(ruta);
-
+		if(args.length > 0) {
+			try {
+				String ruta = args[0];
+				String strCurrentLine;   
+				System.out.print("Hola " + args[0]);
+				Archivo archivo = new Archivo();
+				//Cargo el archivo para poder usarlo
+				archivo.cargarArchivo(ruta);
+				
+				while ((strCurrentLine = archivo.getBufferLectura().readLine ()) != null) {   
+					System.out.println (strCurrentLine);
+				}				
+			} catch (IOException e) {
+				System.out.print("Hubo un error con el Archivo.");
+			}
+		}
+		else
+			System.out.print("No se pudo cargar Archivo.");
+		
 	}
 
 }

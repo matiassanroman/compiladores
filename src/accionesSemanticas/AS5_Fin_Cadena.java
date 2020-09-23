@@ -20,6 +20,7 @@ public class AS5_Fin_Cadena extends AccionSemantica{
 	@Override
 	public int execute(StringBuffer buffer, char c) {
 		this.s = new Simbolo(buffer.toString());
+		s.setTipo("Cadena");
 		if(tablaSimbolo.contains(this.s) ){  			//SI ESTA EN LA TABLA
 			return tablaToken.get("CADENA");
 		}
