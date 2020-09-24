@@ -6,7 +6,7 @@ public class AS4_Fin_Comentario extends AccionSemantica{
 
 	// Al terminar de reconocer el comentario lo descarta 
 	// inicializando de nuevo el buffer y pedirle al 
-	// analizador que limpie el buffer con propio metodo
+	// analizador que limpie el buffer con su propio metodo
 	public int execute(StringBuffer buffer, char c) {
 		buffer = new StringBuffer();
 		Compilador.limpiarBuffer();

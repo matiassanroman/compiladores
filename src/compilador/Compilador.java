@@ -11,6 +11,8 @@ import accionesSemanticas.*;
 
 public class Compilador {
 	
+	
+	// int cantidad de errores; tener en cuenta para etapas 3 y 4
 	static StringBuffer buffer = new StringBuffer();
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
 	@SuppressWarnings("unused")

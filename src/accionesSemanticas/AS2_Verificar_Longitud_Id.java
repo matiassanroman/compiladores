@@ -15,21 +15,18 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 		this.tablaSimbolo = tablaSimbolo;			
 	}	
 	
-	@Override
+	//Controla que que la longitud de los identificadores(ID) sea menor o 
+	// igual a 20 caracteres
 	public int execute(StringBuffer buffer, char c) {
 		
-		//Chequeo que sea menor a 20.
-		//Si el String está en la TS, retornar identificador + referencia a la TS.
-		//Si el String no está en la TS, se la dá de alta en la TS, retornar identificador 
+		
 		//+ referencia a la TS.
 		if(buffer.length() < 20){
-			s = new Simbolo(buffer.toString());			
-			if(tablaSimbolo.contains(s))
-			{
-				return tablaToken.get("ID");
-			}
-			else
-			{
+			s = new Simbolo(buffer.toString());	
+			 //Si el String está en la TS, retornar identificador + referencia a la TS.
+			if(tablaSimbolo.contains(s)) { return tablaToken.get("ID"); }
+			//Si el String no está en la TS, se la dá de alta en la TS, retornar identificador
+			else {
 				s.setUso("ID");
 				tablaSimbolo.put(s.getValor(),s);
 				return tablaToken.get("ID");
@@ -40,7 +37,8 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 			s = new Simbolo(buffer.substring(0,19));
 			buffer.setLength(20);
 			tablaSimbolo.put(s.getValor(),s);
-			return -3; 														// ID FUERA DE RANGO
+			// ID fuera de rango, (codigo de error -3), para informar luego
+			return -3; 														
 		}
 	}
 
@@ -48,7 +46,8 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 		return this.s;
 	}
 
-	@Override
+	// Al tener que leer un caracter mas de la entrada, se necesita
+	// acomodar la linea, entonces retorna true
 	public boolean acomodarLinea() {
 		return true;
 	}

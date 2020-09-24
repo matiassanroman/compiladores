@@ -8,14 +8,16 @@ public class AS7_Fin_Simbolo_Simple extends AccionSemantica{
 	Implicitamente devolvemos el ascii del simbolo.
 	*/
 
-	@Override
+	// Se retorna el caracter el primera posicion
+	// del buffer de lectura, correspondiente al 
+	// simbolo simple
 	public int execute(StringBuffer buffer, char c) {
-		
 		return buffer.charAt(0);
-		
 	}
 
-	@Override
+	// Como se va a haber leido el siguiente caracter
+	// se necesitaré acomodar la linea, con lo cual 
+	// se retorna true
 	public boolean acomodarLinea() {
 		return true;
 	}

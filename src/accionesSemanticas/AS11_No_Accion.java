@@ -2,14 +2,13 @@ package accionesSemanticas;
 
 public class AS11_No_Accion extends AccionSemantica{
 
-	//No hace nada.
+	// Ante la apacion de un determinado simbolo, el cual
+	// no requiere realizar ninguna accion, no se realiza nada
 	
-	@Override
 	public int execute(StringBuffer buffer, char c) {
 		return 0;
 	}
 	
-	@Override
 	public boolean acomodarLinea(){
 		return false;
 	}
