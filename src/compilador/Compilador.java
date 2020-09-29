@@ -156,7 +156,7 @@ public class Compilador {
 		Compilador c = new Compilador();
 		
 		CrearSalida.crearTxtSalida(c);
-		
+		System.out.print("El archivos de texto está en la ruta: ");
 		/*
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
