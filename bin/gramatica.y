@@ -80,10 +80,7 @@ asignacion : identificador '=' expresion ';'    {imprimir("Reconocio Asignacion"
 		   | identificador error expresion  	{yyerror("Error en el operador de asignacion, se espera ==");}
 		   ;
 
-tipo : INTEGER 
-	 | FLOAT
-	 | CADENA
-	 ;
+
 
 expresion : expresion '+' termino   {imprimir("Reconocio suma");}
 		  | expresion '-' termino    {imprimir("Reconocio resta");}
