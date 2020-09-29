@@ -4,6 +4,7 @@
 package compilador;
 import java.io.IOException;
 import java.io.ObjectInputStream.GetField;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -19,7 +20,7 @@ public class Compilador {
 	private static int nroLinea= 1;
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
-	Archivo archivo = new Archivo();
+	static Archivo archivo = new Archivo();
 	protected static int asciiAnterior = 0;
 	
 	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
@@ -78,7 +79,7 @@ public class Compilador {
 /*6*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as4_end_comentario, as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*7*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as2_verificar_longitud_id, as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*8*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion, as11_no_accion    , as11_no_accion, as4_end_comentario       , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*9*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
+/*9*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as5_end_cadena, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*10*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as5_end_cadena, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*11*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
 /*12*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as1_agregar_buffer, as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
@@ -153,31 +154,57 @@ public class Compilador {
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		
+		tablaToken.put("CTE",257);
+		tablaToken.put("ID",258);
+		tablaToken.put("IF",259);
+		tablaToken.put("THEN",260);
+		tablaToken.put("ELSE",261);
+		tablaToken.put("END_IF",262);
+		tablaToken.put("OUT",263);
+		tablaToken.put("FUNC",264);
+		tablaToken.put("RETURN",265);
+		tablaToken.put("FOR",266);
+		tablaToken.put("INTEGER",267);
+		tablaToken.put("FLOAT",268);
+		tablaToken.put("PROC",269);
+		tablaToken.put("NS",270);
+		tablaToken.put("NA",271);
+		tablaToken.put("CADENA",272);
+		tablaToken.put("UP",273);
+		tablaToken.put("DOWN",274);
+		
+		tablaToken.put("<=", 275);
+		tablaToken.put(">=", 276);
+		tablaToken.put("!=", 277);
+		tablaToken.put("==", 278);
+		
 		Compilador c = new Compilador();
+		ArrayList<String> errores = new ArrayList<String>();
+		ArrayList<String> reconocidos = new ArrayList<String>();
+		//CrearSalida.crearTxtSalida(c);
 		
-		CrearSalida.crearTxtSalida(c);
 		
-		/*
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
 				String ruta = args[0];
-				String strCurrentLine;   
-				System.out.print("El archivos de texto está en la ruta: " + args[0]);
-				Archivo archivo = new Archivo();
-				//Cargo el archivo para poder usarlo
 				archivo.cargarArchivo(ruta);
+				Parser p = new Parser(c, errores);
+				p.yyparse();
+				errores = p.getErrores();
+				reconocidos = p.getReconocidos();
+				for (int i=0; i<errores.size(); i++)
+					System.out.println(errores.get(i));
 				
-				while ((strCurrentLine = archivo.getBufferLectura().readLine ()) != null) {   
-					System.out.println (strCurrentLine);
+				for (int i=0; i<reconocidos.size(); i++)
+					System.out.println(reconocidos.get(i));
 				
-				}				
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
 			}
 		}
 		else
-			System.out.print("No se pudo cargar Archivo.");
-		*/
+			System.out.print("Se produjo un error con los argumentos del programa.");
+		
 	}
 }

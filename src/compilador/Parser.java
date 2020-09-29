@@ -810,8 +810,13 @@ public void yyerror(String error){
 	this.errores.add(error + " en linea " + this.lineaActual)	;
 }
 
+public ArrayList<String> getErrores(){
+	return this.errores;
+}
 
-
+public ArrayList<String> getReconocidos(){
+	return this.reconocidos;
+}
 
 
 /**
