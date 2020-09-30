@@ -47,7 +47,7 @@ public class Diccionario {
 		//DECIMALES
 		else if (ascii >= 48 && ascii <= 57)     { return diccionario.get(15); }
 		else if (diccionario.containsKey(ascii)) { return diccionario.get(ascii); }
-			else return 13;		
+		else return 13;		
 		}
 	
 	public static boolean contiene(int clave) { return diccionario.containsKey(clave); }
