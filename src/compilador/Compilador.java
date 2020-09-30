@@ -2,8 +2,7 @@
 // Clases central desde donde se invoca todo
 
 package compilador;
-import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -20,7 +19,8 @@ public class Compilador {
 	private static int nroLinea= 1;
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
-	static Archivo archivo = new Archivo();
+	FileReader fr;
+	static BufferedReader br;
 	protected static int asciiAnterior = 0;
 	
 	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
@@ -92,6 +92,12 @@ public class Compilador {
 /*19*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion}, };
 	
 	
+	public void cargarArchivo(String origen) throws IOException{
+		File archivo = new File (origen);
+		fr = new FileReader(archivo);
+	    br = new BufferedReader(fr);
+	}
+	
 	// Metodo que retorna la tabla de simbolos
 	public Hashtable<String,Simbolo> getTablaSimbolo(){
 		return Compilador.tablaSimbolo;
@@ -114,16 +120,22 @@ public class Compilador {
 		
 		do{	
 			if (acomodarLinea){
+				System.out.println("Entra??");
 				asciiActual = asciiAnterior;
 				acomodarLinea = false;
 			}
 			else {
-				asciiActual = archivo.leerBuffer(); 
+				
+				System.out.println("Anterior " + asciiAnterior);
+				asciiActual = br.read();
+				System.out.println("Actual " + asciiActual);
 				if(asciiActual == 13) { nroLinea++; }
 			}
 			
 			asciiAnterior = asciiActual;
 			int columna = diccionario.asciiToColumna(asciiActual);
+			System.out.println("Estado Actual: " + estadoActual);
+			System.out.println("Columna: " + columna);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
@@ -180,14 +192,13 @@ public class Compilador {
 		
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
-		ArrayList<String> reconocidos = new ArrayList<String>();
-		//CrearSalida.crearTxtSalida(c);
-		
+		ArrayList<String> reconocidos = new ArrayList<String>();		
+			
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
 				String ruta = args[0];
-				archivo.cargarArchivo(ruta);
+				c.cargarArchivo(ruta);
 				Parser p = new Parser(c, errores);
 				p.yyparse();
 				errores = p.getErrores();
