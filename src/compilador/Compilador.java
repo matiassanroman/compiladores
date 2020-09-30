@@ -15,7 +15,6 @@ public class Compilador {
 	// int cantidad de errores; tener en cuenta para etapas 3 y 4
 	static StringBuffer buffer = new StringBuffer();
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
-	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
@@ -132,15 +131,7 @@ public class Compilador {
 				if(asciiActual == 13) { nroLinea++; }
 			}
 			
-			asciiAnterior = asciiActual;
-			int columna = diccionario.asciiToColumna(asciiActual);
-			System.out.println("Estado Actual: " + estadoActual);
-			System.out.println("Columna: " + columna);
-			estadoSiguiente = matrizTEstados[estadoActual][columna];
-			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
-			token.setToken(AS.execute(buffer, (char)asciiActual));
-			acomodarLinea = AS.acomodarLinea();
-			estadoActual = estadoSiguiente;
+		
 			
 			if(token.getToken() > 0) {
 				//if (buffer.length() > 0)
@@ -156,6 +147,18 @@ public class Compilador {
 			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
 				else if (token.getToken() == -3){ System.out.println("Warning en la linea "+nroLinea+": identificador supera la longitud máxima"); }
 					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }
+			
+			asciiAnterior = asciiActual;
+			int columna = diccionario.asciiToColumna(asciiActual);
+			System.out.println("Estado Actual: " + estadoActual);
+			System.out.println("Columna: " + columna);
+			estadoSiguiente = matrizTEstados[estadoActual][columna];
+			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
+			token.setToken(AS.execute(buffer, (char)asciiActual));
+			acomodarLinea = AS.acomodarLinea();
+			estadoActual = estadoSiguiente;
+		
+		
 		}
 		while (!hayToken);
 		//System.out.println(t);
@@ -163,7 +166,6 @@ public class Compilador {
 	}
 	
 	
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		
 		tablaToken.put("CTE",257);
