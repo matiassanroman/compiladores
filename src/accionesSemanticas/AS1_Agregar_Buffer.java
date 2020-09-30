@@ -4,6 +4,7 @@ public class AS1_Agregar_Buffer extends AccionSemantica{
 
 	// Agrega el caracter 'c' al buffer (string)
 	public int execute(StringBuffer buffer, char c) {
+		System.out.println("AgregarBuffer " + buffer + " Char: " + c);
 		buffer.append(c);
 		return 0;
 	}
