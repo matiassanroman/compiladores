@@ -2,127 +2,135 @@
 package Compilador;
 %}
 
-%token CTE ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN
+%token ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN
 %token '<=' '>=' '!=' '==' 
 
 %left '+' '-'
 %left '*' '/'
 
-
 %%
-programa : bloquePrograma {imprimir("Reconoce Programa");}
+programa : bloquePrograma {mostrarMensaje("Reconoce bien el programa");}
 		 ;
 
 bloquePrograma : bloquePrograma sentenciaDeclarativa
-			   | bloquePrograma sentenciaEjecutables
+			   | bloquePrograma sentenciaEjecutable
 			   | sentenciaDeclarativa
-		       | sentenciaEjecutables
-		       ;
+               | sentenciaEjecutable 
+               ;
 
-sentenciaDeclarativa : PROC ID '(' listaParametros  ')' NA '=' constante ',' NS '=' constante bloqueSentencias  {imprimir("Reconocio declaracion de procedimiento");} 
+sentenciaDeclarativa : tipo listaVariables ';'        
+					 | declaracionProcedimiento
+					 | error listaVariables ';'      {yyerror("Error en la sentencia, tipo invalido");}
 					 ;
 
-sentenciaEjecutables : sentenciaIf {imprimir("Reconoce If");}
-					 | asignacion  {imprimir("Reconoce Asignacion");}
-					 | cicloFor    {imprimir("Reconoce For");}
-					 | OUT '(' CADENA ')'  {imprimir("Reconoce Out");}
-					 | identificador '(' listaParametros ')' 
-					 ;
-
-listaParametros : listaParametros ',' identificador {imprimir("Reconoce ListaParametros");}
-				| identificador
-				;
-
-bloqueSentencias : '{' listaSentencias '}' {imprimir("Reconoce bloqueSentencias");}
-				 ;
-
-listaSentencias : listaSentencias asignacion  {imprimir("Reconoce Lista sentencias asignacion");}
-				| listaSentencias cicloFor    {imprimir("Reconoce Lista sentencias CicloFor");}
-				| listaSentencias sentenciaIf {imprimir("Reconoce Lista sentencias SentenciaIf");}
-				| sentenciaIf
-				| cicloFor
-				| asignacion
-				;
-				
-sentenciaIf  : IF '(' condicion ')' THEN bloqueSentencias ELSE bloqueSentencias END_IF {imprimir("Reconoce If completo");}
-			 | IF '(' condicion ')' THEN bloqueSentencias END_IF                       {imprimir("Reconoce If parcial");}
-			 ;
-
-cicloFor : FOR '(' condicionFor ')' bloqueSentencias  {imprimir("Reconoce cilcoFor");}
-		 ;
-
-condicionFor : inicioFor ';' comparacionFor ';' incDecFor identificador {imprimir("Reconoce condicionesDelFor");}
-			 ;
-
-inicioFor : identificador '=' constante   {imprimir("Reconoce inicioFor");}
-
-comparacionFor : identificador comparador identificador  {imprimir("Reconoce comparacionFor	");}
+listaVariables : listaVariables ',' identificador
+			   | identificador
 			   ;
 
-incDecFor : UP      {imprimir("Reconoce UP");}
-		  | DOWN    {imprimir("Reconoce DOWN");}
+declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo");}
+						 ;
+
+encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' tipo ',' NS '=' tipo
+			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' tipo
+			   | PROC identificador '(' error ')' NA '=' tipo ',' NS '=' tipo {yyerror("Error en los parametros de procedimiento");}
+			   ; 
+
+parametrosProc : parametro
+			   | parametro ',' parametro
+			   | parametro ',' parametro ',' parametro
+
+parametro : tipo identificador  {yyerror("Error en el parametro, tipo invalido");}
 		  ;
 
-condicion : expresion comparador expresion   {imprimir("Reconoce condicion");}
-		  | error expresion				  {yyerror("Error en la parte izquierda de la condición");}
-		  | expresion error 			  {yyerror("Error en la parte derecha de la condición");}		  
-		  ;
-
-comparador : '<='			{$$.obj = "<=";}															
-		   | '>='			{$$.obj = ">=";}
-		   | '<'			{$$.obj = "<";}
-		   | '>'			{$$.obj = ">";}
-		   | '!='			{$$.obj = "!=";}
-		   | '=='           {$$.obj = "==";}
+bloqueProc : '{' bloque '}' {mostrarMensaje("Reconocio bloque de procedimiento");}
+		   | '{' error '}'  {yyerror("Error en el cuerpo del procedimiento");}
 		   ;
 
-asignacion : identificador '=' expresion ';'    {imprimir("Reconocio Asignacion");}
-		   | identificador error expresion  	{yyerror("Error en el operador de asignacion, se espera ==");}
-		   ;
+bloque : bloque sentenciaDeclarativa ';'
+	   | bloque sentenciaEjecutable ';'
+	   | sentenciaDeclarativa ';'
+       | sentenciaEjecutable ';'
+       ;
 
-tipo : INTEGER 
-	 | FLOAT
-	 | CADENA
-	 ;
+sentenciaEjecutable : asignacion
+					| OUT '(' CADENA ')'                         
+					| identificador '(' parametrosProc ')'
+					| IF cuerpoIf END_IF 
+					| cicloFor
+					| OUT '(' error ')'  {yyerror("Error en la cadena");}
+					| IF error END_IF    {yyerror("Error en el cuerpo del IF");}
+					;
 
-expresion : expresion '+' termino   {imprimir("Reconocio suma");}
-		  | expresion '-' termino    {imprimir("Reconocio resta");}
-		  | termino
+cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio ciclo FOR");}
+         ;
+
+condicionFor : inicioFor ';' condicion ';' incDec {mostrarMensaje("Reconocio condicion del FOR");}
+			 ;
+
+inicioFor : identificador '=' constante
 		  ;
 
-termino : termino '*' factor {imprimir("Reconocio multiplicaion");}
-		| termino '/' factor {imprimir("Reconocio division");}
-		| factor
-		;
+condicion : identificador comparador asignacion
+		  | identificador comparador identificador
+		  | identificador comparador constante
+		  ;
 
-factor  :   constante
-		|   identificador
-		;
+incDec : UP constante   {mostrarMensaje("Reconocio incremento-UP del FOR");}
+	   | DOWN constante {mostrarMensaje("Reconocio decremento-UP del FOR");}
+	   ;
 
-identificador   :   ID  { 
-							{imprimir("Reconoce palabra reservada");}
-                            Simbolo s = a.TablaSimbolo.get($1.sval);                                              
-                            $$.obj = s;
-                        }
+bloqueSentencia : bloqueSentencia sentenciaEjecutable
+				| sentenciaEjecutable
 				;
 
-constante   :   CTE {
-                        Simbolo s = a.TablaSimbolo.get($1.sval);
-                        $$.obj = s;
-                    }
+cuerpoIf : cuerpoCompleto
+		 | cuerpoIncompleto 
+		 ;
+		 
+cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia '}'	{mostrarMensaje("Reconocio IF con cuerpo en ELSE");}		   	  
+			   ; 
 
-			| '-' CTE   {
-						    Simbolo s = verificarRango($2.sval);
-							$$.obj = s;
-						}
-			;
+cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE {mostrarMensaje("Reconocio IF sin cuerpo en ELSE");}
+				 ;
+
+asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion");}
+		   ;
+
+expresion : expresion '+' termino {mostrarMensaje("Reconocio suma");}
+		  | expresion '-' termino {mostrarMensaje("Reconocio resta");}
+		  | termino               {mostrarMensaje("Reconocio termino");}
+		  ;
+
+termino : termino '*' factor {mostrarMensaje("Reconocio multiplicacion");}
+		| termino '/' factor {mostrarMensaje("Reconocio division");}
+		| factor             {mostrarMensaje("Reconocio factor");}
+		;
+
+factor : constante
+	   | identificador
+	   ;
+
+comparador : '<=' {mostrarMensaje("Reconocio comparador menor-igual");}
+		   | '>=' {mostrarMensaje("Reconocio comparador mayor-igual");}
+		   | '!=' {mostrarMensaje("Reconocio comparador distinto");}
+		   | '==' {mostrarMensaje("Reconocio comparador igual");}
+		   ;
+
+tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT");}
+     | INTEGER {mostrarMensaje("Reconocio tipo INTEGER");}
+     ;
+
+identificador : ID {mostrarMensaje("Reconocio identificador");}
+			  ;
+
+constante : INTEGER {mostrarMensaje("Reconocio constante entera");}
+          ;
 
 %%
 
-private void verificarRango(ParserVal num){
-	System.out.println("El CTE NEGATIVO es "+num.t.toString());	
+void mostrarMensaje(String mensaje){
+	System.out.println(mensaje);
 }
 
-private void imprimir(String string) throws IOException {
-	System.out.println(string);
-}
+
+

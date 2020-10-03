@@ -15,7 +15,6 @@ public class Compilador {
 	// int cantidad de errores; tener en cuenta para etapas 3 y 4
 	static StringBuffer buffer = new StringBuffer();
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
-	@SuppressWarnings("unused")
 	private static int nroLinea= 1;
 	static Diccionario diccionario = new Diccionario();
 	private static boolean acomodarLinea= false; // acomodar linea y tomar la lectura anterior
@@ -41,13 +40,6 @@ public class Compilador {
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
-	//						   +	letra	/nl	 eof	
-	//						   0 	  1		 2    3
-	int[][] matrizTEstados1 = { { 0,  1, 0, 0 }, 
-							   { 0,	1, 0, 0 } };
-	
-	AccionSemantica[][] matrizASemanticas1 = { {as6_end_simbolo, as1_agregar_buffer, as11_no_accion, as11_no_accion},
-											  {as11_no_accion, as1_agregar_buffer, as2_verificar_longitud_id, as11_no_accion}};
 	//							   l    =	;	d	 _	eof
 	//							   0    1   2    3   4   5
 	int[][] matrizTEstados = { 	  {1,	2,  0,   0,	 0,  0}, 
@@ -122,7 +114,7 @@ public class Compilador {
 			}									//TRATAMIENTO DE ERRORES LÉXICOS
 			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
 				else if (token.getToken() == -3){ System.out.println("Warning en la linea "+nroLinea+": identificador supera la longitud máxima"); }
-					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }
+					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }			
 		}
 		while (!hayToken);
 		//System.out.println(t);
