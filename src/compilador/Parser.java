@@ -18,6 +18,10 @@
 
 //#line 2 "gramatica.y"
 package compilador;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 //#line 19 "Parser.java"
 
 
@@ -735,32 +739,106 @@ break;
  * object in the background.  It is intended for extending Thread
  * or implementing Runnable.  Turn off with -Jnorun .
  */
-public void run()
+//Definiciones propias
+
+Compilador c;
+ArrayList<String> errores = new ArrayList<String>();
+Token t;
+int lineaActual;
+ArrayList<String> reconocidos = new ArrayList<String>();
+
+public Parser(Compilador c, ArrayList<String> errores)
 {
-  yyparse();
+this.c =c;
+this.errores =errores;
 }
-//## end of method run() ########################################
 
+int i= 0;
 
+public int yylex() {
+	
+	try {
+		Token token = c.getToken();
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		return token.getToken();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return 0;
+	/*
+	if(i == 0) {
+		Token token = new Token(258,0);
+		token.setLexema("asd");
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra id");
+		return 258;
+	}
+	else if(i == 1) {
+		Token token = new Token(61,0);
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra =");
+		return 61;
+	}
+	else if(i == 2) {
+		Token token = new Token(258,0);
+		token.setLexema("dsa");
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra id");
+		return 258;
+	}
+	else if(i == 3) {
+		Token token = new Token(59,0);
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra ;");
+		return 59;
+	}
+	return 0;*/
+}
 
-//## Constructors ###############################################
-/**
- * Default constructor.  Turn off with -Jnoconstruct .
+public void yyerror(String error){
+	this.errores.add(error + " en linea " + this.lineaActual)	;
+}
 
- */
+public ArrayList<String> getErrores(){
+	return this.errores;
+}
+
+public ArrayList<String> getReconocidos(){
+	return this.reconocidos;
+}
+
 public Parser()
 {
-  //nothing to do
+//nothing to do
 }
 
 
 /**
- * Create a parser, setting the debug to true or false.
- * @param debugMe true for debugging, false for no debug.
- */
+* Create a parser, setting the debug to true or false.
+* @param debugMe true for debugging, false for no debug.
+*/
 public Parser(boolean debugMe)
 {
-  yydebug=debugMe;
+yydebug=debugMe;
 }
 //###############################################################
 

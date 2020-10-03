@@ -125,7 +125,7 @@ public class Compilador {
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
-		
+				
 		tablaToken.put("ID",257);
 		tablaToken.put("IF",258);
 		tablaToken.put("THEN",259);
