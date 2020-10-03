@@ -10,6 +10,7 @@ public class AS6_Fin_Simbolo extends AccionSemantica{
 	// Se agrega al buffer el caracter 'c', corresponde 
 	// al simbolo que se desea leer e identificar
 	public int execute(StringBuffer buffer, char c) {
+		//System.out.println("Entro" + c);
 		buffer = new StringBuffer();				
 		return c;
 	}

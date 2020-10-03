@@ -23,8 +23,7 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 		//+ referencia a la TS.
 		if(buffer.length() < 20){
 			s = new Simbolo(buffer.toString());
-			System.out.println("Accion2 " + buffer.toString());
-			 //Si el String está en la TS, retornar identificador + referencia a la TS.
+			//Si el String está en la TS, retornar identificador + referencia a la TS.
 			if(tablaSimbolo.contains(s)) { return tablaToken.get("ID"); }
 			//Si el String no está en la TS, se la dá de alta en la TS, retornar identificador
 			else {

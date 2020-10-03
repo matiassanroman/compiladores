@@ -37,6 +37,7 @@ int yychar;             //the current working character
 //###############################################################
 void debug(String msg)
 {
+  System.out.println("Entro en debug");
   if (yydebug)
     System.out.println(msg);
 }
@@ -52,6 +53,7 @@ int statemax;                        //state when highest index reached
 //###############################################################
 final void state_push(int state)
 {
+	//System.out.println("Entro en state_push");
   try {
 		stateptr++;
 		statestk[stateptr]=state;
@@ -67,14 +69,17 @@ final void state_push(int state)
 }
 final int state_pop()
 {
+	//System.out.println("Entro en state_pop");
   return statestk[stateptr--];
 }
 final void state_drop(int cnt)
 {
+	//System.out.println("Entro en state_drop");
   stateptr -= cnt; 
 }
 final int state_peek(int relative)
 {
+	//System.out.println("Entro en state_peek");
   return statestk[stateptr-relative];
 }
 //###############################################################
@@ -82,6 +87,7 @@ final int state_peek(int relative)
 //###############################################################
 final boolean init_stacks()
 {
+	//System.out.println("Entro en init_stacks");
   stateptr = -1;
   val_init();
   return true;
@@ -91,6 +97,7 @@ final boolean init_stacks()
 //###############################################################
 void dump_stacks(int count)
 {
+	//System.out.println("Entro en dump_stacks");
 int i;
   System.out.println("=index==state====value=     s:"+stateptr+"  v:"+valptr);
   for (i=0;i<count;i++)
@@ -113,6 +120,7 @@ int valptr;
 //###############################################################
 void val_init()
 {
+	//System.out.println("Entro en val_init");
   valstk=new ParserVal[YYSTACKSIZE];
   yyval=new ParserVal();
   yylval=new ParserVal();
@@ -120,18 +128,21 @@ void val_init()
 }
 void val_push(ParserVal val)
 {
+	//System.out.println("Entro en val_push");
   if (valptr>=YYSTACKSIZE)
     return;
   valstk[++valptr]=val;
 }
 ParserVal val_pop()
 {
+	//System.out.println("Entro en val_pop");
   if (valptr<0)
     return new ParserVal();
   return valstk[valptr--];
 }
 void val_drop(int cnt)
 {
+	//System.out.println("Entro en val_drop");
 int ptr;
   ptr=valptr-cnt;
   if (ptr<0)
@@ -798,12 +809,65 @@ public Parser(Compilador c, ArrayList<String> errores)
   this.errores =errores;
 }
 
-public int yylex() throws IOException {
-	Token token = c.getToken();
-	this.lineaActual = token.getLinea();
-	yylval = new ParserVal(t);
-	yylval.sval = token.getLexema();
-	return token.getToken();
+int i= 0;
+
+public int yylex() {
+	
+	try {
+		Token token = c.getToken();
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		return token.getToken();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return 0;
+	/*
+	if(i == 0) {
+		Token token = new Token(258,0);
+		token.setLexema("asd");
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra id");
+		return 258;
+	}
+	else if(i == 1) {
+		Token token = new Token(61,0);
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra =");
+		return 61;
+	}
+	else if(i == 2) {
+		Token token = new Token(258,0);
+		token.setLexema("dsa");
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra id");
+		return 258;
+	}
+	else if(i == 3) {
+		Token token = new Token(59,0);
+		token.setLinea(1);
+		i=i+1;
+		this.lineaActual = token.getLinea();
+		yylval = new ParserVal(t);
+		yylval.sval = token.getLexema();
+		System.out.println("entra ;");
+		return 59;
+	}
+	return 0;*/
 }
 
 public void yyerror(String error){

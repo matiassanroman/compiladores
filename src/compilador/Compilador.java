@@ -41,55 +41,24 @@ public class Compilador {
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
-	int[][] matrizTEstados = 
-// Mapeado caracter-columna
-//     <   >   !   =   .   %   "   f lmin lmay blanco nl  tab c   d   +   -   _   *   /   {   }   (   )   i   ,   ;   eof
-//     0   1   2   3   4   5   6   7   8    9    10   11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27
-/*0*/{{1 , 2 , 3 , 4 , 17, 5 , 9 , 19, 7 ,  8 ,  0 ,  0 , 0 , 19, 12, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*1*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*2*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*3*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*4*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*5*/ {19, 19, 19, 19, 19, 6,  19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*6*/ {19, 19, 19, 19, 19, 6,  19, 19, 19,  19,  19,  0 , 19, 6 , 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*7*/ {19, 19, 19, 19, 19, 19, 19, 19, 7 ,  19,  19,  19, 19, 19, 7 , 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*8*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  8 ,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*9*/ {19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 9 , 19, 19, 10, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*10*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  9 , 19, 11, 19, 19, 10, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*11*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 11, 19, 19, 10, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*12*/{19, 19, 19, 19, 13, 19, 19, 19, 19,  19,  19,  19, 19, 19, 12, 19, 19, 16, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*13*/{19, 19, 19, 19, 19, 19, 19, 14, 19,  19,  19,  19, 19, 19, 13, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*14*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 15, 15, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*15*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 15, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*16*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*17*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*18*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-/*19*/{19, 19, 19, 19, 19, 19, 19, 19, 19,  19,  19,  19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19}, };
+	//						   +	letra	/nl	 eof	
+	//						   0 	  1		 2    3
+	int[][] matrizTEstados1 = { { 0,  1, 0, 0 }, 
+							   { 0,	1, 0, 0 } };
 	
-	AccionSemantica[][] matrizASemanticas =
-// Mapeado caracter-columna
-//     <                   >                   !                   =                         .                   %                   "               f                   lmin                lmay                blanco          nl                  tab             c                          d                   +                   -                   _                   *                /                {                }                (                )                i                        ,                ;                eof
-//     0                   1                   2                   3                         4                   5                   6               7                   8                   9                   10              11                  12              13                         14                  15                  16                  17                  18               19               20               21               22               23               24                       25               26               27
-/*0*/{{as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer      , as1_agregar_buffer, as1_agregar_buffer, as11_no_accion, as11_no_accion    , as1_agregar_buffer, as1_agregar_buffer, as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as1_agregar_buffer, as6_end_simbolo   , as6_end_simbolo   , as11_no_accion    , as6_end_simbolo, as6_end_simbolo, as6_end_simbolo, as6_end_simbolo, as6_end_simbolo, as6_end_simbolo, as11_no_accion         , as6_end_simbolo, as6_end_simbolo, as11_no_accion},
-/*1*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as8_end_simbolo_complejo, as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as7_end_simbolo_simple   , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*2*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as8_end_simbolo_complejo, as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as7_end_simbolo_simple   , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*3*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as8_end_simbolo_complejo, as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*4*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as8_end_simbolo_complejo, as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as7_end_simbolo_simple   , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*5*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as1_agregar_buffer, as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*6*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as4_end_comentario, as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*7*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as2_verificar_longitud_id, as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*8*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion, as11_no_accion    , as11_no_accion, as4_end_comentario       , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*9*/ {as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as5_end_cadena, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*10*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as5_end_cadena, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*11*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as1_agregar_buffer       , as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*12*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as1_agregar_buffer, as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as1_agregar_buffer, as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*13*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as10_verificar_float     , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*14*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as1_agregar_buffer, as1_agregar_buffer, as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*15*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as10_verificar_float     , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*16*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as9_verificar_rango_cte, as11_no_accion , as11_no_accion , as11_no_accion},
-/*17*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*18*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as9_verificar_rango_cte  , as1_agregar_buffer, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion},
-/*19*/{as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion          , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion, as11_no_accion    , as11_no_accion, as11_no_accion           , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion , as11_no_accion         , as11_no_accion , as11_no_accion , as11_no_accion}, };
+	AccionSemantica[][] matrizASemanticas1 = { {as6_end_simbolo, as1_agregar_buffer, as11_no_accion, as11_no_accion},
+											  {as11_no_accion, as1_agregar_buffer, as2_verificar_longitud_id, as11_no_accion}};
+	//							   l    =	;	d	 _	eof
+	//							   0    1   2    3   4   5
+	int[][] matrizTEstados = { 	  {1,	2,  0,   0,	 0,  0}, 
+			   				      {1,	0,  0,   1,  1,  0},
+			   				      {0,	0,  0,   0,  0,  0} 
+			   				 };
+	//												 lmin					    =			                ;                          d                  		  _                           eof
+	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer,	    as1_agregar_buffer,		    as6_end_simbolo,            as11_no_accion,				as11_no_accion,			    as11_no_accion}, 
+							  				  {as1_agregar_buffer,	    as2_verificar_longitud_id,	as2_verificar_longitud_id,	as1_agregar_buffer,	   		as1_agregar_buffer,		    as11_no_accion},
+											  {as7_end_simbolo_simple,	as11_no_accion,             as7_end_simbolo_simple,     as7_end_simbolo_simple,		as7_end_simbolo_simple,		as11_no_accion}
+							  				};
 	
 	
 	public void cargarArchivo(String origen) throws IOException{
@@ -102,12 +71,11 @@ public class Compilador {
 	public Hashtable<String,Simbolo> getTablaSimbolo(){
 		return Compilador.tablaSimbolo;
 	}
-
+	
 	// Metodo que sirve para pedir tokens, EXPLICACION A COMPLETAR
 	public Token getToken() throws IOException {
 		Token token = new Token();
-		//int asciiAnterior; 
-		
+				
 		if(asciiAnterior == -1){    	//Fin del archivo, devuelve 0
 			token.setToken(0); 
 			return token;
@@ -120,22 +88,21 @@ public class Compilador {
 		
 		do{	
 			if (acomodarLinea){
-				System.out.println("Entra??");
+				//System.out.println("Entra??");
 				asciiActual = asciiAnterior;
 				acomodarLinea = false;
 			}
 			else {
-				
-				System.out.println("Anterior " + asciiAnterior);
+				//System.out.println("Anterior " + asciiAnterior);
 				asciiActual = br.read();
-				System.out.println("Actual " + asciiActual);
+				//System.out.println("Actual " + asciiActual);
 				if(asciiActual == 13) { nroLinea++; }
 			}
 			
 			asciiAnterior = asciiActual;
+			System.out.println("asciiActual: " + asciiActual);
 			int columna = diccionario.asciiToColumna(asciiActual);
-			System.out.println("Estado Actual: " + estadoActual);
-			System.out.println("Columna: " + columna);
+			System.out.println("Fila: " + estadoActual + " Columna: " + columna);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
@@ -161,7 +128,6 @@ public class Compilador {
 		//System.out.println(t);
 		return token;		
 	}
-	
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
@@ -200,14 +166,14 @@ public class Compilador {
 				String ruta = args[0];
 				c.cargarArchivo(ruta);
 				Parser p = new Parser(c, errores);
-				p.yyparse();
+				p.yyparse(); 
 				errores = p.getErrores();
 				reconocidos = p.getReconocidos();
 				for (int i=0; i<errores.size(); i++)
 					System.out.println("Errores: " + errores.get(i));
 				
 				for (int i=0; i<reconocidos.size(); i++)
-					System.out.println("Errores 2: " + reconocidos.get(i));
+					System.out.println("Reconocidos: " + reconocidos.get(i));
 				
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
