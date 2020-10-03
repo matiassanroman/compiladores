@@ -17,7 +17,7 @@
 
 
 //#line 2 "gramatica.y"
-package compilador;
+package Compilador;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +41,6 @@ int yychar;             //the current working character
 //###############################################################
 void debug(String msg)
 {
-  System.out.println("Entro en debug");
   if (yydebug)
     System.out.println(msg);
 }
@@ -57,7 +56,6 @@ int statemax;                        //state when highest index reached
 //###############################################################
 final void state_push(int state)
 {
-	//System.out.println("Entro en state_push");
   try {
 		stateptr++;
 		statestk[stateptr]=state;
@@ -73,17 +71,14 @@ final void state_push(int state)
 }
 final int state_pop()
 {
-	//System.out.println("Entro en state_pop");
   return statestk[stateptr--];
 }
 final void state_drop(int cnt)
 {
-	//System.out.println("Entro en state_drop");
   stateptr -= cnt; 
 }
 final int state_peek(int relative)
 {
-	//System.out.println("Entro en state_peek");
   return statestk[stateptr-relative];
 }
 //###############################################################
@@ -91,7 +86,6 @@ final int state_peek(int relative)
 //###############################################################
 final boolean init_stacks()
 {
-	//System.out.println("Entro en init_stacks");
   stateptr = -1;
   val_init();
   return true;
@@ -101,7 +95,6 @@ final boolean init_stacks()
 //###############################################################
 void dump_stacks(int count)
 {
-	//System.out.println("Entro en dump_stacks");
 int i;
   System.out.println("=index==state====value=     s:"+stateptr+"  v:"+valptr);
   for (i=0;i<count;i++)
@@ -124,7 +117,6 @@ int valptr;
 //###############################################################
 void val_init()
 {
-	//System.out.println("Entro en val_init");
   valstk=new ParserVal[YYSTACKSIZE];
   yyval=new ParserVal();
   yylval=new ParserVal();
@@ -132,21 +124,18 @@ void val_init()
 }
 void val_push(ParserVal val)
 {
-	//System.out.println("Entro en val_push");
   if (valptr>=YYSTACKSIZE)
     return;
   valstk[++valptr]=val;
 }
 ParserVal val_pop()
 {
-	//System.out.println("Entro en val_pop");
   if (valptr<0)
     return new ParserVal();
   return valstk[valptr--];
 }
 void val_drop(int cnt)
 {
-	//System.out.println("Entro en val_drop");
 int ptr;
   ptr=valptr-cnt;
   if (ptr<0)
@@ -188,6 +177,7 @@ public final static short NA=270;
 public final static short CADENA=271;
 public final static short UP=272;
 public final static short DOWN=273;
+public final static short CTE=274;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
     0,    1,    1,    1,    1,    2,    2,    2,    5,    5,
@@ -230,18 +220,18 @@ final static short yydgoto[] = {                          9,
    54,   67,   24,   25,   55,   56,   57,
 };
 final static short yysindex[] = {                      -186,
- -240,    0,  -39,  -20,    7,    0,    0, -240,    0, -186,
-    0,    0, -240,    0,  -32,  -92,    0,    0,   -7,    0,
- -238, -240, -210,    0,    0, -216, -240,   25,    0,    0,
-    9, -203, -239, -156,    0,    0, -240,    0, -146,   26,
-    0,   34,   36,   22,   44,   30,  -41,    0, -240,   52,
-   54,    0,    0,    0,  -17,   14,    0, -121,   37,   46,
- -123,    0,    0,    0,    0,    0, -239,  -16,    0,    0,
- -158,   -6, -240,   80, -148,   82,    0,    0, -203, -239,
- -239,    0, -239, -239,    0,    0,    0,    0,   66,   67,
+ -237,    0,  -39,   -9,   -4,    0,    0, -237,    0, -186,
+    0,    0, -237,    0,  -32,  -96,    0,    0,   -7,    0,
+ -214, -237, -205,    0,    0, -216, -237,   21,    0,    0,
+    6, -203, -240, -156,    0,    0, -237,    0, -147,   27,
+    0,   34,   36,   22,   46,   30,  -41,    0, -237,   52,
+   54,    0,    0,    0,  -17,  -24,    0, -121,   37,   48,
+ -123,    0,    0,    0,    0,    0, -240,  -18,    0,    0,
+ -166,   -6, -237,   80, -148,   82,    0,    0, -203, -240,
+ -240,    0, -240, -240,    0,    0,    0,    0,   66,   67,
    71,    0,    0, -138,    0, -138,   78, -132,   79, -120,
-  108,   14,   14,    0,    0,    0,    0,    0, -111, -109,
- -199,   94, -203,   98, -203,  -99,    0,    0, -158, -158,
+  108,  -24,  -24,    0,    0,    0,    0,    0, -111, -109,
+ -199,   94, -203,   98, -203,  -99,    0,    0, -166, -166,
     0, -203,  116, -203,    0,   40,    0,    0,  120, -103,
   123, -138, -101,  109,  -98, -100,  111, -203,  112,    0,
  -203,    0, -203,    0,    0,
@@ -257,7 +247,7 @@ final static short yyrindex[] = {                         0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
   -38,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-  134,   -9,   -2,    0,    0,    0,    0,    0,    0,    0,
+  134,   -2,    8,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,  -85,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -266,7 +256,7 @@ final static short yyrindex[] = {                         0,
 final static short yygindex[] = {                         0,
     0,    1,    5,  -25,  164,    0,   11,    0,    0,  131,
   -70,    0,  113,    0,    0,    0,  -83,    0,  106,    0,
-  -61,    0,    0,    0,    0,    6,   20,
+  -61,    0,    0,    0,    0,   23,    2,
 };
 final static int YYTABLESIZE=226;
 static short yytable[];
@@ -274,16 +264,16 @@ static { yytable();}
 static void yytable(){
 yytable = new short[]{                         75,
    22,   88,   36,   85,   12,   93,   49,   32,  101,   95,
-   29,   20,  110,  116,   30,  118,    2,    2,   28,   26,
-   36,   49,   38,   20,  140,   80,   52,   81,   33,   49,
-   34,   49,   39,   47,   59,   47,   37,   44,   60,   42,
-   48,   82,   48,   53,  125,   49,   27,   62,  136,   47,
-   41,   36,   37,   49,   43,   83,   48,  127,  128,   77,
-   84,   89,    6,    7,   47,   90,   68,   48,   20,    1,
+   29,   20,  110,  116,   30,  118,    2,   83,   28,    2,
+   36,   49,   84,   20,  140,   80,   34,   81,   33,   49,
+   26,   49,   39,   52,   59,   27,   37,   44,   60,   42,
+   47,   82,   47,   53,  125,   49,   38,   62,  136,   37,
+   48,   36,   48,   49,   43,   41,   47,  127,  128,   77,
+   47,   89,    6,    7,   48,   90,   48,   68,   20,    1,
     2,    3,  119,  120,   69,    4,   70,   91,    5,    6,
-    7,    8,   71,   39,   72,  102,  103,  123,   73,   49,
+    7,    8,   71,   39,  104,  105,   72,  123,   73,   49,
    53,   53,   78,   53,   53,   86,  129,   79,  131,   58,
-    2,    3,  104,  105,   87,    4,   94,   52,    5,    6,
+    2,    3,  102,  103,   94,    4,   87,   52,    5,    6,
     7,    8,  142,  117,  117,  144,   96,  145,    2,    3,
    98,   99,  100,    4,  106,  107,    5,   63,   64,   65,
    66,   33,    1,    2,    3,    2,  111,  112,    4,  113,
@@ -303,19 +293,19 @@ static { yycheck(); }
 static void yycheck() {
 yycheck = new short[] {                         41,
    40,  125,   41,  125,    0,   67,   32,   40,   79,   71,
-   10,    1,   96,  125,   10,  125,  257,  257,    8,   40,
-   59,   47,  261,   13,  125,   43,  266,   45,   61,   43,
-  123,   45,   22,   43,   34,   45,   44,   27,   34,  256,
-   43,   59,   45,   33,  115,   59,   40,   37,  132,   59,
-  261,   59,   44,   79,  271,   42,   59,  119,  120,   49,
-   47,   61,  266,  267,   40,   61,   41,   59,   58,  256,
+   10,    1,   96,  125,   10,  125,  257,   42,    8,  257,
+   59,   47,   47,   13,  125,   43,  123,   45,   61,   43,
+   40,   45,   22,  274,   34,   40,   44,   27,   34,  256,
+   43,   59,   45,   33,  115,   59,  261,   37,  132,   44,
+   43,   59,   45,   79,  271,  261,   59,  119,  120,   49,
+   40,   61,  266,  267,   59,   61,   59,   41,   58,  256,
   257,  258,  272,  273,   41,  262,   41,   67,  265,  266,
-  267,  268,   61,   73,   41,   80,   81,  113,   59,  115,
+  267,  268,   61,   73,   83,   84,   41,  113,   59,  115,
    80,   81,   41,   83,   84,   59,  122,   44,  124,  256,
-  257,  258,   83,   84,   59,  262,  123,  266,  265,  266,
+  257,  258,   80,   81,  123,  262,   59,  274,  265,  266,
   267,  268,  138,  109,  110,  141,  123,  143,  257,  258,
-   41,  270,   41,  262,   59,   59,  265,  274,  275,  276,
-  277,   61,  256,  257,  258,  257,   59,  270,  262,   61,
+   41,  270,   41,  262,   59,   59,  265,  275,  276,  277,
+  278,   61,  256,  257,  258,  257,   59,  270,  262,   61,
   136,  265,  266,  267,  268,  257,  258,  257,  258,  270,
   262,   44,  262,  265,   61,  265,  257,  258,   61,   44,
   260,  262,  123,   44,  265,  269,   44,  269,    0,   61,
@@ -328,7 +318,7 @@ yycheck = new short[] {                         41,
 };
 }
 final static short YYFINAL=9;
-final static short YYMAXTOKEN=277;
+final static short YYMAXTOKEN=278;
 final static String yyname[] = {
 "end-of-file",null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
@@ -348,7 +338,7 @@ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,"ID","IF","THEN","ELSE","END_IF","OUT",
 "FUNC","RETURN","FOR","INTEGER","FLOAT","PROC","NS","NA","CADENA","UP","DOWN",
-"\"<=\"","\">=\"","\"!=\"","\"==\"",
+"CTE","\"<=\"","\">=\"","\"!=\"","\"==\"",
 };
 final static String yyrule[] = {
 "$accept : programa",
@@ -413,7 +403,7 @@ final static String yyrule[] = {
 "tipo : FLOAT",
 "tipo : INTEGER",
 "identificador : ID",
-"constante : INTEGER",
+"constante : CTE",
 };
 
 //#line 130 "gramatica.y"
@@ -424,7 +414,7 @@ void mostrarMensaje(String mensaje){
 
 
 
-//#line 341 "Parser.java"
+//#line 342 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -696,9 +686,9 @@ case 61:
 break;
 case 62:
 //#line 126 "gramatica.y"
-{mostrarMensaje("Reconocio constante entera");}
+{mostrarMensaje("Reconocio constante");}
 break;
-//#line 610 "Parser.java"
+//#line 611 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
@@ -761,9 +751,6 @@ public void run()
  * Default constructor.  Turn off with -Jnoconstruct .
 
  */
-
-// Definiciones propias
-
 Compilador c;
 ArrayList<String> errores = new ArrayList<String>();
 Token t;

@@ -141,10 +141,11 @@ public class Compilador {
 		tablaToken.put("CADENA",271);
 		tablaToken.put("UP",272);
 		tablaToken.put("DOWN",273);
-		tablaToken.put("<=", 274);
-		tablaToken.put(">=", 275);
-		tablaToken.put("!=", 276);
-		tablaToken.put("==", 277);
+		tablaToken.put("CTE",274);
+		tablaToken.put("<=", 275);
+		tablaToken.put(">=", 276);
+		tablaToken.put("!=", 277);
+		tablaToken.put("==", 278);
 		
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
