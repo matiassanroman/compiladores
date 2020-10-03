@@ -6,7 +6,6 @@ public class AS11_No_Accion extends AccionSemantica{
 	// no requiere realizar ninguna accion, no se realiza nada
 	
 	public int execute(StringBuffer buffer, char c) {
-		System.out.println("NoActionBuffer");
 		return 0;
 	}
 	

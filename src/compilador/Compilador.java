@@ -94,9 +94,9 @@ public class Compilador {
 			}
 			
 			asciiAnterior = asciiActual;
-			System.out.println("asciiActual: " + asciiActual);
+			//System.out.println("asciiActual: " + asciiActual);
 			int columna = diccionario.asciiToColumna(asciiActual);
-			System.out.println("Fila: " + estadoActual + " Columna: " + columna);
+			//System.out.println("Fila: " + estadoActual + " Columna: " + columna);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));

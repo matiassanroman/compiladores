@@ -1,0 +1,6 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: asd	 Value: asd	 Uso: ID
+Clave: dsa	 Value: dsa	 Uso: ID
