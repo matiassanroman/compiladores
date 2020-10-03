@@ -2,7 +2,7 @@
 package Compilador;
 %}
 
-%token ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN
+%token ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN CTE
 %token '<=' '>=' '!=' '==' 
 
 %left '+' '-'
@@ -123,7 +123,7 @@ tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT");}
 identificador : ID {mostrarMensaje("Reconocio identificador");}
 			  ;
 
-constante : INTEGER {mostrarMensaje("Reconocio constante entera");}
+constante : CTE {mostrarMensaje("Reconocio constante");}
           ;
 
 %%
