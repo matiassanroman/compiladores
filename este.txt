@@ -1,1 +1,3 @@
-asd123456789_12345gf12=abc;
+INTEGER asd;
+INTEGER dsa;
+asd=dsa;

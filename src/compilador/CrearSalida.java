@@ -20,11 +20,12 @@ public class CrearSalida {
 			salida.newLine();
 			
 			
-			Hashtable<String,Simbolo> tablaSimbolo= c.getTablaSimbolo();
+			Hashtable<String,Simbolo> tablaSimbolo = c.getTablaSimbolo();
 			salida.write("/*  Tabla de Simbolos  */");
 			salida.newLine();
 			salida.newLine();
 		
+			/*
 			Simbolo s1 = new Simbolo("ariel".toString());
 			s1.setUso("ID");
 			Simbolo s2 = new Simbolo("matias".toString());	
@@ -32,6 +33,7 @@ public class CrearSalida {
 			
 			tablaSimbolo.put(s1.getValor(),s1);
 			tablaSimbolo.put(s2.getValor(),s2);
+			*/
 			
 			Set<String> keys = tablaSimbolo.keySet();
 		    Iterator<String> itr = keys.iterator();

@@ -38,7 +38,7 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 			buffer.setLength(20);
 			tablaSimbolo.put(s.getValor(),s);
 			// ID fuera de rango, (codigo de error -3), para informar luego
-			return -3; 														
+			return 0; 														
 		}
 	}
 

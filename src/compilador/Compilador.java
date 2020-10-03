@@ -40,17 +40,19 @@ public class Compilador {
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
-	//							   l    =	;	d	 _	eof
-	//							   0    1   2    3   4   5
-	int[][] matrizTEstados = { 	  {1,	2,  0,   0,	 0,  0}, 
-			   				      {1,	0,  0,   1,  1,  0},
-			   				      {0,	0,  0,   0,  0,  0} 
+	//							  lmin lmay  =	 ;	 d	 _	 eof
+	//							   0    1	 2   3    4  5   6
+	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,  0}, 
+			   				      {1,	0,   0,  0,  1,  1,  0}, //Camino de id
+			   				      {0,	0,   0,  0,  0,  0,  0}, //Camino de =
+			   				      {0,	3,   0,  0,  0,  0,  0}, //Camino de palabras reservadas
 			   				 };
-	//												 lmin					    =			                ;                          d                  		  _                           eof
-	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer,	    as1_agregar_buffer,		    as6_end_simbolo,            as11_no_accion,				as11_no_accion,			    as11_no_accion}, 
-							  				  {as1_agregar_buffer,	    as2_verificar_longitud_id,	as2_verificar_longitud_id,	as1_agregar_buffer,	   		as1_agregar_buffer,		    as11_no_accion},
-											  {as7_end_simbolo_simple,	as11_no_accion,             as7_end_simbolo_simple,     as7_end_simbolo_simple,		as7_end_simbolo_simple,		as11_no_accion}
-							  				};
+	//												 lmin					    lmay			                =                        ;                  		d                           _						  eof
+	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer,	    as1_agregar_buffer,	        as1_agregar_buffer,		    as6_end_simbolo,            as11_no_accion,				as11_no_accion,			    as11_no_accion}, 
+							  				  {as1_agregar_buffer,	    as2_verificar_longitud_id,	as2_verificar_longitud_id,	as2_verificar_longitud_id,	as1_agregar_buffer,	   		as1_agregar_buffer,		    as11_no_accion},
+											  {as7_end_simbolo_simple,	as7_end_simbolo_simple,	    as11_no_accion,             as7_end_simbolo_simple,     as7_end_simbolo_simple,		as7_end_simbolo_simple,		as11_no_accion},
+							  				  {as3_devolver_pr,         as1_agregar_buffer,         as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as11_no_accion}
+	};
 	
 	
 	public void cargarArchivo(String origen) throws IOException{
@@ -164,6 +166,8 @@ public class Compilador {
 				
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
+				
+				CrearSalida.crearTxtSalida(c);
 				
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
