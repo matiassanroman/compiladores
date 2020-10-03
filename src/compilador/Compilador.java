@@ -124,29 +124,27 @@ public class Compilador {
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		
-		tablaToken.put("CTE",257);
-		tablaToken.put("ID",258);
-		tablaToken.put("IF",259);
-		tablaToken.put("THEN",260);
-		tablaToken.put("ELSE",261);
-		tablaToken.put("END_IF",262);
-		tablaToken.put("OUT",263);
-		tablaToken.put("FUNC",264);
-		tablaToken.put("RETURN",265);
-		tablaToken.put("FOR",266);
-		tablaToken.put("INTEGER",267);
-		tablaToken.put("FLOAT",268);
-		tablaToken.put("PROC",269);
-		tablaToken.put("NS",270);
-		tablaToken.put("NA",271);
-		tablaToken.put("CADENA",272);
-		tablaToken.put("UP",273);
-		tablaToken.put("DOWN",274);
-		
-		tablaToken.put("<=", 275);
-		tablaToken.put(">=", 276);
-		tablaToken.put("!=", 277);
-		tablaToken.put("==", 278);
+		tablaToken.put("ID",257);
+		tablaToken.put("IF",258);
+		tablaToken.put("THEN",259);
+		tablaToken.put("ELSE",260);
+		tablaToken.put("END_IF",261);
+		tablaToken.put("OUT",262);
+		tablaToken.put("FUNC",263);
+		tablaToken.put("RETURN",264);
+		tablaToken.put("FOR",265);
+		tablaToken.put("INTEGER",266);
+		tablaToken.put("FLOAT",267);
+		tablaToken.put("PROC",268);
+		tablaToken.put("NS",269);
+		tablaToken.put("NA",270);
+		tablaToken.put("CADENA",271);
+		tablaToken.put("UP",272);
+		tablaToken.put("DOWN",273);
+		tablaToken.put("<=", 274);
+		tablaToken.put(">=", 275);
+		tablaToken.put("!=", 276);
+		tablaToken.put("==", 277);
 		
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
