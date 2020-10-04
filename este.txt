@@ -1,4 +1,4 @@
 FLOAT f;
-INTEGER i;
+FLOAT ff;
 
-OUT("hola");
+f= ff;
