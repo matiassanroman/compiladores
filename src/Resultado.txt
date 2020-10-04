@@ -2,5 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: asd	 Value: asd	 Uso: ID
-Clave: dsa	 Value: dsa	 Uso: ID
+Clave: esteesuniddemasveint	 Value: esteesuniddemasveint	 Uso: ID

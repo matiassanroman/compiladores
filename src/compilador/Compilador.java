@@ -11,7 +11,6 @@ import accionesSemanticas.*;
 
 public class Compilador {
 	
-	
 	// int cantidad de errores; tener en cuenta para etapas 3 y 4
 	static StringBuffer buffer = new StringBuffer();
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
@@ -26,7 +25,6 @@ public class Compilador {
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
-	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
@@ -41,11 +39,11 @@ public class Compilador {
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
 	//							  lmin lmay  =	 ;	 d	 _	 eof
-	//							   0    1	 2   3    4  5   6
-	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,  0}, 
-			   				      {1,	0,   0,  0,  1,  1,  0}, //Camino de id
-			   				      {0,	0,   0,  0,  0,  0,  0}, //Camino de =
-			   				      {0,	3,   0,  0,  0,  0,  0}, //Camino de palabras reservadas
+	//							   0    1	 2   3   4   5    6
+	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,   0}, 
+			   				      {1,	0,   0,  0,  1,  1,   0}, //Camino de id
+			   				      {0,	0,   0,  0,  0,  0,   0}, //Camino de =
+			   				      {0,	3,   0,  0,  0,  0,   0}, //Camino de palabras reservadas
 			   				 };
 	//												 lmin					    lmay			                =                        ;                  		d                           _						  eof
 	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer,	    as1_agregar_buffer,	        as1_agregar_buffer,		    as6_end_simbolo,            as11_no_accion,				as11_no_accion,			    as11_no_accion}, 
@@ -53,7 +51,6 @@ public class Compilador {
 											  {as7_end_simbolo_simple,	as7_end_simbolo_simple,	    as11_no_accion,             as7_end_simbolo_simple,     as7_end_simbolo_simple,		as7_end_simbolo_simple,		as11_no_accion},
 							  				  {as3_devolver_pr,         as1_agregar_buffer,         as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as11_no_accion}
 	};
-	
 	
 	public void cargarArchivo(String origen) throws IOException{
 		File archivo = new File (origen);
@@ -115,7 +112,6 @@ public class Compilador {
 				return token;
 			}									//TRATAMIENTO DE ERRORES LÉXICOS
 			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
-				else if (token.getToken() == -3){ System.out.println("Warning en la linea "+nroLinea+": identificador supera la longitud máxima"); }
 					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }			
 		}
 		while (!hayToken);
