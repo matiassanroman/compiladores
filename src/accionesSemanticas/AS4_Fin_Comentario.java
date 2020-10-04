@@ -10,6 +10,7 @@ public class AS4_Fin_Comentario extends AccionSemantica{
 	public int execute(StringBuffer buffer, char c) {
 		buffer = new StringBuffer();
 		Compilador.limpiarBuffer();
+		System.out.println("entro comentario");
 		return 0;
 	}
 
