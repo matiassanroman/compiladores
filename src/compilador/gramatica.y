@@ -46,18 +46,18 @@ bloqueProc : '{' bloque '}' {mostrarMensaje("Reconocio bloque de procedimiento")
 		   | '{' error '}'  {yyerror("Error en el cuerpo del procedimiento");}
 		   ;
 
-bloque : bloque sentenciaDeclarativa ';'
-	   | bloque sentenciaEjecutable ';'
-	   | sentenciaDeclarativa ';'
-       | sentenciaEjecutable ';'
+bloque : bloque sentenciaDeclarativa
+	   | bloque sentenciaEjecutable 
+	   | sentenciaDeclarativa 
+       | sentenciaEjecutable 
        ;
 
 sentenciaEjecutable : asignacion
-					| OUT '(' CADENA ')'                         
-					| identificador '(' parametrosProc ')'
+					| OUT '(' CADENA ')' ';'                       
+					| identificador '(' parametrosProc ')' ';'
 					| IF cuerpoIf END_IF 
 					| cicloFor
-					| OUT '(' error ')'  {yyerror("Error en la cadena");}
+					| OUT '(' error ')' ';'  {yyerror("Error en la cadena");}
 					| IF error END_IF    {yyerror("Error en el cuerpo del IF");}
 					;
 
@@ -124,7 +124,6 @@ identificador : ID {mostrarMensaje("Reconocio identificador");}
 			  ;
 
 constante : CTE {mostrarMensaje("Reconocio constante");}
-		  | '-' CTE
           ;
 
 %%

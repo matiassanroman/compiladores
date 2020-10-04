@@ -2,5 +2,14 @@
 
 /*  Tabla de Simbolos  */
 
+<<<<<<< HEAD
 Clave: ff	 Value: ff	 Uso: ID
+=======
+<<<<<<< HEAD
+Clave: esteesuniddemasveint	 Value: esteesuniddemasveint	 Uso: ID
+=======
+Clave: i	 Value: i	 Uso: ID
+Clave: OUThola	 Value: OUThola	 Uso: CADENA
+>>>>>>> 22cdd04204b8311f8cadf5bfae184f5009f58810
 Clave: f	 Value: f	 Uso: ID
+>>>>>>> 54798f4ff6dd08539a8a13b3cad80b669f70d4e7

@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+INTEGER esteesuniddemasveinteporongas;
+=======
 FLOAT f;
 FLOAT ff;
 
+<<<<<<< HEAD
 f= ff;
+=======
+OUT("hola");
+>>>>>>> 54798f4ff6dd08539a8a13b3cad80b669f70d4e7
+>>>>>>> 22cdd04204b8311f8cadf5bfae184f5009f58810

@@ -11,7 +11,6 @@ import accionesSemanticas.*;
 
 public class Compilador {
 	
-	
 	// int cantidad de errores; tener en cuenta para etapas 3 y 4
 	static StringBuffer buffer = new StringBuffer();
 	public static void limpiarBuffer() { buffer.delete(0, buffer.length()); }
@@ -26,7 +25,6 @@ public class Compilador {
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
-	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
@@ -63,8 +61,8 @@ public class Compilador {
 				   				    /* 7 */   {as1_agregar_buffer,      as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,  as11_no_accion,       as5_end_cadena,   as1_agregar_buffer,  as1_agregar_buffer, 	as1_agregar_buffer,	  as11_no_accion,       as11_no_accion}, 
 				   				    /* 8 */   {as11_no_accion,          as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,      as11_no_accion,       as11_no_accion,   as1_agregar_buffer,  as1_agregar_buffer,	as1_agregar_buffer,	  as11_no_accion,       as11_no_accion} 			  
 							  				  
+
 	};
-	
 	
 	public void cargarArchivo(String origen) throws IOException{
 		File archivo = new File (origen);
@@ -127,7 +125,6 @@ public class Compilador {
 				return token;
 			}									//TRATAMIENTO DE ERRORES LÉXICOS
 			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
-				else if (token.getToken() == -3){ System.out.println("Warning en la linea "+nroLinea+": identificador supera la longitud máxima"); }
 					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }			
 		}
 		while (!hayToken);

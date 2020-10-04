@@ -18,28 +18,23 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 	//Controla que que la longitud de los identificadores(ID) sea menor o 
 	// igual a 20 caracteres
 	public int execute(StringBuffer buffer, char c) {
-		
-		
-		//+ referencia a la TS.
-		if(buffer.length() < 20){
+		// Bloques para controlar la longitud de la cadena
+		if (buffer.length() <= 20)
 			s = new Simbolo(buffer.toString());
-			//Si el String está en la TS, retornar identificador + referencia a la TS.
-			if(tablaSimbolo.contains(s)) { return tablaToken.get("ID"); }
-			//Si el String no está en la TS, se la dá de alta en la TS, retornar identificador
-			else {
-				s.setUso("ID");
-				tablaSimbolo.put(s.getValor(),s);
-				return tablaToken.get("ID");
-			}
-		}
-		//Si longitud > 20, truncar(String), informar "String truncado a longitud 20"
 		else {
-			s = new Simbolo(buffer.substring(0,19));
+			s = new Simbolo(buffer.substring(0,20));
 			buffer.setLength(20);
 			tablaSimbolo.put(s.getValor(),s);
-			// ID fuera de rango, (codigo de error -3), para informar luego
-			return 0; 														
+			System.out.println("Warning: Longitud de identificador excedido, truncado a 20");
 		}
+		
+		if(!tablaSimbolo.contains(s)) {
+			tablaSimbolo.put(s.getValor(),s);
+		}
+		
+		s.setUso("ID");
+		return tablaToken.get("ID");
+		
 	}
 
 	public Simbolo getSimbolo() {
