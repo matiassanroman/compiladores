@@ -1,3 +1,4 @@
-INTEGER asd;
-FLOAT dsa;
-asd=dsa;
+FLOAT f;
+INTEGER i;
+
+OUT("hola");

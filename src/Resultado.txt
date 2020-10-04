@@ -2,5 +2,6 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: asd	 Value: asd	 Uso: ID
-Clave: dsa	 Value: dsa	 Uso: ID
+Clave: i	 Value: i	 Uso: ID
+Clave: OUThola	 Value: OUThola	 Uso: CADENA
+Clave: f	 Value: f	 Uso: ID

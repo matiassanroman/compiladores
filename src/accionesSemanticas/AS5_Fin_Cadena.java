@@ -20,6 +20,7 @@ public class AS5_Fin_Cadena extends AccionSemantica{
 	// Al finalizar de reconocer una cadena, si esta el la tabla
 	// se retorna sino se la agrega y luego se retorna
 	public int execute(StringBuffer buffer, char c) {
+		System.out.println("Cadena entro");
 		this.s = new Simbolo(buffer.toString());
 		s.setTipo("Cadena");
 		// Si está en la tabla
