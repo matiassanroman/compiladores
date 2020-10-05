@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-INTEGER esteesuniddemasveinteporongas;
-=======
 FLOAT f;
-INTEGER i;
-
-OUT("hola");
->>>>>>> 54798f4ff6dd08539a8a13b3cad80b669f70d4e7
+FLOAT ff;
+FLOAT r;
+r=r/ff;

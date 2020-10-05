@@ -17,7 +17,11 @@
 
 
 //#line 2 "gramatica.y"
-package Compilador;
+package compilador;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 //#line 19 "Parser.java"
 
 

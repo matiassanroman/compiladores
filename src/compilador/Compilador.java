@@ -38,28 +38,28 @@ public class Compilador {
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
-	//							  lmin lmay  =	 ;	 d	 _	 %   /nl   "    -   (   )   eof
-	//							   0    1	 2   3   4   5   6    7    8    9  10  11   12
-	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,  4,	  0,   6,	0,	0,  0,	0}, // 0
-			   				      {1,	0,   0,  0,  1,  1,  0,	  0,   0,   0,  0,	0,	0}, // 1 Camino de id
-			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0}, // 2 Camino de =
-			   				      {0,	3,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0}, // 3 Camino de palabras reservadas
-			   				      {0,   0,   0,  0,  0,  0,  5,   0,   0,   0,	0,	0,	0}, // 4 Reconozco el primer % del comentario
-			   				      {5,   5,   5,  5,  5,  5,  5,   0,   0,   5,	5,	5,	0}, // 5 Reconozco el segundo % del comentario
-			   				      {6,   6,   6,  6,  6,  6,  6,   0,   0,   7,	7,	7,	0}, // 6 Reconozco cadenas
-			   				      {8,   8,   8,  8,  8,  8,  8,   6,   0,   7,	7,	7,	0}, // 7 Reconozco cadenas multilinea
-			   				      {0,   0,   0,  0,  0,  0,  0,   0,   0,   7,	7,	7,	0} 	// 8 Reconozco cadenas multilinea
+	//							  lmin lmay  =	 ;	 d	 _	 %   /nl   "    -   (   )   b   bb   +   *   /   ,   {   }   eof
+	//							   0    1	 2   3   4   5   6    7    8    9  10  11   12  13   14  15 16  17   18  19   20
+	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,  4,	  0,   6,	0,	0,  0,	0,	0,   0,	 0,	 0,	 0,  0,  0,   0}, // 0
+			   				      {1,	0,   0,  0,  1,  1,  0,	  0,   0,   0,  0,	0,	0,	0,	 0,  0,  0,  0,  0,  0,   0}, // 1 Camino de id
+			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,   0}, // 2 Camino de =
+			   				      {0,	3,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,   0}, // 3 Camino de palabras reservadas
+			   				      {0,   0,   0,  0,  0,  0,  5,   0,   0,   0,	0,	0,	0,	0,   0,  0,  0,  0,  0,  0,   0}, // 4 Reconozco el primer % del comentario
+			   				      {5,   5,   5,  5,  5,  5,  5,   0,   0,   5,	5,	5,	5,	0,   5,  5,  5,  5,  5,  5,   0}, // 5 Reconozco el segundo % del comentario
+			   				      {6,   6,   6,  6,  6,  6,  6,   0,   0,   7,	6,	6,	6,	6,   6,  6,  6,  6,  6,  6,   0}, // 6 Reconozco cadenas
+			   				      {8,   8,   8,  8,  8,  8,  8,   6,   0,   7,	8,	8,	8,	6,   8,  8,  8,  8,  8,  8,   0}, // 7 Reconozco cadenas multilinea
+			   				      {8,   8,   8,  8,  8,  8,  8,   0,   0,   7,	8,	8,	8,	0,   8,  8,  8,  8,  8,  8,   0} // 8 Reconozco cadenas multilinea
 							};
-	//												 lmin					    lmay			                =                        ;                  		d                           _						  %					  /n			          "	    		    -				  	(				      )			              eof
-	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer,	    as1_agregar_buffer,	        as1_agregar_buffer,		    as6_end_simbolo,            as11_no_accion,				as11_no_accion,			    as1_agregar_buffer,	 as11_no_accion,   	   as11_no_accion,   as11_no_accion,      as6_end_simbolo,      as6_end_simbolo,      as11_no_accion}, 
-									/* 1 */	  {as1_agregar_buffer,	    as2_verificar_longitud_id,	as2_verificar_longitud_id,	as2_verificar_longitud_id,	as1_agregar_buffer,	   		as1_agregar_buffer,		    as11_no_accion,		 as11_no_accion,	   as11_no_accion,   as11_no_accion,      as11_no_accion,	    as11_no_accion,       as11_no_accion},
-									/* 2 */	  {as7_end_simbolo_simple,	as7_end_simbolo_simple,	    as11_no_accion,             as7_end_simbolo_simple,     as7_end_simbolo_simple,		as7_end_simbolo_simple,		as11_no_accion,		 as11_no_accion,	   as11_no_accion,   as11_no_accion,      as11_no_accion,	    as11_no_accion,	      as11_no_accion},
-									/* 3 */	  {as3_devolver_pr,         as1_agregar_buffer,         as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as3_devolver_pr,            as11_no_accion,		 as11_no_accion,	   as11_no_accion,   as11_no_accion,      as11_no_accion,	    as11_no_accion,	      as11_no_accion},
-									/* 4 */	  {as11_no_accion,          as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as1_agregar_buffer,  as11_no_accion,	   as11_no_accion,   as11_no_accion,      as11_no_accion,	    as11_no_accion,	      as11_no_accion}, 
-									/* 5 */	  {as1_agregar_buffer,      as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,  as4_end_comentario,   as11_no_accion,   as11_no_accion,      as11_no_accion,	    as11_no_accion,       as11_no_accion},
-							  		/* 6 */   {as1_agregar_buffer,   	as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,  as11_no_accion,       as5_end_cadena,   as1_agregar_buffer,  as1_agregar_buffer,   as1_agregar_buffer,   as11_no_accion}, 
-				   				    /* 7 */   {as1_agregar_buffer,      as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,         as1_agregar_buffer,  as11_no_accion,       as5_end_cadena,   as1_agregar_buffer,  as1_agregar_buffer, 	as1_agregar_buffer,	  as11_no_accion}, 
-				   				    /* 8 */   {as11_no_accion,          as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,             as11_no_accion,      as11_no_accion,       as11_no_accion,   as1_agregar_buffer,  as1_agregar_buffer,	as1_agregar_buffer,	  as11_no_accion} 			  
+	//												 lmin					    lmay			           =                        ;                  		      d                         _			        %					  /n			  "	    		    -				  	(				     )			      blanco				      bb   					+   						*   					 	/   					, 	  				{   				}		  		eof
+	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as6_end_simbolo		  , as11_no_accion		  ,	as11_no_accion		  , as1_agregar_buffer , as11_no_accion	   , as11_no_accion , as6_end_simbolo	, as6_end_simbolo	, as6_end_simbolo	, as11_no_accion		   , as11_no_accion, as6_end_simbolo   		  , as6_end_simbolo   		 , as6_end_simbolo   		, as6_end_simbolo   , as6_end_simbolo   , as6_end_simbolo   , as11_no_accion}, 
+									/* 1 */	  {as1_agregar_buffer    , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id,	as1_agregar_buffer    ,	as1_agregar_buffer	  ,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	, as11_no_accion	, as2_verificar_longitud_id, as11_no_accion, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion},
+									/* 2 */	  {as7_end_simbolo_simple, as7_end_simbolo_simple   , as11_no_accion		   , as7_end_simbolo_simple	  , as7_end_simbolo_simple,	as7_end_simbolo_simple,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	, as11_no_accion	, as7_end_simbolo_simple   , as11_no_accion, as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion},
+									/* 3 */	  {as3_devolver_pr       , as1_agregar_buffer       , as3_devolver_pr		   , as3_devolver_pr		  , as3_devolver_pr	      , as3_devolver_pr		  , as3_devolver_pr	   , as3_devolver_pr   , as3_devolver_pr, as3_devolver_pr	, as3_devolver_pr	, as3_devolver_pr	, as3_devolver_pr		   , as11_no_accion, as3_devolver_pr   		  , as3_devolver_pr   		 , as3_devolver_pr   		, as3_devolver_pr   , as3_devolver_pr   , as3_devolver_pr   , as11_no_accion},
+									/* 4 */	  {as11_no_accion        , as11_no_accion			, as11_no_accion		   , as11_no_accion			  , as11_no_accion		  , as11_no_accion		  , as1_agregar_buffer , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	, as11_no_accion	, as11_no_accion		   , as11_no_accion, as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion}, 
+									/* 5 */	  {as1_agregar_buffer    , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as4_end_comentario, as11_no_accion , as11_no_accion	, as11_no_accion	, as11_no_accion	, as11_no_accion		   , as11_no_accion, as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion    , as11_no_accion    , as11_no_accion    , as11_no_accion},
+							  		/* 6 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as11_no_accion}, 
+				   				    /* 7 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as11_no_accion}, 
+				   				    /* 8 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  ,  as1_agregar_buffer, as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer, as11_no_accion}, 			  
 							  				  
 
 	};
@@ -98,7 +98,7 @@ public class Compilador {
 			else {
 				//System.out.println("Anterior " + asciiAnterior);
 				asciiActual = br.read();
-				//System.out.println("Actual " + asciiActual);
+				//System.out.println("Actual " + asciiActual + " " + (char)asciiActual);
 				if(asciiActual == 13) { nroLinea++; }
 			}
 			
@@ -109,6 +109,7 @@ public class Compilador {
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
+			//System.out.println("Token:" + token.getToken());
 			acomodarLinea = AS.acomodarLinea();
 			estadoActual = estadoSiguiente;
 			
