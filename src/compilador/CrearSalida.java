@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class CrearSalida {
 
 	public static void crearTxtSalida(Compilador c) {

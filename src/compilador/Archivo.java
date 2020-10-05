@@ -22,7 +22,8 @@ public class Archivo {
 	public void cargarArchivo(String ruta) throws IOException{
 		
 		File archivo = null;
-	    FileReader fr = null;
+	    @SuppressWarnings("unused")
+		FileReader fr = null;
 		
 		System.out.println("hola: " + ruta);
 		archivo = new File(ruta);

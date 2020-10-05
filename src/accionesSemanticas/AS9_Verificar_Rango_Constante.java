@@ -41,7 +41,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 		// Si la cte está fuera de los rangos
 		else                                    	
 			if((cte<minValorCte) || (cte>maxValorCte)) return -4;	   		
-			else return 0;        // Retornar -4, para ERROR de fuera de rango
+			else return -4;        // Retornar -4, para ERROR de fuera de rango
 	}
 
 	// Al leer simbolo se puede leer uno que no corresponda a la 
