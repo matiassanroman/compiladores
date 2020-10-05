@@ -1,4 +1,4 @@
 FLOAT f;
 FLOAT ff;
 FLOAT r;
-r=r+ff;
+r=r/ff;
