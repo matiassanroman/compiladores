@@ -2,8 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: fff	 Value: fff	 Uso: ID
 Clave: ff	 Value: ff	 Uso: ID
 Clave: r	 Value: r	 Uso: ID
-Clave: hola ---hola	 Value: hola ---hola	 Uso: CADENA
 Clave: f	 Value: f	 Uso: ID
+Clave: rff	 Value: rff	 Uso: ID

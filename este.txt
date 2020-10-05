@@ -1,9 +1,4 @@
 FLOAT f;
 FLOAT ff;
-f= ff;
-OUT("hola ---
-hola");
-
 FLOAT r;
-
-r = f-ff;
+r=r+ff;
