@@ -1,4 +1,8 @@
 FLOAT f;
-FLOAT ff;
 FLOAT r;
-r=r/ff;
+
+IF(f != r){
+f=r;
+}
+ELSE
+END_IF

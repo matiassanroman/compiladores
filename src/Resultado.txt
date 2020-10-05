@@ -2,6 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: ff	 Value: ff	 Uso: ID
 Clave: r	 Value: r	 Uso: ID
 Clave: f	 Value: f	 Uso: ID
