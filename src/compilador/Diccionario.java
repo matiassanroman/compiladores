@@ -8,9 +8,9 @@ public class Diccionario {
 	
 	public Diccionario() {
 		
-//		diccionario.put(60, 0); 	// <
-	//	diccionario.put(62, 1); 	// >
-	//	diccionario.put(33, 2); 	// !
+		diccionario.put(60, 20); 	// <
+		diccionario.put(62, 21); 	// >
+		diccionario.put(33, 22); 	// !
 //		diccionario.put(102, 7); 	// f
 //		diccionario.put(46, 4); 	// .
 //		diccionario.put(9, 12); 	// tab
@@ -49,7 +49,7 @@ public class Diccionario {
 		//DECIMALES
 		else if (ascii >= 48 && ascii <= 57)     { return diccionario.get(15); }
 		else if (diccionario.containsKey(ascii)) { return diccionario.get(ascii); }
-		else return 20;		
+		else return 23;		
 		}
 	
 	public static boolean contiene(int clave) { return diccionario.containsKey(clave); }
