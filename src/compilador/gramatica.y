@@ -40,7 +40,7 @@ parametrosProc : parametro
 			   | parametro ',' parametro ',' parametro
 			   ;
 
-parametro : tipo identificador  {yyerror("Error en el parametro, tipo invalido");}
+parametro : tipo identificador  {mostrarMensaje("Reconocio parametro");}
 		  ;
 
 bloqueProc : '{' bloque '}' {mostrarMensaje("Reconocio bloque de procedimiento");}
