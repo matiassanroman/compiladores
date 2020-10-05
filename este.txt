@@ -1,8 +1,10 @@
 FLOAT f;
 FLOAT r;
 
-IF(f != r){
+PROC f(FLOAT r, INTEGER s, FLOAT ss) NA=INTEGER, NS=INTEGER
+{
+IF(f==r){
 f=r;
 }
-ELSE
 END_IF
+}

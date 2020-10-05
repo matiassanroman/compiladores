@@ -599,7 +599,7 @@ case 14:
 break;
 case 18:
 //#line 43 "gramatica.y"
-{yyerror("Error en el parametro, tipo invalido");}
+{mostrarMensaje("Reconocio parametro");}
 break;
 case 19:
 //#line 46 "gramatica.y"
@@ -643,11 +643,11 @@ case 39:
 break;
 case 44:
 //#line 91 "gramatica.y"
-{mostrarMensaje("Reconocio IF con cuerpo en ELSE");}
+{mostrarMensaje("Reconocio IF con ELSE");}
 break;
 case 45:
 //#line 94 "gramatica.y"
-{mostrarMensaje("Reconocio IF sin cuerpo en ELSE");}
+{mostrarMensaje("Reconocio IF sin ELSE");}
 break;
 case 46:
 //#line 97 "gramatica.y"
