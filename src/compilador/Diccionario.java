@@ -15,7 +15,7 @@ public class Diccionario {
 //		diccionario.put(46, 4); 	// .
 //		diccionario.put(9, 12); 	// tab
 //		//diccionario.put(14, 13); 	// c
-		//	diccionario.put(105, 24); 	// i
+		diccionario.put(105, 23); 	// i
 		//diccionario.put(3, 27); 	// eof
 	
 		diccionario.put(61, 2); 	// =
@@ -42,6 +42,8 @@ public class Diccionario {
 	}
 	
 	public int asciiToColumna(int ascii){
+		//i para constante
+		if(ascii == 105) { return diccionario.get(105); }
 		//MAYUSCULA
 		if(ascii >= 65 && ascii <= 90) { return diccionario.get(1); }
 		//MINUSCULA
@@ -49,7 +51,7 @@ public class Diccionario {
 		//DECIMALES
 		else if (ascii >= 48 && ascii <= 57)     { return diccionario.get(15); }
 		else if (diccionario.containsKey(ascii)) { return diccionario.get(ascii); }
-		else return 23;		
+		else return 24;		
 		}
 	
 	public static boolean contiene(int clave) { return diccionario.containsKey(clave); }

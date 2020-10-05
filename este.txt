@@ -1,10 +1,4 @@
-FLOAT f;
+INTEGER f;
 FLOAT r;
 
-PROC f(FLOAT r, INTEGER s, FLOAT ss) NA=INTEGER, NS=INTEGER
-{
-IF(f==r){
-f=r;
-}
-END_IF
-}
+f=13_i;
