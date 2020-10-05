@@ -18,7 +18,7 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
                | sentenciaEjecutable 
                ;
 
-sentenciaDeclarativa : tipo listaVariables ';'        
+sentenciaDeclarativa : tipo listaVariables ';'       {mostrarMensaje("Reconocio declaracion de una o mas variables");}
 					 | declaracionProcedimiento
 					 | error listaVariables ';'      {yyerror("Error en la sentencia, tipo invalido");}
 					 ;
@@ -30,14 +30,15 @@ listaVariables : listaVariables ',' identificador
 declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo");}
 						 ;
 
-encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' tipo ',' NS '=' tipo
-			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' tipo
+encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' tipo ',' NS '=' tipo {mostrarMensaje("Reconocio PROC con parametros");}
+			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' tipo                {mostrarMensaje("Reconocio PROC sin parametros");}
 			   | PROC identificador '(' error ')' NA '=' tipo ',' NS '=' tipo {yyerror("Error en los parametros de procedimiento");}
 			   ; 
 
 parametrosProc : parametro
 			   | parametro ',' parametro
 			   | parametro ',' parametro ',' parametro
+			   ;
 
 parametro : tipo identificador  {yyerror("Error en el parametro, tipo invalido");}
 		  ;
@@ -53,18 +54,18 @@ bloque : bloque sentenciaDeclarativa
        ;
 
 sentenciaEjecutable : asignacion
-					| OUT '(' CADENA ')' ';'                       
-					| identificador '(' parametrosProc ')' ';'
+					| OUT '(' CADENA ')' ';' {mostrarMensaje("Reconocio OUT CADENA");}                      
+					| identificador '(' parametrosProc ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento");}
 					| IF cuerpoIf END_IF 
-					| cicloFor
+					| cicloFor {mostrarMensaje("Reconocio ciclo FOR");}
 					| OUT '(' error ')' ';'  {yyerror("Error en la cadena");}
 					| IF error END_IF    {yyerror("Error en el cuerpo del IF");}
 					;
 
-cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio ciclo FOR");}
+cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' 
          ;
 
-condicionFor : inicioFor ';' condicion ';' incDec {mostrarMensaje("Reconocio condicion del FOR");}
+condicionFor : inicioFor ';' condicion ';' incDec {mostrarMensaje("Reconocio encabezado del FOR");}
 			 ;
 
 inicioFor : identificador '=' constante
@@ -90,7 +91,7 @@ cuerpoIf : cuerpoCompleto
 cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia '}'	{mostrarMensaje("Reconocio IF con cuerpo en ELSE");}		   	  
 			   ; 
 
-cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE {mostrarMensaje("Reconocio IF sin cuerpo en ELSE");}
+cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio IF sin cuerpo en ELSE");}
 				 ;
 
 asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion");}
@@ -98,12 +99,12 @@ asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignaci
 
 expresion : expresion '+' termino {mostrarMensaje("Reconocio suma");}
 		  | expresion '-' termino {mostrarMensaje("Reconocio resta");}
-		  | termino               {mostrarMensaje("Reconocio termino");}
+		  | termino               
 		  ;
 
 termino : termino '*' factor {mostrarMensaje("Reconocio multiplicacion");}
 		| termino '/' factor {mostrarMensaje("Reconocio division");}
-		| factor             {mostrarMensaje("Reconocio factor");}
+		| factor             
 		;
 
 factor : constante
@@ -123,7 +124,8 @@ tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT");}
 identificador : ID {mostrarMensaje("Reconocio identificador");}
 			  ;
 
-constante : CTE {mostrarMensaje("Reconocio constante");}
+constante : CTE     {mostrarMensaje("Reconocio constante");}
+		  | '-' CTE {mostrarMensaje("Reconocio constante negativa");}
           ;
 
 %%
