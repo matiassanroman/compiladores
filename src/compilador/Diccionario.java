@@ -12,7 +12,7 @@ public class Diccionario {
 		diccionario.put(62, 21); 	// >
 		diccionario.put(33, 22); 	// !
 //		diccionario.put(102, 7); 	// f
-//		diccionario.put(46, 4); 	// .
+		diccionario.put(46, 24); 	// .
 //		diccionario.put(9, 12); 	// tab
 //		//diccionario.put(14, 13); 	// c
 		diccionario.put(105, 23); 	// i
@@ -51,7 +51,7 @@ public class Diccionario {
 		//DECIMALES
 		else if (ascii >= 48 && ascii <= 57)     { return diccionario.get(15); }
 		else if (diccionario.containsKey(ascii)) { return diccionario.get(ascii); }
-		else return 24;		
+		else return 26;		
 		}
 	
 	public static boolean contiene(int clave) { return diccionario.containsKey(clave); }

@@ -1,4 +1,4 @@
 INTEGER f;
 FLOAT r;
 
-f=13_i;
+d=10.;

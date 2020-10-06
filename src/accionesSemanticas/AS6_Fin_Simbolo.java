@@ -4,7 +4,7 @@ public class AS6_Fin_Simbolo extends AccionSemantica{
 	
 	/*
 	Identifica que el token es un simbolo devolviendolo. Estos simbolos son:
-	'{' '}' '(' ')' ',' ';' '+' '-' '*' '/' 
+	'{' '}' '(' ')' ',' ';' '+' '-' '*' '/' '.'
 	*/ 
 	
 	// Se agrega al buffer el caracter 'c', corresponde 

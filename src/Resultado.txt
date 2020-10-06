@@ -2,6 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: 13	 Value: 13	 Uso: CTE
+Clave: 10	 Value: 10	 Uso: CTE
 Clave: r	 Value: r	 Uso: ID
 Clave: f	 Value: f	 Uso: ID
+Clave: d	 Value: d	 Uso: ID
