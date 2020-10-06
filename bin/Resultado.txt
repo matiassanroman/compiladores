@@ -1,0 +1,15 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+Clave: ss	 Value: ss	 Uso: ID
+Clave: s	 Value: s	 Uso: ID
+Clave: r	 Value: r	 Uso: ID
+>>>>>>> 90c5136196d514ce5ed906ccdb53827f811c0f19
+Clave: f	 Value: f	 Uso: ID
+=======
+Clave: a	 Value: a	 Uso: ID
+>>>>>>> 77c8470ecf6b7af62e059406b03e40dda1696d5e

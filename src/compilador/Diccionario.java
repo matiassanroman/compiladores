@@ -11,11 +11,11 @@ public class Diccionario {
 		diccionario.put(60, 20); 	// <
 		diccionario.put(62, 21); 	// >
 		diccionario.put(33, 22); 	// !
-//		diccionario.put(102, 7); 	// f
-//		diccionario.put(46, 4); 	// .
+		diccionario.put(102, 25); 	// f
+		diccionario.put(46, 24); 	// .
 //		diccionario.put(9, 12); 	// tab
 //		//diccionario.put(14, 13); 	// c
-		//	diccionario.put(105, 24); 	// i
+		diccionario.put(105, 23); 	// i
 		//diccionario.put(3, 27); 	// eof
 	
 		diccionario.put(61, 2); 	// =
@@ -42,6 +42,10 @@ public class Diccionario {
 	}
 	
 	public int asciiToColumna(int ascii){
+		//i para constante
+		if(ascii == 105) { return diccionario.get(105); }
+		//f para flotante
+		if(ascii == 102) { return diccionario.get(102); }
 		//MAYUSCULA
 		if(ascii >= 65 && ascii <= 90) { return diccionario.get(1); }
 		//MINUSCULA
@@ -49,7 +53,7 @@ public class Diccionario {
 		//DECIMALES
 		else if (ascii >= 48 && ascii <= 57)     { return diccionario.get(15); }
 		else if (diccionario.containsKey(ascii)) { return diccionario.get(ascii); }
-		else return 23;		
+		else return 26;		
 		}
 	
 	public static boolean contiene(int clave) { return diccionario.containsKey(clave); }

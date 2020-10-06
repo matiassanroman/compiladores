@@ -1,14 +1,2 @@
-FLOAT f;
-<<<<<<< HEAD
-f = 10;
-=======
-FLOAT r;
-
-PROC f(FLOAT r, INTEGER s, FLOAT ss) NA=INTEGER, NS=INTEGER
-{
-IF(f==r){
-f=r;
-}
-END_IF
-}
->>>>>>> 90c5136196d514ce5ed906ccdb53827f811c0f19
+INTEGER j;
+j= 1.2;

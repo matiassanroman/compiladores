@@ -27,7 +27,6 @@ public class AS3_Devolver_PR extends AccionSemantica{
 	public Simbolo getSimbolo() { return this.s; }
 	
 	public int execute(StringBuffer buffer, char c) {
-		//System.out.println("Hola: " + c + " " + (int)c);
 		//Retorna Palabra Reservada
 		return tablaToken.get(buffer.toString());
 	}

@@ -38,40 +38,49 @@ public class Compilador {
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	
-	//							  lmin lmay  =	 ;	 d	 _	 %   /nl   "    -   (   )   b   bb   +   *   /   ,   {   }   <   >   !	eof
-	//							   0    1	 2   3   4   5   6    7    8    9  10  11   12  13   14  15 16  17   18  19  20  21  22  23
-	int[][] matrizTEstados = { 	  {1,	3,   2,  0,	 0,  0,  4,	  0,   6,	0,	0,  0,	0,	0,   0,	 0,	 0,	 0,  0,  0,  9,  10, 11, 0}, // 0
-			   				      {1,	0,   0,  0,  1,  1,  0,	  0,   0,   0,  0,	0,	0,	0,	 0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 1 Camino de id
-			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 2 Camino de = o ==
-			   				      {0,	3,   0,  0,  0,  3,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 3 Camino de palabras reservadas
-			   				      {0,   0,   0,  0,  0,  0,  5,   0,   0,   0,	0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 4 Reconozco el primer % del comentario
-			   				      {5,   5,   5,  5,  5,  5,  5,   0,   0,   5,	5,	5,	5,	0,   5,  5,  5,  5,  5,  5,  5,  5,  5,  0}, // 5 Reconozco el segundo % del comentario
-			   				      {6,   6,   6,  6,  6,  6,  6,   0,   0,   7,	6,	6,	6,	6,   6,  6,  6,  6,  6,  6,  6,  6,  6,  0}, // 6 Reconozco cadenas
-			   				      {8,   8,   8,  8,  8,  8,  8,   6,   0,   7,	8,	8,	8,	6,   8,  8,  8,  8,  8,  8,  8,  8,  8,  0}, // 7 Reconozco cadenas multilinea
-			   				      {8,   8,   8,  8,  8,  8,  8,   0,   0,   7,	8,	8,	8,	0,   8,  8,  8,  8,  8,  8,  8,  8,  8,  0}, // 8 Reconozco cadenas multilinea
-			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 9 Reconozco < <=
-			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // 10 Reconozco > >=
-			   				      {0,	0,   0,  0,  0,  0,  0,	  0,   0,   0,  0,	0,	0,	0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0}  // 11 Reconozco !=
-			   				      					
-	
+	//							  					lmin lmay  =  ;   d   _   %  /nl "    -   (  )  b  bb   +  *  /   ,  {  }  <   >   !   i   .   f  eof
+	//							   					   0    1  2  3   4   5   6   7  8    9  10 11 12  13  14 15 16  17 18 19 20  21  22  23  24  25  26  
+	int[][] matrizTEstados = { 	  
+/*                                                 0*/{1,	3, 2, 0, 12,  0,  4,  0, 6,	  0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 9, 10, 11,  1, 16,  1,  0}, /* 0 */
+/*                               Camino de id      1*/{1,	0, 0, 0,  1,  1,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 1 Camino de id */
+/*                           Camino de = o ==      2*/{0,	0, 0, 0,  0,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 2 Camino de = o == */
+/*              Camino de palabras reservadas      3*/{0,	3, 0, 0,  0,  3,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 3 Camino de palabras reservadas */
+/*       Reconozco el primer % del comentario      4*/{0,   0, 0, 0,  0,  0,  5,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 4 Reconozco el primer % del comentario */
+/*      Reconozco el segundo % del comentario      5*/{5,   5, 5, 5,  5,  5,  5,  0, 0,   5,  5, 5,	5,	0,  5, 5, 5,  5, 5, 5, 5,  5,  5,  5,  5,  5,  0}, /* 5 Reconozco el segundo % del comentario */
+/*                       Reconozco comentario      6*/{6,   6, 6, 6,  6,  6,  6,  0, 0,   7,  6, 6,	6,	6,  6, 6, 6,  6, 6, 6, 6,  6,  6,  6,  6,  6,  0}, /* 6 Reconozco comentario */
+/*               Reconozco cadenas multilinea      7*/{8,   8, 8, 8,  8,  8,  8,  6, 0,   7,  8, 8,	8,	6,  8, 8, 8,  8, 8, 8, 8,  8,  8,  8,  8,  8,  0}, /* 7 Reconozco cadenas multilinea */
+/*               Reconozco cadenas multilinea      8*/{8,   8, 8, 8,  8,  8,  8,  0, 0,   7,  8, 8,	8,	0,  8, 8, 8,  8, 8, 8, 8,  8,  8,  8,  8,  8,  0}, /* 8 Reconozco cadenas multilinea */
+/*                             Reconozco < <=      9*/{0,	0, 0, 0,  0,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 9 Reconozco < <= */
+/*                            Reconozco > >=      10*/{0,	0, 0, 0,  0,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 10 Reconozco > >= */
+/*                              Reconozco !=      11*/{0,	0, 0, 0,  0,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 11 Reconozco != */
+/*                Reconozco constante entera      12*/{0,	0, 0, 0, 12, 13,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0, 14,  0,  0}, /* 12 Reconozco constante entera */					
+/*                Reconozco constante entera      13*/{0,	0, 0, 0,  0,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0, 13,  0,  0,  0}, /* 13 Reconozco constante entera */
+/*          Reconozco flotantes del tipo 10.      14*/{0,	0, 0, 0, 14,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0, 15,  0}, /* 14 Reconozco flotantes del tipo 10. */
+/*   Reconozco flotantes del tipo 10.10f+-10      15*/{0,	0, 0, 0,  0,  0,  0,  0, 0,  16,  0, 0,	0,	0, 16, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 15 Reconozco flotantes del tipo 10.10f+-10 */
+/* Reconozco flotantes del tipo 10.10f+-10 y 0.50 16*/{0,	0, 0, 0, 16,  0,  0,  0, 0,   0,  0, 0,	0,	0,  0, 0, 0,  0, 0, 0, 0,  0,  0,  0,  0,  0,  0}, /* 16 Reconozco flotantes del tipo 10.10f+-10 y 0.50 */
 							}; 
-	//												 lmin					    lmay			           =                        ;                  		    d                     _			              %					  /n			       "	    		-				  	(				           )			             blanco				           bb   			+   					  *   					 	 /   					    , 	  							{   				}		  		   <				 			>			   		     	!						eof
-	AccionSemantica[][] matrizASemanticas = { {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as6_end_simbolo		  , as11_no_accion		  ,	as11_no_accion		  , as1_agregar_buffer , as11_no_accion	   , as11_no_accion , as6_end_simbolo	, as6_end_simbolo	        , as6_end_simbolo	        , as11_no_accion		   , as11_no_accion, as6_end_simbolo   		  , as6_end_simbolo   		 , as6_end_simbolo   		, as6_end_simbolo              , as6_end_simbolo   , as6_end_simbolo   , as1_agregar_buffer       , as1_agregar_buffer		 , as1_agregar_buffer		, as11_no_accion}, 
-									/* 1 */	  {as1_agregar_buffer    , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id,	as1_agregar_buffer    ,	as1_agregar_buffer	  ,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as2_verificar_longitud_id	, as2_verificar_longitud_id	, as2_verificar_longitud_id, as11_no_accion, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id    , as11_no_accion    , as11_no_accion    , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion},
-									/* 2 */	  {as7_end_simbolo_simple, as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple	  , as7_end_simbolo_simple,	as7_end_simbolo_simple,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion 	        , as11_no_accion	        , as7_end_simbolo_simple   , as11_no_accion, as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion           , as11_no_accion           , as11_no_accion			, as11_no_accion},
-									/* 3 */	  {as3_devolver_pr       , as1_agregar_buffer       , as3_devolver_pr		   , as3_devolver_pr		  , as3_devolver_pr	      , as1_agregar_buffer	  , as3_devolver_pr	   , as3_devolver_pr   , as3_devolver_pr, as3_devolver_pr	, as3_devolver_pr	        , as3_devolver_pr	        , as3_devolver_pr		   , as3_devolver_pr, as3_devolver_pr   	  , as3_devolver_pr   		 , as3_devolver_pr   		, as3_devolver_pr              , as3_devolver_pr   , as3_devolver_pr   , as11_no_accion		      , as11_no_accion           , as11_no_accion           , as3_devolver_pr},
-									/* 4 */	  {as11_no_accion        , as11_no_accion			, as11_no_accion		   , as11_no_accion			  , as11_no_accion		  , as11_no_accion		  , as1_agregar_buffer , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	        , as11_no_accion			, as11_no_accion		   , as11_no_accion, as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion		      , as11_no_accion           , as11_no_accion  		 	, as11_no_accion}, 
-									/* 5 */	  {as1_agregar_buffer    , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as4_end_comentario, as11_no_accion , as11_no_accion	, as11_no_accion	        , as11_no_accion			, as11_no_accion		   , as11_no_accion, as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion		      , as11_no_accion           , as11_no_accion			, as11_no_accion},
-							  		/* 6 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer        , as1_agregar_buffer		, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer           , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	      , as1_agregar_buffer       , as1_agregar_buffer		, as11_no_accion}, 
-				   				    /* 7 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  , as1_agregar_buffer , as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer        , as1_agregar_buffer		, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer           , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	      , as1_agregar_buffer       , as1_agregar_buffer		, as11_no_accion}, 
-				   				    /* 8 */   {as1_agregar_buffer    , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer		  , as1_agregar_buffer	  , as1_agregar_buffer	  ,  as1_agregar_buffer, as11_no_accion    , as5_end_cadena , as1_agregar_buffer, as1_agregar_buffer        , as1_agregar_buffer		, as1_agregar_buffer	   , as11_no_accion, as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer           , as1_agregar_buffer, as1_agregar_buffer, as1_agregar_buffer	      , as1_agregar_buffer       , as1_agregar_buffer		, as11_no_accion}, 			  
-				   				    /* 9 */	  {as7_end_simbolo_simple, as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple	  , as7_end_simbolo_simple,	as7_end_simbolo_simple,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	        , as11_no_accion			, as7_end_simbolo_simple   , as11_no_accion, as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion 		  , as11_no_accion           , as1_agregar_buffer  	 	, as11_no_accion},
-				   				    /* 10 */  {as7_end_simbolo_simple, as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple	  , as7_end_simbolo_simple,	as7_end_simbolo_simple,	as11_no_accion	   , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	        , as11_no_accion			, as7_end_simbolo_simple   , as11_no_accion, as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion		      , as11_no_accion           , as11_no_accion			, as11_no_accion},
-				   				    /* 11 */  {as11_no_accion        , as11_no_accion			, as8_end_simbolo_complejo , as11_no_accion			  , as11_no_accion		  , as11_no_accion		  , as1_agregar_buffer , as11_no_accion    , as11_no_accion , as11_no_accion	, as11_no_accion	        , as11_no_accion			, as11_no_accion		   , as11_no_accion, as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion               , as11_no_accion    , as11_no_accion    , as11_no_accion		      , as11_no_accion           , as11_no_accion  		 	, as11_no_accion},
-				   				   
-	};
+	//												 lmin					    lmay			           		=                         ;                  		d                       _			            %					  	/n			       		"	    				 -				  		(				           )			           blanco				      bb   					 	 +   					  	 *   					 	 /   					    , 	  						{   					}		  		   		  <				 			>			   		     	!							  i							 .			             f					eof
+	AccionSemantica[][] matrizASemanticas = { 
+									/* 0 */  {as1_agregar_buffer     , as1_agregar_buffer		 , as1_agregar_buffer	    , as6_end_simbolo		   , as1_agregar_buffer	    , as11_no_accion		 , as1_agregar_buffer     , as11_no_accion	  	   , as11_no_accion 		, as6_end_simbolo		 , as6_end_simbolo	        , as6_end_simbolo	       , as11_no_accion		   	  , as11_no_accion 		   , as6_end_simbolo   		  , as6_end_simbolo   		 , as6_end_simbolo   		, as6_end_simbolo          , as6_end_simbolo   		, as6_end_simbolo   	  , as1_agregar_buffer       , as1_agregar_buffer		, as1_agregar_buffer	   , as1_agregar_buffer	 , as1_agregar_buffer     , as1_agregar_buffer	   , as11_no_accion			}, /* 0  */
+									/* 1 */	  {as1_agregar_buffer     , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as1_agregar_buffer     , as1_agregar_buffer	 , as11_no_accion	      , as11_no_accion    	   , as11_no_accion 		, as11_no_accion		 , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion 		   , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion    		, as11_no_accion    	  , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion	 	 , as11_no_accion         , as11_no_accion		   , as11_no_accion			}, /* 1  */
+									/* 2 */	  {as7_end_simbolo_simple , as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple   , as7_end_simbolo_simple , as7_end_simbolo_simple , as11_no_accion	      , as11_no_accion    	   , as11_no_accion 		, as7_end_simbolo_simple , as11_no_accion 	        , as11_no_accion	       , as7_end_simbolo_simple   , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion           , as11_no_accion           , as11_no_accion		   , as11_no_accion		 , as7_end_simbolo_simple , as11_no_accion		   , as11_no_accion			}, /* 2  */
+									/* 3 */	  {as3_devolver_pr        , as1_agregar_buffer       , as3_devolver_pr		    , as3_devolver_pr		   , as3_devolver_pr	    , as1_agregar_buffer	 , as3_devolver_pr	      , as3_devolver_pr   	   , as3_devolver_pr		, as3_devolver_pr		 , as3_devolver_pr	        , as3_devolver_pr	       , as3_devolver_pr		  , as3_devolver_pr		   , as3_devolver_pr   	  	  , as3_devolver_pr   		 , as3_devolver_pr   		, as3_devolver_pr          , as3_devolver_pr   		, as3_devolver_pr   	  , as11_no_accion		     , as11_no_accion           , as11_no_accion           , as11_no_accion		 , as11_no_accion         , as3_devolver_pr	  	   , as11_no_accion			}, /* 3  */
+									/* 4 */	  {as11_no_accion         , as11_no_accion			 , as11_no_accion		    , as11_no_accion		   , as11_no_accion		    , as11_no_accion		 , as1_agregar_buffer     , as11_no_accion    	   , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as11_no_accion		   	  , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion		     , as11_no_accion           , as11_no_accion  		   , as11_no_accion		 , as11_no_accion         , as11_no_accion		   , as11_no_accion			}, /* 4  */
+									/* 5 */	  {as1_agregar_buffer     , as1_agregar_buffer       , as1_agregar_buffer	    , as1_agregar_buffer	   , as1_agregar_buffer	    , as1_agregar_buffer	 , as1_agregar_buffer     , as4_end_comentario     , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as11_no_accion		   	  , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion		     , as11_no_accion           , as11_no_accion		   , as11_no_accion		 , as11_no_accion 	      , as11_no_accion		   , as11_no_accion			}, /* 5  */
+							  		/* 6 */   {as1_agregar_buffer     , as1_agregar_buffer		 , as1_agregar_buffer	    , as1_agregar_buffer	   , as1_agregar_buffer	    , as1_agregar_buffer	 , as1_agregar_buffer     , as11_no_accion         , as5_end_cadena 		, as1_agregar_buffer	 , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	   	  , as11_no_accion 		   , as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer       , as1_agregar_buffer		, as1_agregar_buffer	  , as1_agregar_buffer	     , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	 , as1_agregar_buffer     , as1_agregar_buffer	   , as11_no_accion			}, /* 6  */
+				   				    /* 7 */   {as1_agregar_buffer     , as1_agregar_buffer		 , as1_agregar_buffer	    , as1_agregar_buffer	   , as1_agregar_buffer	    , as1_agregar_buffer	 , as1_agregar_buffer     , as11_no_accion    	   , as5_end_cadena 		, as1_agregar_buffer	 , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	   	  , as11_no_accion 		   , as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer       , as1_agregar_buffer		, as1_agregar_buffer	  , as1_agregar_buffer	     , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	 , as1_agregar_buffer     , as1_agregar_buffer	   , as11_no_accion			}, /* 7  */
+				   				    /* 8 */   {as1_agregar_buffer     , as1_agregar_buffer		 , as1_agregar_buffer	    , as1_agregar_buffer	   , as1_agregar_buffer	    , as1_agregar_buffer	 , as1_agregar_buffer     , as11_no_accion    	   , as5_end_cadena 		, as1_agregar_buffer	 , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	   	  , as11_no_accion 		   , as1_agregar_buffer		  , as1_agregar_buffer		 , as1_agregar_buffer		, as1_agregar_buffer       , as1_agregar_buffer		, as1_agregar_buffer	  , as1_agregar_buffer	     , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	 , as1_agregar_buffer     , as1_agregar_buffer	   , as11_no_accion			}, /* 8  */  
+				   				    /* 9 */	  {as7_end_simbolo_simple , as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple   , as7_end_simbolo_simple , as7_end_simbolo_simple , as11_no_accion	      , as11_no_accion         , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as7_end_simbolo_simple   , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion 		  	 , as11_no_accion           , as1_agregar_buffer  	   , as11_no_accion		 , as11_no_accion         , as11_no_accion		   , as11_no_accion			}, /* 9  */
+				   				    /* 10 */  {as7_end_simbolo_simple , as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple   , as7_end_simbolo_simple , as7_end_simbolo_simple , as11_no_accion	      , as11_no_accion         , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as7_end_simbolo_simple   , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion		     , as11_no_accion           , as11_no_accion		   , as11_no_accion		 , as11_no_accion         , as11_no_accion		   , as11_no_accion			}, /* 10 */
+				   				    /* 11 */  {as11_no_accion         , as11_no_accion			 , as8_end_simbolo_complejo , as11_no_accion		   , as11_no_accion		    , as11_no_accion		 , as1_agregar_buffer     , as11_no_accion    	   , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as11_no_accion		      , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    	     , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion		     , as11_no_accion           , as11_no_accion  		   , as11_no_accion		 , as11_no_accion         , as11_no_accion		   , as11_no_accion			}, /* 11 */
+				   				    /* 12 */  {as11_no_accion         , as11_no_accion           , as11_no_accion 		    , as11_no_accion	       , as1_agregar_buffer     , as11_no_accion         , as11_no_accion	      , as11_no_accion    	   , as11_no_accion 		, as11_no_accion		 , as11_no_accion	        , as11_no_accion		   , as7_end_simbolo_simple   , as11_no_accion		   , as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	  , as11_no_accion		     , as11_no_accion           , as11_no_accion		   , as11_no_accion		 , as1_agregar_buffer     , as11_no_accion		   , as11_no_accion			}, /* 12 */
+				   				    /* 13 */  {as9_verificar_rango_cte, as9_verificar_rango_cte	 , as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte 	, as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte , as9_verificar_rango_cte	 , as11_no_accion	      	, as9_verificar_rango_cte  , as11_no_accion      , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte}, /* 13 */
+				   				    /* 14 */  {as10_verificar_float	  , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float     , as1_agregar_buffer     , as10_verificar_float   , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float     , as10_verificar_float   , as10_verificar_float     , as10_verificar_float     , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float   , as10_verificar_float    , as10_verificar_float	 , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float, as1_agregar_buffer     , as1_agregar_buffer     , as10_verificar_float	}, /* 14 */
+				   				    /* 15 */  {as11_no_accion	      , as11_no_accion	         , as11_no_accion           , as11_no_accion           , as11_no_accion   	    , as11_no_accion   		 , as11_no_accion	      , as11_no_accion         , as11_no_accion         , as1_agregar_buffer     , as11_no_accion	        , as11_no_accion           , as11_no_accion           , as11_no_accion         , as1_agregar_buffer       , as11_no_accion     		 , as11_no_accion 			, as11_no_accion     	   , as11_no_accion   		, as11_no_accion    	  , as11_no_accion	 		 , as11_no_accion	    	, as11_no_accion           , as11_no_accion   	 , as11_no_accion         , as11_no_accion    	   , as11_no_accion			}, /* 15 */
+				   				    /* 16 */  {as10_verificar_float	  , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float     , as1_agregar_buffer   	, as10_verificar_float   , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float     , as10_verificar_float   , as10_verificar_float     , as10_verificar_float     , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float   , as10_verificar_float    , as10_verificar_float	 , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float, as10_verificar_float   , as10_verificar_float   , as10_verificar_float	}  /* 16 */
+	}; 
 	
-	//ver palabra reservada devolverpr esta en el + - *..
+	//ver palabra reservada devolver pr esta en el + - *..
 	
 	public void cargarArchivo(String origen) throws IOException{
 		File archivo = new File (origen);
@@ -87,63 +96,79 @@ public class Compilador {
 	// Metodo que sirve para pedir tokens, EXPLICACION A COMPLETAR
 	public Token getToken() throws IOException {
 		Token token = new Token();
-				
-		if(asciiAnterior == -1){    	//Fin del archivo, devuelve 0
+		
+		//Si en caracter que se procesó antes fue de codigo -1, se llegó al fin del archivo
+		if(asciiAnterior == -1){    	
 			token.setToken(0); 
 			return token;
 		}		
 		
+		// Definicion de algunas variables usadas
 		int estadoSiguiente = 0;
 		int estadoActual = 0;
 		boolean hayToken = false;
 		int asciiActual;
 		
+		// con el do-while hacemos que siempre se ejecute al menos 
+		// una vez el bloque de codigo del do, luego se contiuará
+		// ciclando hasta que no haya mas tokens
+		
 		do{	
+			// Si una accion semantica X, luego de operar requiere que se acomode la
+			// linea, se deberá retroceder al caracter anterior 
 			if (acomodarLinea){
-				//System.out.println("Entra??");
 				asciiActual = asciiAnterior;
 				acomodarLinea = false;
 			}
+			// Si no hubo que acomodar la linea, se lee el buffer de lectura
+			// y si el ascci leido coresponde con el salto de linea se incrementa
+			// en 1 el contador de lineas
 			else {
-				//System.out.println("Anterior " + asciiAnterior);
 				asciiActual = br.read();
-				//System.out.println("Actual " + asciiActual + " " + (char)asciiActual);
-				if(asciiActual == 13) { nroLinea++; }
+				if(asciiActual == 13)     { nroLinea++; }
 			}
 			
+			// Avanzo el caracter ascci, obtengo la columna de la matriz de tracision de estados
+			// desde un mapeo que hicimos en una clase llamada diccionario, actualizamos el estado
+			// siguiente, disparamos la accion semantica asociada a esa transicion, se la accion semantica
+			// obtenemos un booleano que nos indica si en el siguiente ciclo se debe acomodar linea o no
+			// y por ultimo actualizo el estado actual, siendo este el estado siguiente
 			asciiAnterior = asciiActual;
-			//System.out.println("asciiActual: " + asciiActual);
 			int columna = diccionario.asciiToColumna(asciiActual);
-			//System.out.println("Fila: " + estadoActual + " Columna: " + columna);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
-			//System.out.println("Token:" + token.getToken());
 			acomodarLinea = AS.acomodarLinea();
 			estadoActual = estadoSiguiente;
 			
+			// Si el token el mayor a 0 significa que es un ascii valido, con lo cual a nuestra
+			// estrucutra interna "Token" puede ser completada con todos los datos de ese lexema-token
 			if(token.getToken() > 0) {
-				//if (buffer.length() > 0)
 				token.setLexema(buffer.toString());
 				token.setLinea(nroLinea);
 				hayToken = true;
 				buffer.delete(0, buffer.length());	
 			}
+			// Ssi es un ascii invalido (valor negativo), decimos que el token se vuelve 0
+			// para poder seguir operando
 			else if (asciiAnterior == -1) {	
 				token.setToken(0); 
 				return token;
-			}									//TRATAMIENTO DE ERRORES LÉXICOS
+			}
+			// Por ultima damos algun tramatiento de errores lexicos, donde el valor negativo
+			// que se retornó por una accion semantica X, indica de que erroe lexico se trata
 			else if (token.getToken() == -2){ System.out.println("Error: caracter inválido "+asciiActual+ " en la linea " + nroLinea); }
 					else if (token.getToken() == -4){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }			
 		}
 		while (!hayToken);
-		//System.out.println(t);
 		return token;		
 	}
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 				
+		// Esta codiicacion fue generada desde yacc, el cual a cada token
+		// que nosotros le declaramos le asocia un numero que hace referencia a este.
 		tablaToken.put("ID",257);
 		tablaToken.put("IF",258);
 		tablaToken.put("THEN",259);
