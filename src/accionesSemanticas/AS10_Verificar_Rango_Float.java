@@ -27,19 +27,18 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 
 	
 	public int execute(StringBuffer buffer, char c) {
+		System.out.println("FLOTANTE: " + buffer.toString());
 		this.s = new Simbolo(buffer.toString());
 		double flotante = Double.parseDouble(buffer.toString());
-		System.out.println("END: " + flotante);
 		// Si la 
 		if ( ((flotante>=minimalValorFloat) && (flotante <= minValorFloat)) || (flotante==cero)  || ((flotante>=maxValorFloat) && (flotante <= maximalValorFloat)) ) {
-			System.out.println("ENTRO 1");
 			s.setTipo("float");
 			// Si la cte ya está en la TS, retornar referencia
 			if(TablaSimbolo.contains(this.s) )  return TablaToken.get("FLOAT");
 			else {
 				s.setUso("CTE");
 				TablaSimbolo.put(s.getValor(),s);
-				return TablaToken.get("FLOAT");
+				return TablaToken.get("CTE");
 			}
 		}
 		else {System.out.println("ENTRO 2");  // SI esta fuera de los rangos retornar error

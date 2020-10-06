@@ -11,7 +11,7 @@ public class Diccionario {
 		diccionario.put(60, 20); 	// <
 		diccionario.put(62, 21); 	// >
 		diccionario.put(33, 22); 	// !
-//		diccionario.put(102, 7); 	// f
+		diccionario.put(102, 25); 	// f
 		diccionario.put(46, 24); 	// .
 //		diccionario.put(9, 12); 	// tab
 //		//diccionario.put(14, 13); 	// c
@@ -44,6 +44,8 @@ public class Diccionario {
 	public int asciiToColumna(int ascii){
 		//i para constante
 		if(ascii == 105) { return diccionario.get(105); }
+		//f para flotante
+		if(ascii == 102) { return diccionario.get(102); }
 		//MAYUSCULA
 		if(ascii >= 65 && ascii <= 90) { return diccionario.get(1); }
 		//MINUSCULA
