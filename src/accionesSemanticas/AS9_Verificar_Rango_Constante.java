@@ -25,7 +25,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 	
 	public int execute(StringBuffer buffer, char c) {
 		this.s = new Simbolo(buffer.toString());
-		int cte = Integer. parseInt(buffer.toString());
+		int cte = Integer.parseInt(buffer.toString());
 		// Verifica si la constante esta dentro del rango
 		if((cte>=minValorCte) && (cte<=maxValorCte)){ 	   
 			s.setTipo("int");
