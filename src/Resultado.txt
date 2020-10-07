@@ -2,4 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: verga	 Value: verga	 Uso: ID
+Clave: ho_ A---que -h	 Value: ho_ A---que -h	 Uso: CADENA
