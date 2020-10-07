@@ -120,6 +120,8 @@ comparador : '<=' {mostrarMensaje("Reconocio comparador menor-igual en linea nro
 		   | '>=' {mostrarMensaje("Reconocio comparador mayor-igual en linea nro: "+compilador.Compilador.nroLinea);}
 		   | '!=' {mostrarMensaje("Reconocio comparador distinto en linea nro: "+compilador.Compilador.nroLinea);}
 		   | '==' {mostrarMensaje("Reconocio comparador igual en linea nro: "+compilador.Compilador.nroLinea);}
+		   | '>'  {mostrarMensaje("Reconocio comparador mayor en linea nro: "+compilador.Compilador.nroLinea);}
+		   | '<'  {mostrarMensaje("Reconocio comparador menor en linea nro: "+compilador.Compilador.nroLinea);}
 		   ;
 
 tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT en linea nro: "+compilador.Compilador.nroLinea);}
