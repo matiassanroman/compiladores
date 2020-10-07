@@ -2,11 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-<<<<<<< HEAD
-Clave: ho_ A---que -h	 Value: ho_ A---que -h	 Uso: CADENA
-=======
-Clave: j	 Value: j	 Uso: ID
-Clave: var	 Value: var	 Uso: ID
-Clave: 46	 Value: 46	 Uso: CTE
-Clave: 45	 Value: 45	 Uso: CTE
->>>>>>> 7ff92904843d5796b07b1b9af1791a3269feb373
+Clave: b	 Value: b	 Uso: ID
+Clave: 10.5	 Value: 10.5	 Uso: CTE
