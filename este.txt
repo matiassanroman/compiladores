@@ -1,3 +1,11 @@
+<<<<<<< HEAD
 
 OUT("ho_ A---que -
 h"); 
+=======
+IF( var == 45_i ) {
+	j=46_i;
+	INTEGER j;
+}
+END_IF
+>>>>>>> 7ff92904843d5796b07b1b9af1791a3269feb373
