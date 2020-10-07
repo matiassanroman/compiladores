@@ -46,7 +46,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 				return TablaToken.get("CTE");
 			}
 		}
-		else {System.out.println("ENTRO 2");  // SI esta fuera de los rangos retornar error
+		else {   // SI esta fuera de los rangos retornar error
 			if ( (flotante<minimalValorFloat) ||  (flotante>minValorFloat && flotante<cero) || (flotante>cero && flotante<maxValorFloat) || (flotante>maximalValorFloat))
 				return -1;	  // Retorna -1 codigo de error
 			else 

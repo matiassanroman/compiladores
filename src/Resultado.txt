@@ -2,5 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: j	 Value: j	 Uso: ID
-Clave: 1.2	 Value: 1.2	 Uso: CTE
+Clave: verga	 Value: verga	 Uso: ID

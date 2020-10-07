@@ -21,12 +21,13 @@ package compilador;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+import compilador.Compilador;
 //#line 19 "Parser.java"
 
 
 
 
+@SuppressWarnings("unused")
 public class Parser
 {
 
@@ -575,135 +576,135 @@ case 1:
 break;
 case 6:
 //#line 21 "gramatica.y"
-{mostrarMensaje("Reconocio declaracion de una o mas variables");}
+{mostrarMensaje("Reconocio declaracion de una o mas variables en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 8:
 //#line 23 "gramatica.y"
-{yyerror("Error en la sentencia, tipo invalido");}
+{yyerror("Error en la sentencia, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 11:
 //#line 30 "gramatica.y"
-{mostrarMensaje("Reconocio procedimiento completo");}
+{mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 12:
 //#line 33 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros");}
+{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 13:
 //#line 34 "gramatica.y"
-{mostrarMensaje("Reconocio PROC sin parametros");}
+{mostrarMensaje("Reconocio PROC sin parametros"+compilador.Compilador.nroLinea);}
 break;
 case 14:
 //#line 35 "gramatica.y"
-{yyerror("Error en los parametros de procedimiento");}
+{yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 18:
 //#line 43 "gramatica.y"
-{mostrarMensaje("Reconocio parametro");}
+{mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 19:
 //#line 46 "gramatica.y"
-{mostrarMensaje("Reconocio bloque de procedimiento");}
+{mostrarMensaje("Reconocio bloque de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 20:
 //#line 47 "gramatica.y"
-{yyerror("Error en el cuerpo del procedimiento");}
+{yyerror("Error en el cuerpo del procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 26:
 //#line 57 "gramatica.y"
-{mostrarMensaje("Reconocio OUT CADENA");}
+{mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 27:
 //#line 58 "gramatica.y"
-{mostrarMensaje("Reconocio llamda a procedimiento");}
+{mostrarMensaje("Reconocio llamada a procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 29:
 //#line 60 "gramatica.y"
-{mostrarMensaje("Reconocio ciclo FOR");}
+{mostrarMensaje("Reconocio ciclo FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 30:
 //#line 61 "gramatica.y"
-{yyerror("Error en la cadena");}
+{yyerror("Error en la cadena en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 31:
 //#line 62 "gramatica.y"
-{yyerror("Error en el cuerpo del IF");}
+{yyerror("Error en el cuerpo del IF en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 33:
 //#line 68 "gramatica.y"
-{mostrarMensaje("Reconocio encabezado del FOR");}
+{mostrarMensaje("Reconocio encabezado del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 38:
 //#line 79 "gramatica.y"
-{mostrarMensaje("Reconocio incremento-UP del FOR");}
+{mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 39:
 //#line 80 "gramatica.y"
-{mostrarMensaje("Reconocio decremento-UP del FOR");}
+{mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 44:
 //#line 91 "gramatica.y"
-{mostrarMensaje("Reconocio IF con ELSE");}
+{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 45:
 //#line 94 "gramatica.y"
-{mostrarMensaje("Reconocio IF sin ELSE");}
+{mostrarMensaje("Reconocio IF sin ELSE en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 46:
 //#line 97 "gramatica.y"
-{mostrarMensaje("Reconocio Asignacion");}
+{mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 47:
 //#line 100 "gramatica.y"
-{mostrarMensaje("Reconocio suma");}
+{mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 48:
 //#line 101 "gramatica.y"
-{mostrarMensaje("Reconocio resta");}
+{mostrarMensaje("Reconocio resta en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 50:
 //#line 105 "gramatica.y"
-{mostrarMensaje("Reconocio multiplicacion");}
+{mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 51:
 //#line 106 "gramatica.y"
-{mostrarMensaje("Reconocio division");}
+{mostrarMensaje("Reconocio division en linea nro:  en linea nro: \"+compilador.Compilador.nroLinea);}"+compilador.Compilador.nroLinea);}
 break;
 case 55:
 //#line 114 "gramatica.y"
-{mostrarMensaje("Reconocio comparador menor-igual");}
+{mostrarMensaje("Reconocio comparador menor-igual en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 56:
 //#line 115 "gramatica.y"
-{mostrarMensaje("Reconocio comparador mayor-igual");}
+{mostrarMensaje("Reconocio comparador mayor-igual en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 57:
 //#line 116 "gramatica.y"
-{mostrarMensaje("Reconocio comparador distinto");}
+{mostrarMensaje("Reconocio comparador distinto en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 58:
 //#line 117 "gramatica.y"
-{mostrarMensaje("Reconocio comparador igual");}
+{mostrarMensaje("Reconocio comparador igual en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 59:
 //#line 120 "gramatica.y"
-{mostrarMensaje("Reconocio tipo FLOAT");}
+{mostrarMensaje("Reconocio tipo FLOAT en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 60:
 //#line 121 "gramatica.y"
-{mostrarMensaje("Reconocio tipo INTEGER");}
+{mostrarMensaje("Reconocio tipo INTEGER en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 61:
 //#line 124 "gramatica.y"
-{mostrarMensaje("Reconocio identificador");}
+{mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 62:
 //#line 127 "gramatica.y"
-{mostrarMensaje("Reconocio constante");}
+{mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 63:
 //#line 128 "gramatica.y"
-{mostrarMensaje("Reconocio constante negativa");}
+{mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 //#line 628 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
