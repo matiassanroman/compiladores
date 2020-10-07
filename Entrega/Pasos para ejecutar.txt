@@ -1,0 +1,5 @@
+1) Ir a la ruta del jar y poner el siguiente comando en cmd:
+
+java -jar Compilador.jar C:\Users\USUARIO\Desktop\Compiladores\Proyecto\compiladores\Entrega\CasosdePrueba\1-Cadenas-Id-Contastes-Asignacion.txt
+
+2)La Tabla de Simbolos se genera en la ruta donde se encuentra el jar

@@ -1,0 +1,7 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: 10	 Value: 10	 Uso: CTE
+Clave: id_integer	 Value: id_integer	 Uso: ID
+Clave: hj_intege_r	 Value: hj_intege_r	 Uso: ID

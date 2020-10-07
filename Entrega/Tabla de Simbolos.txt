@@ -1,0 +1,15 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: 15	 Value: 15	 Uso: CTE
+Clave: id3_float	 Value: id3_float	 Uso: ID
+Clave: id_float	 Value: id_float	 Uso: ID
+Clave: hola -chau--	 Value: hola -chau--	 Uso: CADENA
+Clave: .10	 Value: .10	 Uso: CTE
+Clave: 10	 Value: 10	 Uso: CTE
+Clave: integer_negativa	 Value: integer_negativa	 Uso: ID
+Clave: 12.f-2	 Value: 12.f-2	 Uso: CTE
+Clave: 15.15f+4	 Value: 15.15f+4	 Uso: CTE
+Clave: id2_float	 Value: id2_float	 Uso: ID
+Clave: id_integer	 Value: id_integer	 Uso: ID

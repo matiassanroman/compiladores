@@ -13,7 +13,7 @@ public class CrearSalida {
 
 	public static void crearTxtSalida(Compilador c) {
 		try {
-			String ruta = "Resultado.txt";
+			String ruta = "Tabla de Simbolos.txt";
 			BufferedWriter salida = new BufferedWriter(new FileWriter(ruta));
 			
 			salida.write("/*  Resultados de la compilacion  */");

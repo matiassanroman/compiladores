@@ -1,1 +1,3 @@
-OUT("ho	la	");
+INTEGER id_integer;
+
+_hj_intege_r = 10_i;
