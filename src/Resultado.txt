@@ -2,6 +2,6 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: j	 Value: j	 Uso: ID
-Clave: var	 Value: var	 Uso: ID
-Clave: 45	 Value: 45	 Uso: CTE
+
+Clave: ho	la		 Value: ho	la		 Uso: CADENA
+

@@ -1,4 +1,1 @@
-IF( var == 45_i ) {
-	j = 45_í;
-}
-END_IF
+OUT("ho	la	");
