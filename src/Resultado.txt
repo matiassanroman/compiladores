@@ -4,5 +4,4 @@
 
 Clave: j	 Value: j	 Uso: ID
 Clave: var	 Value: var	 Uso: ID
-Clave: 46	 Value: 46	 Uso: CTE
 Clave: 45	 Value: 45	 Uso: CTE
