@@ -1,1 +1,5 @@
-verga = -33000_i;
+IF( var == 45_i ) {
+	j=46_i;
+	INTEGER j;
+}
+END_IF
