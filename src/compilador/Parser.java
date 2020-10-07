@@ -842,50 +842,6 @@ public int yylex() {
     e.printStackTrace();
   }
   return 0;
-  /*
-  if(i == 0) {
-    Token token = new Token(258,0);
-    token.setLexema("asd");
-    token.setLinea(1);
-    i=i+1;
-    this.lineaActual = token.getLinea();
-    yylval = new ParserVal(t);
-    yylval.sval = token.getLexema();
-    System.out.println("entra id");
-    return 258;
-  }
-  else if(i == 1) {
-    Token token = new Token(61,0);
-    token.setLinea(1);
-    i=i+1;
-    this.lineaActual = token.getLinea();
-    yylval = new ParserVal(t);
-    yylval.sval = token.getLexema();
-    System.out.println("entra =");
-    return 61;
-  }
-  else if(i == 2) {
-    Token token = new Token(258,0);
-    token.setLexema("dsa");
-    token.setLinea(1);
-    i=i+1;
-    this.lineaActual = token.getLinea();
-    yylval = new ParserVal(t);
-    yylval.sval = token.getLexema();
-    System.out.println("entra id");
-    return 258;
-  }
-  else if(i == 3) {
-    Token token = new Token(59,0);
-    token.setLinea(1);
-    i=i+1;
-    this.lineaActual = token.getLinea();
-    yylval = new ParserVal(t);
-    yylval.sval = token.getLexema();
-    System.out.println("entra ;");
-    return 59;
-  }
-  return 0;*/
 }
 
 public void yyerror(String error){

@@ -1,5 +1,0 @@
-/*  Resultados de la compilacion  */
-
-/*  Tabla de Simbolos  */
-
-Clave: ho	la		 Value: ho	la		 Uso: CADENA
