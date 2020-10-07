@@ -2,5 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: b	 Value: b	 Uso: ID
-Clave: 10.5	 Value: 10.5	 Uso: CTE
+Clave: ho	la		 Value: ho	la		 Uso: CADENA
