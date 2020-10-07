@@ -55,8 +55,6 @@ bloque : bloque sentenciaDeclarativa
        | sentenciaEjecutable
        ;
 
-       ;
-
 sentenciaEjecutable : asignacion
 					| OUT '(' CADENA ')' ';' {mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}                     
 					| identificador '(' parametrosProc ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);}
@@ -96,13 +94,9 @@ cuerpoIf : cuerpoCompleto
 		 ;
 		 
 cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia '}'	{mostrarMensaje("Reconocio IF con cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}		   	  
-			   | '(' error ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia '}'     {yyerror("Error en condicion de IF en linea nro: "+compilador.Compilador.nroLinea);}
-			   | '(' condicion ')' '{' error '}' ELSE '{' bloqueSentencia '}'			{yyerror("Error en bloque de sentecias de IF en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
 cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
-				 | '(' error ')' '{' bloqueSentencia '}'     {yyerror("Error en bloque de sentecias de IF en linea nro: "+compilador.Compilador.nroLinea);}
-				 | '(' condicion ')' '{' error '}'			 {yyerror("Error en el bloque de sentencias del ELSE en linea nro: "+compilador.Compilador.nroLinea);}
 				 ;
 
 asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);}

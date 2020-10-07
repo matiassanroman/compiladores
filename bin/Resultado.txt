@@ -2,6 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-
-Clave: ho	la		 Value: ho	la		 Uso: CADENA
-
+Clave: 24udn	 Value: 24udn	 Uso: ID

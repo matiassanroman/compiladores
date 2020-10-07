@@ -1,1 +1,1 @@
-OUT("ho	la	");
+INTEGER 24udn;
