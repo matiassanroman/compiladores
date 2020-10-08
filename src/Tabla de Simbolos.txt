@@ -2,7 +2,14 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: a	 Value: a	 Uso: ID
-Clave: 22	 Value: 22	 Uso: CTE
-Clave: 20	 Value: 20	 Uso: CTE
 Clave: id	 Value: id	 Uso: ID
+Clave: final	 Value: final	 Uso: ID
+Clave: hola	 Value: hola	 Uso: ID
+Clave: 25	 Value: 25	 Uso: CTE
+Clave: hola3	 Value: hola3	 Uso: ID
+Clave: 20	 Value: 20	 Uso: CTE
+Clave: hola2	 Value: hola2	 Uso: ID
+Clave: hola1	 Value: hola1	 Uso: ID
+Clave: 15	 Value: 15	 Uso: CTE
+Clave: inic	 Value: inic	 Uso: ID
+Clave: 10	 Value: 10	 Uso: CTE

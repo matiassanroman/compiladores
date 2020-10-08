@@ -143,14 +143,14 @@ public class Compilador {
 			// y por ultimo actualizo el estado actual, siendo este el estado siguiente
 			asciiAnterior = asciiActual;
 			int columna = diccionario.asciiToColumna(asciiActual);
-			System.out.println("Fila: " + estadoActual + " Columna: " + columna);
+			//System.out.println("Fila: " + estadoActual + " Columna: " + columna);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
 			acomodarLinea = AS.acomodarLinea();
 			estadoActual = estadoSiguiente;
 			
-			System.out.println("Toke: " + token.getToken());
+			//System.out.println("Toke: " + token.getToken());
 			// Si el token el mayor a 0 significa que es un ascii valido, con lo cual a nuestra
 			// estrucutra interna "Token" puede ser completada con todos los datos de ese lexema-token
 			if(token.getToken() > 0) {
