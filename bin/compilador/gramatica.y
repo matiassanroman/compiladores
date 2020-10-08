@@ -31,9 +31,9 @@ listaVariables : listaVariables ',' identificador
 declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea);}
 						 ;
 
-encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' tipo ',' NS '=' tipo {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' tipo                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
-			   | PROC identificador '(' error ')' NA '=' tipo ',' NS '=' tipo {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
+encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea);}
+			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' CTE                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
+			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
 parametrosProc : parametro
