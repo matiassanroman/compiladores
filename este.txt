@@ -1,4 +1,7 @@
+id=id;
 
-PROC a() NA = FLOAT, NS = FLOAT {
-id=id1;
+PROC a(INTEGER id) NA=20_i , NS=22_i {
+
+id=id;
+
 }
