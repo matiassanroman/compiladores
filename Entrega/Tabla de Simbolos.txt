@@ -9,4 +9,4 @@ Clave: hola2	 Value: hola2	 Uso: ID
 Clave: hola1	 Value: hola1	 Uso: ID
 Clave: inic	 Value: inic	 Uso: ID
 Clave: 10	 Value: 10	 Uso: CTE
-Clave: final	 Value: final	 Uso: ID
+Clave: <inal	 Value: <inal	 Uso: ID

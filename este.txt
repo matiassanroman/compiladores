@@ -1,4 +1,6 @@
 
-INTEGER id_integer;
 
-_hj_intege_r = 10_i;
+IF(id >= a = 20_i+20_i; ){
+	iu=ui;
+}
+END_IF
