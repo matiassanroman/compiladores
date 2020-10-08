@@ -32,7 +32,7 @@ declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio 
 						 ;
 
 encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-			   | PROC identificador '(' ')' NA '=' tipo ',' NS '=' CTE                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
+			   | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
 			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
