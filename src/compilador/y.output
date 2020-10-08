@@ -18,7 +18,7 @@
   12  declaracionProcedimiento : encabezadoProc bloqueProc
 
   13  encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE
-  14                 | PROC identificador '(' ')' NA '=' tipo ',' NS '=' CTE
+  14                 | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE
   15                 | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE
 
   16  parametrosProc : parametro
@@ -184,7 +184,7 @@ state 7
 
 state 8
 	encabezadoProc : PROC . identificador '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE  (13)
-	encabezadoProc : PROC . identificador '(' ')' NA '=' tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC . identificador '(' ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC . identificador '(' error ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	ID  shift 2
@@ -367,7 +367,7 @@ state 28
 
 state 29
 	encabezadoProc : PROC identificador . '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE  (13)
-	encabezadoProc : PROC identificador . '(' ')' NA '=' tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador . '(' ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador . '(' error ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	'('  shift 49
@@ -552,7 +552,7 @@ state 48
 
 state 49
 	encabezadoProc : PROC identificador '(' . parametrosProc ')' NA '=' CTE ',' NS '=' CTE  (13)
-	encabezadoProc : PROC identificador '(' . ')' NA '=' tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' . ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' . error ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	error  shift 82
@@ -844,7 +844,7 @@ state 82
 
 
 state 83
-	encabezadoProc : PROC identificador '(' ')' . NA '=' tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' . NA '=' CTE ',' NS '=' CTE  (14)
 
 	NA  shift 111
 	.  error
@@ -1090,7 +1090,7 @@ state 110
 
 
 state 111
-	encabezadoProc : PROC identificador '(' ')' NA . '=' tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA . '=' CTE ',' NS '=' CTE  (14)
 
 	'='  shift 126
 	.  error
@@ -1236,13 +1236,10 @@ state 125
 
 
 state 126
-	encabezadoProc : PROC identificador '(' ')' NA '=' . tipo ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' . CTE ',' NS '=' CTE  (14)
 
-	INTEGER  shift 6
-	FLOAT  shift 7
+	CTE  shift 138
 	.  error
-
-	tipo  goto 138
 
 
 state 127
@@ -1330,7 +1327,7 @@ state 137
 
 
 state 138
-	encabezadoProc : PROC identificador '(' ')' NA '=' tipo . ',' NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' CTE . ',' NS '=' CTE  (14)
 
 	','  shift 145
 	.  error
@@ -1376,7 +1373,7 @@ state 144
 
 
 state 145
-	encabezadoProc : PROC identificador '(' ')' NA '=' tipo ',' . NS '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' . NS '=' CTE  (14)
 
 	NS  shift 149
 	.  error
@@ -1413,7 +1410,7 @@ state 148
 
 
 state 149
-	encabezadoProc : PROC identificador '(' ')' NA '=' tipo ',' NS . '=' CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS . '=' CTE  (14)
 
 	'='  shift 153
 	.  error
@@ -1451,7 +1448,7 @@ state 152
 
 
 state 153
-	encabezadoProc : PROC identificador '(' ')' NA '=' tipo ',' NS '=' . CTE  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS '=' . CTE  (14)
 
 	CTE  shift 157
 	.  error
@@ -1478,7 +1475,7 @@ state 156
 
 
 state 157
-	encabezadoProc : PROC identificador '(' ')' NA '=' tipo ',' NS '=' CTE .  (14)
+	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE .  (14)
 
 	.  reduce 14
 
