@@ -1,6 +1,4 @@
 
-
-IF(id >= a = 20_i+20_i; ){
-	iu=ui;
+PROC a() NA = FLOAT, NS = FLOAT {
+id=id1;
 }
-END_IF

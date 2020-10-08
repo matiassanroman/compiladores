@@ -21,6 +21,8 @@ ELSE{
 }
 END_IF
 
+%% Cuerpo de IF con IF con ELSE
+
 IF(id1>21_i){
 	iu=ui;
 	IF(id2>21_i){
@@ -29,6 +31,8 @@ IF(id1>21_i){
 	END_IF
 }
 END_IF
+
+%% Cuerpo de IF con IF con ELSE con IF
 
 IF(id>20_i){
 	IF(id>20_i){
@@ -44,6 +48,8 @@ ELSE{
 	END_IF
 }
 END_IF
+
+%% Cuerpo de IF con id COMP ASIGNACION
 
 IF(id >= a = 20_i+20_i; ){
 	iu=ui;

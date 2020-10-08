@@ -3,7 +3,5 @@
 /*  Tabla de Simbolos  */
 
 Clave: a	 Value: a	 Uso: ID
-Clave: iu	 Value: iu	 Uso: ID
-Clave: ui	 Value: ui	 Uso: ID
-Clave: 20	 Value: 20	 Uso: CTE
+Clave: =d1	 Value: =d1	 Uso: ID
 Clave: id	 Value: id	 Uso: ID
