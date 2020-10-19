@@ -2,14 +2,53 @@ package compilador;
 
 public class Simbolo {
 
-	public String valor;       //lexema
-	public String tipo = "";   // int - float - string
-	public String uso = "";    //CTE - CADENA - ID	
+	private String valor;       //lexema
+	private String tipo = "";   // int - float - string - proc
+	private String uso = "";    //CTE - CADENA - ID	
 	private boolean declarado = false;
 	private String estaDeclarado = "NO";
+	private int contador;
+	private String ambito;
 
 	public Simbolo(String valor) {
 	this.valor = valor;
+	this.contador = 1;
+	}
+	
+	public String getAmbito() {
+		return ambito;
+	}
+
+	public String getAmbitoSinId() {
+		return ambito.substring(2,ambito.length());
+	}
+	
+	public void setAmbito(String ambito, boolean primeroMain) {
+		//Entro por primera vez con Main
+		if(primeroMain) {
+			this.ambito = ambito;
+		//
+		}else {
+			this.ambito = this.ambito + compilador.Compilador.ambito;
+		}
+		
+		
+	}
+
+	public void aumentarContador() {
+		contador = contador + 1;
+	}
+	
+	public void disminuirrContador() {
+		contador = contador -1;
+	}
+	
+	public int getContador() {
+		return contador;
+	}
+
+	public void setContador(int contador) {
+		this.contador = contador;
 	}
 
 	public String getValor() {

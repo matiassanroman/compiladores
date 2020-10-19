@@ -1,5 +1,5 @@
 %{
-package Compilador;
+package compilador;
 %}
 
 %token ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN CTE
@@ -23,16 +23,18 @@ sentenciaDeclarativa : tipo listaVariables ';'       {mostrarMensaje("Reconocio 
 					 | error listaVariables ';'      {yyerror("Error, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 					 ;
 
-listaVariables : listaVariables ',' identificador
-			   | identificador
+listaVariables : listaVariables ',' identificador {compilador.Compilador.tablaSimbolo.get($3.sval).setAmbito($3.sval, false);}
+			   | identificador {compilador.Compilador.tablaSimbolo.get($1.sval).setAmbito($1.sval, false);}
 			   | error    {yyerror("Error en la o las varibles, en linea nro: "+compilador.Compilador.nroLinea);}
 			   ;
 
-declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea);}
+declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito();}
 						 ;
 
-encabezadoProc : PROC identificador '(' parametrosProc ')' NA '=' CTE ',' NS '=' CTE {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-			   | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
+encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($2.sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get($2.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; compilador.Compilador.tablaSimbolo.get($5.sval).setAmbito(compilador.Compilador.ambito, false); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($2.sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get($2.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; compilador.Compilador.tablaSimbolo.get($5.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get($8.sval).setAmbito(compilador.Compilador.ambito, false); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($2.sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get($2.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; compilador.Compilador.tablaSimbolo.get($5.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get($8.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get($11.sval).setAmbito(compilador.Compilador.ambito, false); }
+			   | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE                {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($2.sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get($2.sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; }
 			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
@@ -41,7 +43,7 @@ parametrosProc : parametro
 			   | parametro ',' parametro ',' parametro
 			   ;
 
-parametro : tipo identificador  {mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);}
+parametro : tipo identificador  {mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);  compilador.Compilador.tablaSimbolo.get($2.sval).setAmbito($2.sval, false); }
 		  | error identificador {yyerror("Error, tipo invalido en el parametro, en linea nro: "+compilador.Compilador.nroLinea);}
 		  ;
 
@@ -58,7 +60,7 @@ bloque : bloque sentenciaDeclarativa
 sentenciaEjecutable : asignacion
 					| OUT '(' CADENA ')' ';' {mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}                     
 					| identificador '(' parametrosProc ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-					| identificador '(' ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);}
+					| identificador '(' ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea); }
 					| IF cuerpoIf END_IF   
 					| cicloFor {mostrarMensaje("Reconocio ciclo FOR en linea nro: "+compilador.Compilador.nroLinea);}
 					| OUT '(' error ')' ';'  {yyerror("Error en la cadena en linea nro: "+compilador.Compilador.nroLinea);}
@@ -131,14 +133,23 @@ tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT en linea nro: "+compilador.
 identificador : ID {mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea);}
 			  ;
 
-constante : CTE     {mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea);}
-		  | '-' CTE {mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea);}
+constante : CTE     {mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($1.sval).setAmbito(compilador.Compilador.ambito, false); }
+		  | '-' CTE {mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get($1.sval).setAmbito(compilador.Compilador.ambito, false);}
           ;
 
 %%
 
 void mostrarMensaje(String mensaje){
 	System.out.println(mensaje);
+}
+
+void disminuirAmbito(){
+	String [] arreglo = compilador.Compilador.ambito.split("\\:"); 
+	String aux = ""; 
+	for(int i=0; i<arreglo.length-1; i++){
+		aux = aux + arreglo[i]; 
+	} 
+	compilador.Compilador.ambito = aux;
 }
 
 

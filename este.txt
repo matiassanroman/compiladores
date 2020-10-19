@@ -1,9 +1,25 @@
+FLOAT ax;
+PROC a(INTEGER id1) NA=20_i , NS=22_i {
+ax=45_i;
+}
 
-IF(id>20_i){
-	id=25_i;
-	FOR(inic=10_i; inic>final; UP 15_i){
-		hola=hola1;
-		hola2=hola3;
+
+
+PROC f3(INTEGER id4, INTEGER id5, INTEGER id6) NA=20_i , NS=22_i {
+FLOAT ax2;
+PROC f1(INTEGER id2, INTEGER id3) NA=20_i , NS=22_i {
+FLOAT ax1;
+}
+}
+
+PROC b() NA = 3_i, NS = 4_i{
+	FLOAT c;
+	PROC d() NA = 3_i, NS = 4_i{
+		FLOAT e;
+		PROC f() NA = 3_i, NS = 4_i{
+			FLOAT g;
+		}
 	}
 }
-END_IF
+
+FLOAT h;

@@ -37,6 +37,9 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 			else{                                			
 				s.setUso("CTE");
 				TablaSimbolo.put(s.getValor(),s);
+				//Ambito Main
+				String aux = s.getValor() + ":" + "Main";
+				s.setAmbito(aux,true);
 				return TablaToken.get("CTE");
 			}
 		}

@@ -25,6 +25,8 @@ public class Compilador {
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
+	static String ambito = "";
+	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
@@ -176,7 +178,7 @@ public class Compilador {
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
-				
+		
 		// Esta codiicacion fue generada desde yacc, el cual a cada token
 		// que nosotros le declaramos le asocia un numero que hace referencia a este.
 		tablaToken.put("ID",257);
