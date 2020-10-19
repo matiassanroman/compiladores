@@ -42,7 +42,7 @@ public class CrearSalida {
 		    
 		    while (itr.hasNext()) { 
 		       str = itr.next();
-		       salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).getUso());
+		       salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).getUso() + "\t Ambito: " + tablaSimbolo.get(str).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).getTipo());
 		       salida.newLine();
 		    }
 		    
