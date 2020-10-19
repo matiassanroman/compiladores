@@ -1,9 +1,5 @@
+INTEGER d;
 
-IF(id>20_i){
-	id=25_i;
-	FOR(inic=10_i; inic>final; UP 15_i){
-		hola=hola1;
-		hola2=hola3;
-	}
+PROC a( ) NA = 2_i , NS = 3_i{
+	FLOAT c;
 }
-END_IF
