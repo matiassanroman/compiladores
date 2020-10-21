@@ -2,5 +2,13 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: 35	 Value: 35	 Uso: CTE	 Ambito: 35:Main	 Tipo: int
+<<<<<<< HEAD
+Clave: 1.3f+10	 Value: 1.3f+10	 Uso: CTE	 Ambito: 1.3f+10:Main	 Tipo: float
 Clave: t	 Value: t	 Uso: ID	 Ambito: t:Main	 Tipo: 
+=======
+Clave: ax1	 Value: ax1	 Uso: ID	 Ambito: ax1:Main	 Tipo: Var	 Declarada: true
+Clave: ax1	 Value: ax1	 Uso: ID	 Ambito: ax1:Main	 Tipo: Var	 Declarada: false
+Clave: ax1	 Value: ax1	 Uso: ID	 Ambito: ax1:Main	 Tipo: Var	 Declarada: false
+Clave: ax2	 Value: ax2	 Uso: ID	 Ambito: ax2:Main	 Tipo: Var	 Declarada: true
+Clave: ax2	 Value: ax2	 Uso: ID	 Ambito: ax2:Main	 Tipo: Var	 Declarada: false
+>>>>>>> ec08f2d14c074e212e4f7837d496f2d2a95b5081

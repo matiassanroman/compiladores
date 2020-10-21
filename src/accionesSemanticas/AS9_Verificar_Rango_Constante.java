@@ -1,5 +1,6 @@
 package accionesSemanticas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -7,7 +8,7 @@ import compilador.Simbolo;
 
 public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 	
-	Hashtable<String,Simbolo> TablaSimbolo;
+	Hashtable<String,ArrayList<Simbolo>> TablaSimbolo;
 	HashMap<String,Integer> TablaToken;  
 	Simbolo s;
 
@@ -17,7 +18,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 	int maxValorCte     =  32767;
 	
 	// Constructor
-	public AS9_Verificar_Rango_Constante(Hashtable<String,Simbolo> TablaSimbolo, HashMap<String,Integer> TablaToken){
+	public AS9_Verificar_Rango_Constante(Hashtable<String,ArrayList<Simbolo>> TablaSimbolo, HashMap<String,Integer> TablaToken){
 		this.TablaToken = TablaToken;
 		this.TablaSimbolo = TablaSimbolo;			
 	}
@@ -36,7 +37,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 			// Si la cte no está en la TS, agregarla y retornarla
 			else{                                			
 				s.setUso("CTE");
-				TablaSimbolo.put(s.getValor(),s);
+				//TablaSimbolo.put(s.getValor(),s);
 				//Ambito Main
 				String aux = s.getValor() + ":" + "Main";
 				s.setAmbito(aux,true);

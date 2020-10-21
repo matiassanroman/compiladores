@@ -5,8 +5,7 @@ public class Simbolo {
 	private String valor;       //lexema
 	private String tipo = "";   // int - float - string - proc
 	private String uso = "";    //CTE - CADENA - ID	
-	private boolean declarado = false;
-	private String estaDeclarado = "NO";
+	private boolean declarada;
 	private int contador;
 	private String ambito;
 
@@ -18,21 +17,25 @@ public class Simbolo {
 	public String getAmbito() {
 		return ambito;
 	}
-
-	public String getAmbitoSinId() {
-		return ambito.substring(2,ambito.length());
-	}
 	
 	public void setAmbito(String ambito, boolean primeroMain) {
 		//Entro por primera vez con Main
 		if(primeroMain) {
 			this.ambito = ambito;
-		//
+		//Agrega ambito de la variable ambito global
 		}else {
 			this.ambito = this.ambito + compilador.Compilador.ambito;
 		}
 		
 		
+	}
+
+	public boolean isDeclarada() {
+		return declarada;
+	}
+
+	public void setDeclarada(boolean declarada) {
+		this.declarada = declarada;
 	}
 
 	public void aumentarContador() {
@@ -66,22 +69,6 @@ public class Simbolo {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
-	public boolean isDeclarado() {
-		return declarado;
-	}
-
-	public void setDeclarado(boolean declarado) {
-		this.declarado = declarado;
-	}
-
-	public String getEstaDeclarado() {
-		return estaDeclarado;
-	}
-
-	public void setEstaDeclarado(String estaDeclarado) {
-		this.estaDeclarado = estaDeclarado;
-	}
 	
 	public String getUso() {
 		return uso;
@@ -94,16 +81,10 @@ public class Simbolo {
 	@Override
 	public boolean equals(Object o) {
 	Simbolo s = (Simbolo) o;
-	if (this.valor.equals(s.getValor())  /*&& this.ambiente.equals(s.getAmbiente()) && this.tipo.equals(s.getTipo()) && this.uso.equals(s.getUso())*/) {  
+	if (this.valor.equals(s.getValor())){  
 	return true;
 	}
 	return false;
-	}
-	
-	public String imprimir() {
-		String format = "|%1$-15s|%2$-15s|%3$-25s|%4$-35s|%5$-15s|\n";
-		   String output = String.format(format, "Valor: "+ this.valor, "Tipo: "+ this.tipo, "Declarado: " + this.estaDeclarado);
-		  return output; //" Valor: "+ this.valor + " Tipo: "+ this.tipo;
 	}
 	
 } 

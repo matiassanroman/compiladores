@@ -1,5 +1,6 @@
 package accionesSemanticas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -14,12 +15,12 @@ public class AS3_Devolver_PR extends AccionSemantica{
 	Se la dá de alta en la TPR
 	Retornar identificador + referencia a la TPR */
 
-	Hashtable<String,Simbolo> tablaSimbolo;
+	Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
 	HashMap<String,Integer> tablaToken; 
 	Simbolo s;		
 	
 	// Constructor
-	public AS3_Devolver_PR(Hashtable<String,Simbolo> tablaSimbolo, HashMap<String,Integer> tablaToken){
+	public AS3_Devolver_PR(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo, HashMap<String,Integer> tablaToken){
 		this.tablaToken = tablaToken;
 		this.tablaSimbolo = tablaSimbolo;			
 	}	

@@ -18,10 +18,14 @@
 
 //#line 2 "gramatica.y"
 package compilador;
-//#line 19 "Parser.java"
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+//#line 19 "Parser.java"
+
+
+
 
 public class Parser
 {
@@ -443,9 +447,31 @@ void disminuirAmbito(){
 	compilador.Compilador.ambito = aux;
 }
 
+boolean estaDeclarada(String sval){
+	compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
+	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var"))
+			return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada();
+		return true;
+	}
+	return false;
+}
+
+void setearProc(String sval){
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("Proc");
+}
+
+void setearAmbito(String sval){
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+}
+
+void setearAmbitoyDeclarada(String sval){
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setDeclarada(true);
+}
 
 
-//#line 377 "Parser.java"
+//#line 399 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -615,11 +641,11 @@ case 8:
 break;
 case 9:
 //#line 26 "gramatica.y"
-{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false);}
+{ setearAmbitoyDeclarada(val_peek(0).sval); }
 break;
 case 10:
 //#line 27 "gramatica.y"
-{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false);}
+{ setearAmbitoyDeclarada(val_peek(0).sval); }
 break;
 case 11:
 //#line 28 "gramatica.y"
@@ -631,19 +657,19 @@ case 12:
 break;
 case 13:
 //#line 34 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(11).sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get(val_peek(11).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval; compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).setAmbito(compilador.Compilador.ambito, false); }
+{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(11).sval); setearAmbito(val_peek(11).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval; setearAmbito(val_peek(8).sval); }
 break;
 case 14:
 //#line 35 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(14).sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get(val_peek(14).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval; compilador.Compilador.tablaSimbolo.get(val_peek(11).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).setAmbito(compilador.Compilador.ambito, false); }
+{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(14).sval); setearAmbito(val_peek(14).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval; setearAmbito(val_peek(11).sval); setearAmbito(val_peek(8).sval); }
 break;
 case 15:
 //#line 36 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(17).sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get(val_peek(17).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(17).sval; compilador.Compilador.tablaSimbolo.get(val_peek(14).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get(val_peek(11).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).setAmbito(compilador.Compilador.ambito, false); }
+{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(17).sval); setearAmbito(val_peek(17).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(17).sval; setearAmbito(val_peek(14).sval); setearAmbito(val_peek(11).sval); setearAmbito(val_peek(8).sval); }
 break;
 case 16:
 //#line 37 "gramatica.y"
-{mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(9).sval).setTipo("Proc"); compilador.Compilador.tablaSimbolo.get(val_peek(9).sval).setAmbito(compilador.Compilador.ambito, false); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; }
+{mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(9).sval); setearAmbito(val_peek(9).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; }
 break;
 case 17:
 //#line 38 "gramatica.y"
@@ -651,7 +677,7 @@ case 17:
 break;
 case 21:
 //#line 46 "gramatica.y"
-{mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);  compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false); }
+{mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);  setearAmbito(val_peek(0).sval); }
 break;
 case 22:
 //#line 47 "gramatica.y"
@@ -721,6 +747,7 @@ case 52:
 break;
 case 53:
 //#line 104 "gramatica.y"
+
 {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
 	String ladoIzq  = val_peek(3).sval;
 	String operador = val_peek(2).sval;  // bien
@@ -735,19 +762,23 @@ case 53:
 break;
 case 54:
 //#line 107 "gramatica.y"
-{mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea); }
 break;
 case 55:
 //#line 108 "gramatica.y"
-{mostrarMensaje("Reconocio resta en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio resta en linea nro: "+compilador.Compilador.nroLinea); }
 break;
 case 57:
 //#line 112 "gramatica.y"
-{mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea); }
 break;
 case 58:
 //#line 113 "gramatica.y"
-{mostrarMensaje("Reconocio division en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio division en linea nro: "+compilador.Compilador.nroLinea); }
+break;
+case 59:
+//#line 114 "gramatica.y"
+//{ if(!estaDeclarada(val_peek(0).sval)){mostrarMensaje(val_peek(0).sval + " no esta declarada.");} }
 break;
 case 62:
 //#line 121 "gramatica.y"
@@ -783,17 +814,17 @@ case 69:
 break;
 case 70:
 //#line 133 "gramatica.y"
-{mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea); }
 break;
 case 71:
 //#line 136 "gramatica.y"
-{mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(compilador.Compilador.ambito, false); }
+{mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea); setearAmbito(val_peek(0).sval); }
 break;
 case 72:
 //#line 137 "gramatica.y"
-{mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea); compilador.Compilador.tablaSimbolo.get(val_peek(1).sval).setAmbito(compilador.Compilador.ambito, false);}
+{mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea); setearAmbito(val_peek(1).sval); }
 break;
-//#line 706 "Parser.java"
+//#line 732 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
@@ -877,14 +908,14 @@ int i= 0;
 public int yylex() {
 
 try {
-  Token token = c.getToken();
-  this.lineaActual = token.getLinea();
-  yylval = new ParserVal(t);
-  yylval.sval = token.getLexema();
-  return token.getToken();
+Token token = c.getToken();
+this.lineaActual = token.getLinea();
+yylval = new ParserVal(t);
+yylval.sval = token.getLexema();
+return token.getToken();
 } catch (IOException e) {
-  // TODO Auto-generated catch block
-  e.printStackTrace();
+// TODO Auto-generated catch block
+e.printStackTrace();
 }
 return 0;
 }
