@@ -2,27 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: id4	 Value: id4	 Uso: ID	 Ambito: id4:Main:f3	 Tipo: 
-Clave: id3	 Value: id3	 Uso: ID	 Ambito: id3:Main:f3:f1	 Tipo: 
-Clave: id2	 Value: id2	 Uso: ID	 Ambito: id2:Main:f3:f1	 Tipo: 
-Clave: id1	 Value: id1	 Uso: ID	 Ambito: id1:Main:a	 Tipo: 
-Clave: ax2	 Value: ax2	 Uso: ID	 Ambito: ax2:Main:f3	 Tipo: 
-Clave: ax1	 Value: ax1	 Uso: ID	 Ambito: ax1:Main:f3:f1	 Tipo: 
-Clave: ax	 Value: ax	 Uso: ID	 Ambito: ax:Main	 Tipo: 
-Clave: 45	 Value: 45	 Uso: CTE	 Ambito: 45:Main:a	 Tipo: int
-Clave: f3	 Value: f3	 Uso: ID	 Ambito: f3:Main	 Tipo: Proc
-Clave: f1	 Value: f1	 Uso: ID	 Ambito: f1:Main:f3	 Tipo: Proc
-Clave: h	 Value: h	 Uso: ID	 Ambito: h:Main	 Tipo: 
-Clave: g	 Value: g	 Uso: ID	 Ambito: g:Main:b:d:f	 Tipo: 
-Clave: f	 Value: f	 Uso: ID	 Ambito: f:Main:b:d	 Tipo: Proc
-Clave: e	 Value: e	 Uso: ID	 Ambito: e:Main:b:d	 Tipo: 
-Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main:b	 Tipo: Proc
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main:b	 Tipo: 
-Clave: 4	 Value: 4	 Uso: CTE	 Ambito: 4:Main	 Tipo: int
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main	 Tipo: int
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Proc
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc
-Clave: 22	 Value: 22	 Uso: CTE	 Ambito: 22:Main	 Tipo: int
-Clave: id6	 Value: id6	 Uso: ID	 Ambito: id6:Main:f3	 Tipo: 
-Clave: id5	 Value: id5	 Uso: ID	 Ambito: id5:Main:f3	 Tipo: 
-Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int
+Clave: 1.3f+10	 Value: 1.3f+10	 Uso: CTE	 Ambito: 1.3f+10:Main	 Tipo: float
+Clave: t	 Value: t	 Uso: ID	 Ambito: t:Main	 Tipo: 

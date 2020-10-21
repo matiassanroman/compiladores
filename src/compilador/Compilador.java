@@ -175,7 +175,7 @@ public class Compilador {
 		while (!hayToken);
 		return token; 
 	}
-	
+		
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException {
 		

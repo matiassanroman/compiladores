@@ -601,7 +601,9 @@ boolean doaction;
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
 //#line 12 "gramatica.y"
-{mostrarMensaje("Reconoce bien el programa");}
+{mostrarMensaje("Reconoce bien el programa");
+	System.out.println(polaca.toString());
+}
 break;
 case 6:
 //#line 21 "gramatica.y"
@@ -713,11 +715,23 @@ case 51:
 break;
 case 52:
 //#line 101 "gramatica.y"
-{mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);
+	
+}
 break;
 case 53:
 //#line 104 "gramatica.y"
-{mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
+	String ladoIzq  = val_peek(3).sval;
+	String operador = val_peek(2).sval;  // bien
+	String ladoDer  = val_peek(1).sval;
+	Par par =  new Par(ladoIzq);
+	Par par2 = new Par(ladoDer);
+	Par par3 = new Par(operador);
+	polaca.agregarPaso(par);
+	polaca.agregarPaso(par2);
+	polaca.agregarPaso(par3);
+}
 break;
 case 54:
 //#line 107 "gramatica.y"
@@ -849,6 +863,8 @@ ArrayList<String> errores = new ArrayList<String>();
 Token t;
 int lineaActual;
 ArrayList<String> reconocidos = new ArrayList<String>();
+PolacaInversa polaca = new PolacaInversa();
+
 
 public Parser(Compilador c, ArrayList<String> errores)
 {
