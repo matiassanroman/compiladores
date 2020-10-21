@@ -1,12 +1,1 @@
-/*  Resultados de la compilacion  */
 
-/*  Tabla de Simbolos  */
-
-Clave: a1	 Value: a1	 Uso: ID	 Ambito: a1:Main	 Tipo: 	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false
-Clave: h1	 Value: h1	 Uso: ID	 Ambito: h1:Main	 Tipo: 	 Declarada: true
-Clave: 22	 Value: 22	 Uso: CTE	 Ambito: 22:Main	 Tipo: int	 Declarada: false
-Clave: id1	 Value: id1	 Uso: ID	 Ambito: id1:Main:a	 Tipo: 	 Declarada: false
-Clave: 45	 Value: 45	 Uso: CTE	 Ambito: 45:Main:a:a	 Tipo: int	 Declarada: false
-Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int	 Declarada: false
-Clave: ax	 Value: ax	 Uso: ID	 Ambito: ax:Main	 Tipo: 	 Declarada: true
