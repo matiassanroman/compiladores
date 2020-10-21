@@ -22,7 +22,7 @@ public class Compilador {
 	protected static int asciiAnterior = 0;
 	
 	//No ponemos privado para evitar mas metodos y que se pueda acceder de cualquier lado. 
-	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
+	static Hashtable<String,ArrayList<Simbolo>> tablaSimbolo = new Hashtable<String,ArrayList<Simbolo>>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
 	public static String ambito = "";
@@ -32,11 +32,14 @@ public class Compilador {
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
 	static AccionSemantica as3_devolver_pr = new AS3_Devolver_PR(tablaSimbolo, tablaToken);
 	static AccionSemantica as4_end_comentario = new AS4_Fin_Comentario();
+	//REVISAR
 	static AccionSemantica as5_end_cadena = new AS5_Fin_Cadena(tablaSimbolo, tablaToken);
 	static AccionSemantica as6_end_simbolo = new AS6_Fin_Simbolo();
 	static AccionSemantica as7_end_simbolo_simple = new AS7_Fin_Simbolo_Simple();
 	static AccionSemantica as8_end_simbolo_complejo = new AS8_Fin_Simbolo_Complejo(tablaToken);
+	//REVISAR
 	static AccionSemantica as9_verificar_rango_cte = new AS9_Verificar_Rango_Constante(tablaSimbolo, tablaToken);
+	//REVISAR
 	static AccionSemantica as10_verificar_float = new AS10_Verificar_Rango_Float(tablaSimbolo, tablaToken);
 	static AccionSemantica as11_no_accion = new AS11_No_Accion();
 	static AccionSemantica as12_error = new AS12_Error();
@@ -99,7 +102,7 @@ public class Compilador {
 	}
 	
 	// Metodo que retorna la tabla de simbolos
-	public Hashtable<String,Simbolo> getTablaSimbolo(){
+	public Hashtable<String,ArrayList<Simbolo>> getTablaSimbolo(){
 		return Compilador.tablaSimbolo;
 	}
 	

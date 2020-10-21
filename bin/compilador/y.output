@@ -20,7 +20,7 @@
   13  encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
   14                 | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
   15                 | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
-  16                 | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE
+  16                 | PROC identificador '(' ')'
   17                 | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE
 
   18  parametrosProc : parametro
@@ -188,7 +188,7 @@ state 8
 	encabezadoProc : PROC . identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (13)
 	encabezadoProc : PROC . identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC . identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
-	encabezadoProc : PROC . identificador '(' ')' NA '=' CTE ',' NS '=' CTE  (16)
+	encabezadoProc : PROC . identificador '(' ')'  (16)
 	encabezadoProc : PROC . identificador '(' error ')' NA '=' CTE ',' NS '=' CTE  (17)
 
 	ID  shift 2
@@ -373,7 +373,7 @@ state 29
 	encabezadoProc : PROC identificador . '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (13)
 	encabezadoProc : PROC identificador . '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador . '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
-	encabezadoProc : PROC identificador . '(' ')' NA '=' CTE ',' NS '=' CTE  (16)
+	encabezadoProc : PROC identificador . '(' ')'  (16)
 	encabezadoProc : PROC identificador . '(' error ')' NA '=' CTE ',' NS '=' CTE  (17)
 
 	'('  shift 49
@@ -560,7 +560,7 @@ state 49
 	encabezadoProc : PROC identificador '(' . tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (13)
 	encabezadoProc : PROC identificador '(' . tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' . tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
-	encabezadoProc : PROC identificador '(' . ')' NA '=' CTE ',' NS '=' CTE  (16)
+	encabezadoProc : PROC identificador '(' . ')'  (16)
 	encabezadoProc : PROC identificador '(' . error ')' NA '=' CTE ',' NS '=' CTE  (17)
 
 	error  shift 82
@@ -846,10 +846,9 @@ state 82
 
 
 state 83
-	encabezadoProc : PROC identificador '(' ')' . NA '=' CTE ',' NS '=' CTE  (16)
+	encabezadoProc : PROC identificador '(' ')' .  (16)
 
-	NA  shift 111
-	.  error
+	.  reduce 16
 
 
 state 84
@@ -860,7 +859,7 @@ state 84
 	ID  shift 2
 	.  error
 
-	identificador  goto 112
+	identificador  goto 111
 
 
 state 85
@@ -884,7 +883,7 @@ state 87
 state 88
 	sentenciaEjecutable : identificador '(' parametrosProc ')' . ';'  (31)
 
-	';'  shift 113
+	';'  shift 112
 	.  error
 
 
@@ -898,7 +897,7 @@ state 89
 	.  error
 
 	tipo  goto 53
-	parametro  goto 114
+	parametro  goto 113
 
 
 state 90
@@ -917,7 +916,7 @@ state 91
 
 	identificador  goto 58
 	constante  goto 59
-	termino  goto 115
+	termino  goto 114
 	factor  goto 62
 
 
@@ -931,7 +930,7 @@ state 92
 
 	identificador  goto 58
 	constante  goto 59
-	termino  goto 116
+	termino  goto 115
 	factor  goto 62
 
 
@@ -951,7 +950,7 @@ state 94
 
 	identificador  goto 58
 	constante  goto 59
-	factor  goto 117
+	factor  goto 116
 
 
 state 95
@@ -964,7 +963,7 @@ state 95
 
 	identificador  goto 58
 	constante  goto 59
-	factor  goto 118
+	factor  goto 117
 
 
 state 96
@@ -1022,11 +1021,11 @@ state 103
 	FOR  shift 5
 	.  error
 
-	sentenciaEjecutable  goto 119
+	sentenciaEjecutable  goto 118
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
-	bloqueSentencia  goto 120
+	bloqueSentencia  goto 119
 
 
 state 104
@@ -1050,11 +1049,11 @@ state 106
 	FOR  shift 5
 	.  error
 
-	sentenciaEjecutable  goto 119
+	sentenciaEjecutable  goto 118
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
-	bloqueSentencia  goto 121
+	bloqueSentencia  goto 120
 
 
 state 107
@@ -1067,66 +1066,59 @@ state 108
 	cicloFor : FOR '(' condicionFor ')' '{' . bloqueSentencia '}'  (37)
 	cicloFor : FOR '(' condicionFor ')' '{' . error '}'  (39)
 
-	error  shift 122
+	error  shift 121
 	ID  shift 2
 	IF  shift 3
 	OUT  shift 4
 	FOR  shift 5
 	.  error
 
-	sentenciaEjecutable  goto 119
+	sentenciaEjecutable  goto 118
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
-	bloqueSentencia  goto 123
+	bloqueSentencia  goto 122
 
 
 state 109
 	condicionFor : inicioFor ';' condicion . ';' incDec  (40)
 
-	';'  shift 124
+	';'  shift 123
 	.  error
 
 
 state 110
 	encabezadoProc : PROC identificador '(' error ')' . NA '=' CTE ',' NS '=' CTE  (17)
 
-	NA  shift 125
+	NA  shift 124
 	.  error
 
 
 state 111
-	encabezadoProc : PROC identificador '(' ')' NA . '=' CTE ',' NS '=' CTE  (16)
-
-	'='  shift 126
-	.  error
-
-
-state 112
 	encabezadoProc : PROC identificador '(' tipo identificador . ')' NA '=' CTE ',' NS '=' CTE  (13)
 	encabezadoProc : PROC identificador '(' tipo identificador . ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' tipo identificador . ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
-	','  shift 127
-	')'  shift 128
+	','  shift 125
+	')'  shift 126
 	.  error
 
 
-state 113
+state 112
 	sentenciaEjecutable : identificador '(' parametrosProc ')' ';' .  (31)
 
 	.  reduce 31
 
 
-state 114
+state 113
 	parametrosProc : parametro ',' parametro .  (19)
 	parametrosProc : parametro ',' parametro . ',' parametro  (20)
 
-	','  shift 129
+	','  shift 127
 	')'  reduce 19
 
 
-state 115
+state 114
 	expresion : expresion '+' termino .  (54)
 	termino : termino . '*' factor  (57)
 	termino : termino . '/' factor  (58)
@@ -1138,7 +1130,7 @@ state 115
 	';'  reduce 54
 
 
-state 116
+state 115
 	expresion : expresion '-' termino .  (55)
 	termino : termino . '*' factor  (57)
 	termino : termino . '/' factor  (58)
@@ -1150,25 +1142,25 @@ state 116
 	';'  reduce 55
 
 
-state 117
+state 116
 	termino : termino '*' factor .  (57)
 
 	.  reduce 57
 
 
-state 118
+state 117
 	termino : termino '/' factor .  (58)
 
 	.  reduce 58
 
 
-state 119
+state 118
 	bloqueSentencia : sentenciaEjecutable .  (48)
 
 	.  reduce 48
 
 
-state 120
+state 119
 	bloqueSentencia : bloqueSentencia . sentenciaEjecutable  (47)
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia . '}' ELSE '{' bloqueSentencia '}'  (51)
 	cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia . '}'  (52)
@@ -1177,17 +1169,41 @@ state 120
 	IF  shift 3
 	OUT  shift 4
 	FOR  shift 5
+	'}'  shift 128
+	.  error
+
+	sentenciaEjecutable  goto 129
+	identificador  goto 15
+	asignacion  goto 17
+	cicloFor  goto 18
+
+
+state 120
+	cicloFor : FOR '(' error ')' '{' bloqueSentencia . '}'  (38)
+	bloqueSentencia : bloqueSentencia . sentenciaEjecutable  (47)
+
+	ID  shift 2
+	IF  shift 3
+	OUT  shift 4
+	FOR  shift 5
 	'}'  shift 130
 	.  error
 
-	sentenciaEjecutable  goto 131
+	sentenciaEjecutable  goto 129
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
 
 
 state 121
-	cicloFor : FOR '(' error ')' '{' bloqueSentencia . '}'  (38)
+	cicloFor : FOR '(' condicionFor ')' '{' error . '}'  (39)
+
+	'}'  shift 131
+	.  error
+
+
+state 122
+	cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia . '}'  (37)
 	bloqueSentencia : bloqueSentencia . sentenciaEjecutable  (47)
 
 	ID  shift 2
@@ -1197,61 +1213,30 @@ state 121
 	'}'  shift 132
 	.  error
 
-	sentenciaEjecutable  goto 131
+	sentenciaEjecutable  goto 129
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
-
-
-state 122
-	cicloFor : FOR '(' condicionFor ')' '{' error . '}'  (39)
-
-	'}'  shift 133
-	.  error
 
 
 state 123
-	cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia . '}'  (37)
-	bloqueSentencia : bloqueSentencia . sentenciaEjecutable  (47)
+	condicionFor : inicioFor ';' condicion ';' . incDec  (40)
 
-	ID  shift 2
-	IF  shift 3
-	OUT  shift 4
-	FOR  shift 5
-	'}'  shift 134
+	UP  shift 133
+	DOWN  shift 134
 	.  error
 
-	sentenciaEjecutable  goto 131
-	identificador  goto 15
-	asignacion  goto 17
-	cicloFor  goto 18
+	incDec  goto 135
 
 
 state 124
-	condicionFor : inicioFor ';' condicion ';' . incDec  (40)
+	encabezadoProc : PROC identificador '(' error ')' NA . '=' CTE ',' NS '=' CTE  (17)
 
-	UP  shift 135
-	DOWN  shift 136
+	'='  shift 136
 	.  error
-
-	incDec  goto 137
 
 
 state 125
-	encabezadoProc : PROC identificador '(' error ')' NA . '=' CTE ',' NS '=' CTE  (17)
-
-	'='  shift 138
-	.  error
-
-
-state 126
-	encabezadoProc : PROC identificador '(' ')' NA '=' . CTE ',' NS '=' CTE  (16)
-
-	CTE  shift 139
-	.  error
-
-
-state 127
 	encabezadoProc : PROC identificador '(' tipo identificador ',' . tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' tipo identificador ',' . tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
@@ -1259,17 +1244,17 @@ state 127
 	FLOAT  shift 7
 	.  error
 
-	tipo  goto 140
+	tipo  goto 137
 
 
-state 128
+state 126
 	encabezadoProc : PROC identificador '(' tipo identificador ')' . NA '=' CTE ',' NS '=' CTE  (13)
 
-	NA  shift 141
+	NA  shift 138
 	.  error
 
 
-state 129
+state 127
 	parametrosProc : parametro ',' parametro ',' . parametro  (20)
 
 	error  shift 51
@@ -1278,154 +1263,140 @@ state 129
 	.  error
 
 	tipo  goto 53
-	parametro  goto 142
+	parametro  goto 139
 
 
-state 130
+state 128
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' . ELSE '{' bloqueSentencia '}'  (51)
 	cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' .  (52)
 
-	ELSE  shift 143
+	ELSE  shift 140
 	END_IF  reduce 52
 
 
-state 131
+state 129
 	bloqueSentencia : bloqueSentencia sentenciaEjecutable .  (47)
 
 	.  reduce 47
 
 
-state 132
+state 130
 	cicloFor : FOR '(' error ')' '{' bloqueSentencia '}' .  (38)
 
 	.  reduce 38
 
 
-state 133
+state 131
 	cicloFor : FOR '(' condicionFor ')' '{' error '}' .  (39)
 
 	.  reduce 39
 
 
-state 134
+state 132
 	cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' .  (37)
 
 	.  reduce 37
 
 
-state 135
+state 133
 	incDec : UP . constante  (45)
 
 	CTE  shift 56
 	'-'  shift 57
 	.  error
 
-	constante  goto 144
+	constante  goto 141
 
 
-state 136
+state 134
 	incDec : DOWN . constante  (46)
 
 	CTE  shift 56
 	'-'  shift 57
 	.  error
 
-	constante  goto 145
+	constante  goto 142
 
 
-state 137
+state 135
 	condicionFor : inicioFor ';' condicion ';' incDec .  (40)
 
 	.  reduce 40
 
 
-state 138
+state 136
 	encabezadoProc : PROC identificador '(' error ')' NA '=' . CTE ',' NS '=' CTE  (17)
 
-	CTE  shift 146
+	CTE  shift 143
 	.  error
 
 
-state 139
-	encabezadoProc : PROC identificador '(' ')' NA '=' CTE . ',' NS '=' CTE  (16)
-
-	','  shift 147
-	.  error
-
-
-state 140
+state 137
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo . identificador ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo . identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	ID  shift 2
 	.  error
 
-	identificador  goto 148
+	identificador  goto 144
 
 
-state 141
+state 138
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA . '=' CTE ',' NS '=' CTE  (13)
 
-	'='  shift 149
+	'='  shift 145
 	.  error
 
 
-state 142
+state 139
 	parametrosProc : parametro ',' parametro ',' parametro .  (20)
 
 	.  reduce 20
 
 
-state 143
+state 140
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE . '{' bloqueSentencia '}'  (51)
 
-	'{'  shift 150
+	'{'  shift 146
 	.  error
 
 
-state 144
+state 141
 	incDec : UP constante .  (45)
 
 	.  reduce 45
 
 
-state 145
+state 142
 	incDec : DOWN constante .  (46)
 
 	.  reduce 46
 
 
-state 146
+state 143
 	encabezadoProc : PROC identificador '(' error ')' NA '=' CTE . ',' NS '=' CTE  (17)
 
-	','  shift 151
+	','  shift 147
 	.  error
 
 
-state 147
-	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' . NS '=' CTE  (16)
-
-	NS  shift 152
-	.  error
-
-
-state 148
+state 144
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador . ')' NA '=' CTE ',' NS '=' CTE  (14)
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador . ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
-	','  shift 153
-	')'  shift 154
+	','  shift 148
+	')'  shift 149
 	.  error
 
 
-state 149
+state 145
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' . CTE ',' NS '=' CTE  (13)
 
-	CTE  shift 155
+	CTE  shift 150
 	.  error
 
 
-state 150
+state 146
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' . bloqueSentencia '}'  (51)
 
 	ID  shift 2
@@ -1434,52 +1405,45 @@ state 150
 	FOR  shift 5
 	.  error
 
-	sentenciaEjecutable  goto 119
+	sentenciaEjecutable  goto 118
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
-	bloqueSentencia  goto 156
+	bloqueSentencia  goto 151
 
 
-state 151
+state 147
 	encabezadoProc : PROC identificador '(' error ')' NA '=' CTE ',' . NS '=' CTE  (17)
 
-	NS  shift 157
+	NS  shift 152
 	.  error
 
 
-state 152
-	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS . '=' CTE  (16)
-
-	'='  shift 158
-	.  error
-
-
-state 153
+state 148
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' . tipo identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	INTEGER  shift 6
 	FLOAT  shift 7
 	.  error
 
-	tipo  goto 159
+	tipo  goto 153
 
 
-state 154
+state 149
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' . NA '=' CTE ',' NS '=' CTE  (14)
 
-	NA  shift 160
+	NA  shift 154
 	.  error
 
 
-state 155
+state 150
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE . ',' NS '=' CTE  (13)
 
-	','  shift 161
+	','  shift 155
 	.  error
 
 
-state 156
+state 151
 	bloqueSentencia : bloqueSentencia . sentenciaEjecutable  (47)
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia . '}'  (51)
 
@@ -1487,199 +1451,186 @@ state 156
 	IF  shift 3
 	OUT  shift 4
 	FOR  shift 5
-	'}'  shift 162
+	'}'  shift 156
 	.  error
 
-	sentenciaEjecutable  goto 131
+	sentenciaEjecutable  goto 129
 	identificador  goto 15
 	asignacion  goto 17
 	cicloFor  goto 18
 
 
-state 157
+state 152
 	encabezadoProc : PROC identificador '(' error ')' NA '=' CTE ',' NS . '=' CTE  (17)
 
-	'='  shift 163
+	'='  shift 157
 	.  error
 
 
-state 158
-	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS '=' . CTE  (16)
-
-	CTE  shift 164
-	.  error
-
-
-state 159
+state 153
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo . identificador ')' NA '=' CTE ',' NS '=' CTE  (15)
 
 	ID  shift 2
 	.  error
 
-	identificador  goto 165
+	identificador  goto 158
 
 
-state 160
+state 154
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA . '=' CTE ',' NS '=' CTE  (14)
 
-	'='  shift 166
+	'='  shift 159
 	.  error
 
 
-state 161
+state 155
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' . NS '=' CTE  (13)
 
-	NS  shift 167
+	NS  shift 160
 	.  error
 
 
-state 162
+state 156
 	cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSentencia '}' .  (51)
 
 	.  reduce 51
 
 
-state 163
+state 157
 	encabezadoProc : PROC identificador '(' error ')' NA '=' CTE ',' NS '=' . CTE  (17)
 
-	CTE  shift 168
+	CTE  shift 161
 	.  error
 
 
-state 164
-	encabezadoProc : PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE .  (16)
-
-	.  reduce 16
-
-
-state 165
+state 158
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador . ')' NA '=' CTE ',' NS '=' CTE  (15)
 
-	')'  shift 169
+	')'  shift 162
 	.  error
 
 
-state 166
+state 159
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' . CTE ',' NS '=' CTE  (14)
 
-	CTE  shift 170
+	CTE  shift 163
 	.  error
 
 
-state 167
+state 160
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS . '=' CTE  (13)
 
-	'='  shift 171
+	'='  shift 164
 	.  error
 
 
-state 168
+state 161
 	encabezadoProc : PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE .  (17)
 
 	.  reduce 17
 
 
-state 169
+state 162
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' . NA '=' CTE ',' NS '=' CTE  (15)
 
-	NA  shift 172
+	NA  shift 165
 	.  error
 
 
-state 170
+state 163
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE . ',' NS '=' CTE  (14)
 
-	','  shift 173
+	','  shift 166
 	.  error
 
 
-state 171
+state 164
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' . CTE  (13)
 
-	CTE  shift 174
+	CTE  shift 167
 	.  error
 
 
-state 172
+state 165
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA . '=' CTE ',' NS '=' CTE  (15)
 
-	'='  shift 175
+	'='  shift 168
 	.  error
 
 
-state 173
+state 166
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' . NS '=' CTE  (14)
 
-	NS  shift 176
+	NS  shift 169
 	.  error
 
 
-state 174
+state 167
 	encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE .  (13)
 
 	.  reduce 13
 
 
-state 175
+state 168
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' . CTE ',' NS '=' CTE  (15)
 
-	CTE  shift 177
+	CTE  shift 170
 	.  error
 
 
-state 176
+state 169
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS . '=' CTE  (14)
 
-	'='  shift 178
+	'='  shift 171
 	.  error
 
 
-state 177
+state 170
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE . ',' NS '=' CTE  (15)
 
-	','  shift 179
+	','  shift 172
 	.  error
 
 
-state 178
+state 171
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' . CTE  (14)
 
-	CTE  shift 180
+	CTE  shift 173
 	.  error
 
 
-state 179
+state 172
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' . NS '=' CTE  (15)
 
-	NS  shift 181
+	NS  shift 174
 	.  error
 
 
-state 180
+state 173
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE .  (14)
 
 	.  reduce 14
 
 
-state 181
+state 174
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS . '=' CTE  (15)
 
-	'='  shift 182
+	'='  shift 175
 	.  error
 
 
-state 182
+state 175
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' . CTE  (15)
 
-	CTE  shift 183
+	CTE  shift 176
 	.  error
 
 
-state 183
+state 176
 	encabezadoProc : PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE .  (15)
 
 	.  reduce 15
 
 
 37 terminals, 29 nonterminals
-73 grammar rules, 184 states
+73 grammar rules, 177 states

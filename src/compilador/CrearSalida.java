@@ -21,7 +21,7 @@ public class CrearSalida {
 			salida.newLine();
 			
 			
-			Hashtable<String,Simbolo> tablaSimbolo = c.getTablaSimbolo();
+			Hashtable<String,ArrayList<Simbolo>> tablaSimbolo = c.getTablaSimbolo();
 			salida.write("/*  Tabla de Simbolos  */");
 			salida.newLine();
 			salida.newLine();
@@ -32,9 +32,13 @@ public class CrearSalida {
 		    
 		    while (itr.hasNext()) { 
 		       str = itr.next();
-		       salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).getUso() + "\t Ambito: " + tablaSimbolo.get(str).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).isDeclarada() );
-		       salida.newLine();
+	    	   for(int i=0; i<tablaSimbolo.get(str).size(); i++) {
+	    		   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada() );
+	    		   salida.newLine();
+		       }
 		    }
+		    
+		    
 		    
 			salida.close();
 		} catch (IOException e) {

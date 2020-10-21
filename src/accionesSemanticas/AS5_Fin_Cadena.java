@@ -1,5 +1,6 @@
 package accionesSemanticas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import compilador.Simbolo;
@@ -7,12 +8,12 @@ import compilador.Simbolo;
 
 public class AS5_Fin_Cadena extends AccionSemantica{
 	
-	Hashtable<String,Simbolo> tablaSimbolo;
+	Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
 	HashMap<String,Integer> tablaToken;  
 	Simbolo s;
 	
 	// Constructor
-	public AS5_Fin_Cadena(Hashtable<String, Simbolo> tablaSimbolo, HashMap<String, Integer> tablaToken) {
+	public AS5_Fin_Cadena(Hashtable<String, ArrayList<Simbolo>> tablaSimbolo, HashMap<String, Integer> tablaToken) {
 		this.tablaSimbolo = tablaSimbolo;
 		this.tablaToken = tablaToken;
 	}
@@ -27,7 +28,7 @@ public class AS5_Fin_Cadena extends AccionSemantica{
 		// Si no está en la tabla
 		else{                                			
 			s.setUso("CADENA");
-			tablaSimbolo.put(s.getValor(),s);
+			//tablaSimbolo.put(s.getValor(),s);
 			return tablaToken.get("CADENA");
 		}
 	}

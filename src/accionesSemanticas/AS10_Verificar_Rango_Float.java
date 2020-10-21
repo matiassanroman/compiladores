@@ -1,5 +1,6 @@
 package accionesSemanticas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -7,7 +8,7 @@ import compilador.Simbolo;
 
 public class AS10_Verificar_Rango_Float extends AccionSemantica{
 
-	Hashtable<String,Simbolo> TablaSimbolo;
+	Hashtable<String,ArrayList<Simbolo>> TablaSimbolo;
 	HashMap<String,Integer> TablaToken;  
 	Simbolo s;
 
@@ -20,7 +21,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 	double cero = 0.0;
 	
 	// Contructor
-	public AS10_Verificar_Rango_Float(Hashtable<String, Simbolo> tablaSimbolo, HashMap<String, Integer> tablaToken) {
+	public AS10_Verificar_Rango_Float(Hashtable<String, ArrayList<Simbolo>> tablaSimbolo, HashMap<String, Integer> tablaToken) {
 		TablaSimbolo = tablaSimbolo;
 		TablaToken = tablaToken;
 	}
@@ -42,7 +43,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 			if(TablaSimbolo.contains(this.s) )  return TablaToken.get("FLOAT");
 			else {
 				s.setUso("CTE");
-				TablaSimbolo.put(s.getValor(),s);
+				//TablaSimbolo.put(s.getValor(),s);
 				//Ambito Main
 				String aux = s.getValor() + ":" + "Main";
 				s.setAmbito(aux,true);
