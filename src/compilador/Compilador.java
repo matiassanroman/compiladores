@@ -25,7 +25,7 @@ public class Compilador {
 	static Hashtable<String,Simbolo> tablaSimbolo = new Hashtable<String,Simbolo>();
 	private static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
-	static String ambito = "";
+	public static String ambito = "";
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();

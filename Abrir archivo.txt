@@ -7,3 +7,6 @@ javac -cp . compilador/*.java
 3) Luego desde src:
 
 java -cp . compilador.Compilador C:\Users\USUARIO\Desktop\Compiladores\Proyecto\compiladores\este.txt
+
+jonathacoin
+nomatrix

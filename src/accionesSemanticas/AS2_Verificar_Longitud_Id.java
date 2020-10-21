@@ -3,6 +3,7 @@ package accionesSemanticas;
 import java.util.HashMap;
 import java.util.Hashtable;
 import compilador.Simbolo;
+import compilador.Compilador;;
 
 public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 
@@ -19,8 +20,11 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 	// igual a 20 caracteres
 	public int execute(StringBuffer buffer, char c) {
 		// Bloques para controlar la longitud de la cadena
-		if (buffer.length() <= 20)
-			s = new Simbolo(buffer.toString());
+		if (buffer.length() <= 20) {
+			String a1 = buffer.toString(); 
+			a1 = a1.concat("hola");
+			s = new Simbolo(a1);
+		}
 		else {
 			s = new Simbolo(buffer.substring(0,20));
 			buffer.setLength(20);
@@ -28,14 +32,36 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 			System.out.println("Warning: Longitud de identificador excedido, truncado a 20");
 		}
 		
-		if(!tablaSimbolo.contains(s)) {
+		String ambitoGeneral = "Main" + Compilador.ambito;
+		/*
+		String ambitoId = tablaSimbolo.get(s.getValor()).getAmbito();
+		
+		String [] arreglo = ambitoId.split("\\:"); 
+		String aux = ""; 
+		for(int i=1; i<arreglo.length; i++){
+			aux = aux + arreglo[i]; 
+		} 
+		ambitoId = aux; */
+		
+		System.out.println("holaaaa: " + s.getValor());
+		
+		if(!tablaSimbolo.contains(s) ) {
 			tablaSimbolo.put(s.getValor(),s);
-		}
+		} /* else {			
+			System.out.println("1: " + ambitoGeneral);
+			System.out.println("2: " + ambitoId);
+			if(!ambitoId.equals(ambitoGeneral)) {
+				System.out.println("No se puede asignar, diferentes ambitos");
+			}
+			else {
+				System.out.println("Se puede asignar");
+			}
+		} */
 		
 		s.setUso("ID");
 		//Ambito Main
-		String aux = s.getValor() + ":" + "Main";
-		s.setAmbito(aux,true);
+		String aux2 = s.getValor() + ":" + "Main";
+		s.setAmbito(aux2,true);
 		return tablaToken.get("ID");
 		
 	}

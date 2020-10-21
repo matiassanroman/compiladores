@@ -25,16 +25,6 @@ public class CrearSalida {
 			salida.write("/*  Tabla de Simbolos  */");
 			salida.newLine();
 			salida.newLine();
-		
-			/*
-			Simbolo s1 = new Simbolo("ariel".toString());
-			s1.setUso("ID");
-			Simbolo s2 = new Simbolo("matias".toString());	
-			s2.setUso("CADENA");
-			
-			tablaSimbolo.put(s1.getValor(),s1);
-			tablaSimbolo.put(s2.getValor(),s2);
-			*/
 			
 			Set<String> keys = tablaSimbolo.keySet();
 		    Iterator<String> itr = keys.iterator();
@@ -42,7 +32,7 @@ public class CrearSalida {
 		    
 		    while (itr.hasNext()) { 
 		       str = itr.next();
-		       salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).getUso() + "\t Ambito: " + tablaSimbolo.get(str).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).getTipo());
+		       salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).getUso() + "\t Ambito: " + tablaSimbolo.get(str).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).isDeclarada() );
 		       salida.newLine();
 		    }
 		    

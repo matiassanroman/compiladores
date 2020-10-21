@@ -18,10 +18,14 @@
 
 //#line 2 "gramatica.y"
 package compilador;
-//#line 19 "Parser.java"
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+//#line 19 "Parser.java"
+
+
+
 
 public class Parser
 {
@@ -613,11 +617,11 @@ case 8:
 break;
 case 9:
 //#line 26 "gramatica.y"
-{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false);}
+{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false); compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setDeclarada(true); }
 break;
 case 10:
 //#line 27 "gramatica.y"
-{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false);}
+{compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setAmbito(val_peek(0).sval, false); compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).setDeclarada(true); }
 break;
 case 11:
 //#line 28 "gramatica.y"
@@ -861,14 +865,14 @@ int i= 0;
 public int yylex() {
 
 try {
-  Token token = c.getToken();
-  this.lineaActual = token.getLinea();
-  yylval = new ParserVal(t);
-  yylval.sval = token.getLexema();
-  return token.getToken();
+Token token = c.getToken();
+this.lineaActual = token.getLinea();
+yylval = new ParserVal(t);
+yylval.sval = token.getLexema();
+return token.getToken();
 } catch (IOException e) {
-  // TODO Auto-generated catch block
-  e.printStackTrace();
+// TODO Auto-generated catch block
+e.printStackTrace();
 }
 return 0;
 }

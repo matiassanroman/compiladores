@@ -23,8 +23,8 @@ sentenciaDeclarativa : tipo listaVariables ';'       {mostrarMensaje("Reconocio 
 					 | error listaVariables ';'      {yyerror("Error, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 					 ;
 
-listaVariables : listaVariables ',' identificador {compilador.Compilador.tablaSimbolo.get($3.sval).setAmbito($3.sval, false);}
-			   | identificador {compilador.Compilador.tablaSimbolo.get($1.sval).setAmbito($1.sval, false);}
+listaVariables : listaVariables ',' identificador {compilador.Compilador.tablaSimbolo.get($3.sval).setAmbito($3.sval, false); compilador.Compilador.tablaSimbolo.get($3.sval).setDeclarada(true); }
+			   | identificador                    {compilador.Compilador.tablaSimbolo.get($1.sval).setAmbito($1.sval, false); compilador.Compilador.tablaSimbolo.get($1.sval).setDeclarada(true); }
 			   | error    {yyerror("Error en la o las varibles, en linea nro: "+compilador.Compilador.nroLinea);}
 			   ;
 
