@@ -1,4 +1,11 @@
 FLOAT ax1;
 FLOAT ax2;
-ax1= ax1+ax2;
+
+PROC a(){
+	FLOAT ax3;
+	PROC b(){
+		ax3=ax4;
+	}
+}
+
 	

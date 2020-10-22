@@ -34,7 +34,7 @@ declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio 
 encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); }
 			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); setearAmbito($8.sval); }
 			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); setearAmbito($8.sval); setearAmbito($11.sval); }
-			   | PROC identificador '(' ')' NA '=' CTE ',' NS '=' CTE {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; }
+			   | PROC identificador '(' ')' {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; }
 			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
@@ -101,7 +101,7 @@ cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSenten
 cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
 				 ;
 
-asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea); }
+asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea); setearAmbito($1.sval); if(!estaDeclarada($1.sval)){mostrarMensaje($1.sval + " no esta declarada.");} }
 		   ;
 
 expresion : expresion '+' termino {mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea); }
@@ -111,11 +111,11 @@ expresion : expresion '+' termino {mostrarMensaje("Reconocio suma en linea nro: 
 
 termino : termino '*' factor {mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea); }
 		| termino '/' factor {mostrarMensaje("Reconocio division en linea nro: "+compilador.Compilador.nroLinea); }
-		| factor   { if(!estaDeclarada($1.sval)){mostrarMensaje($1.sval + " no esta declarada.");} }          
+		| factor             
 		;
 
 factor : constante
-	   | identificador
+	   | identificador { setearAmbito($1.sval); if(!estaDeclarada($1.sval)){mostrarMensaje($1.sval + " no esta declarada.");} }
 	   ;
 
 comparador : '<=' {mostrarMensaje("Reconocio comparador menor-igual en linea nro: "+compilador.Compilador.nroLinea);}
@@ -153,10 +153,18 @@ void disminuirAmbito(){
 }
 
 boolean estaDeclarada(String sval){
-	compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
 	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
-		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var"))
-			return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada();
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var")) {
+			//compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
+			boolean aux = false;
+			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+			System.out.println("ambito: " + ambitoId);
+			for(int i=compilador.Compilador.tablaSimbolo.get(sval).size()-1; i>=0; i--)
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
+					if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1)
+						return true;
+			return aux;
+		}
 		return true;
 	}
 	return false;
