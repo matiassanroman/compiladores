@@ -221,11 +221,10 @@ public class Compilador {
 				errores = p.getErrores();
 				reconocidos = p.getReconocidos();
 				for (int i=0; i<errores.size(); i++)
-					System.out.println("Errores: " + errores.get(i));
-				
+					System.out.println("Errores: " + errores.get(i));		
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
-				
+		
 				CrearSalida.crearTxtSalida(c);
 				
 			} catch (IOException e) {
