@@ -2,22 +2,10 @@
 
 /*  Tabla de Simbolos  */
 
-<<<<<<< HEAD
 Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Proc	 Declarada: false
-=======
-<<<<<<< HEAD
-Clave: 1.3f+10	 Value: 1.3f+10	 Uso: CTE	 Ambito: 1.3f+10:Main	 Tipo: float
-Clave: t	 Value: t	 Uso: ID	 Ambito: t:Main	 Tipo: 
-=======
->>>>>>> dff2ccd79187a70fc70d4f7508ca073254207ffe
 Clave: ax1	 Value: ax1	 Uso: ID	 Ambito: ax1:Main	 Tipo: Var	 Declarada: true
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false
+Clave: ax4	 Value: ax4	 Uso: ID	 Ambito: ax4:Main:a	 Tipo: Var	 Declarada: true
 Clave: ax4	 Value: ax4	 Uso: ID	 Ambito: ax4:Main:a:b	 Tipo: Var	 Declarada: false
-Clave: ax3	 Value: ax3	 Uso: ID	 Ambito: ax3:Main:a	 Tipo: Var	 Declarada: true
+Clave: ax3	 Value: ax3	 Uso: ID	 Ambito: ax3:Main	 Tipo: Var	 Declarada: true
 Clave: ax3	 Value: ax3	 Uso: ID	 Ambito: ax3:Main:a:b	 Tipo: Var	 Declarada: false
-Clave: ax2	 Value: ax2	 Uso: ID	 Ambito: ax2:Main	 Tipo: Var	 Declarada: true
-<<<<<<< HEAD
-=======
-Clave: ax2	 Value: ax2	 Uso: ID	 Ambito: ax2:Main	 Tipo: Var	 Declarada: false
->>>>>>> ec08f2d14c074e212e4f7837d496f2d2a95b5081
->>>>>>> dff2ccd79187a70fc70d4f7508ca073254207ffe
