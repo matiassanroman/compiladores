@@ -1,5 +1,9 @@
+<<<<<<< HEAD
+t = 1.3f+10;
+=======
 FLOAT ax1;
 FLOAT ax2;
+<<<<<<< HEAD
 
 PROC a(){
 	FLOAT ax3;
@@ -9,3 +13,8 @@ PROC a(){
 }
 
 	
+=======
+ax1= ax1+ax2;
+	
+>>>>>>> ec08f2d14c074e212e4f7837d496f2d2a95b5081
+>>>>>>> dff2ccd79187a70fc70d4f7508ca073254207ffe

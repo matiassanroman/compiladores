@@ -632,7 +632,9 @@ boolean doaction;
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
 //#line 12 "gramatica.y"
-{mostrarMensaje("Reconoce bien el programa");}
+{mostrarMensaje("Reconoce bien el programa");
+	System.out.println(polaca.toString());
+}
 break;
 case 6:
 //#line 21 "gramatica.y"
@@ -744,7 +746,9 @@ case 51:
 break;
 case 52:
 //#line 101 "gramatica.y"
-{mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+{mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);
+	
+}
 break;
 case 53:
 //#line 104 "gramatica.y"
@@ -884,6 +888,8 @@ ArrayList<String> errores = new ArrayList<String>();
 Token t;
 int lineaActual;
 ArrayList<String> reconocidos = new ArrayList<String>();
+PolacaInversa polaca = new PolacaInversa();
+
 
 public Parser(Compilador c, ArrayList<String> errores)
 {
