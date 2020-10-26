@@ -27,6 +27,10 @@ public class Compilador {
 
 	public static String ambito = "";
 	
+	public static int na = 0;
+	public static boolean primero = true;
+	public static int naa = 0;
+	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 

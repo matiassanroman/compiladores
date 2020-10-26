@@ -450,6 +450,29 @@ void disminuirAmbito(){
 	compilador.Compilador.ambito = aux;
 }
 
+void verificarNa(String sval, String proc){
+	//0 no hay error
+	//1 error na de proc x es negativo
+	//2 na de proc x es mayor que el na del proc que lo contiene.
+
+	if(compilador.Compilador.primero){
+		compilador.Compilador.na = Integer.parseInt(sval); 
+		compilador.Compilador.primero = false; 
+		compilador.Compilador.naa = Integer.parseInt(sval);
+	}else{
+		compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
+		if(compilador.Compilador.na < 0){
+			//Error 1: la suma de los na actual supera al na de algun proc que lo engloba.  
+			mostrarMensaje("La suma de los na actual supera al na de algun proc que lo engloba.");
+		} 
+		if(compilador.Compilador.naa < Integer.parseInt(sval)){
+			//Error 2: na de proc x es mayor que el na del proc que lo contiene.
+			mostrarMensaje("Na de proc: " + proc + " es mayor que el Na del proc que lo contiene.");
+		} 
+		compilador.Compilador.naa = Integer.parseInt(sval); 
+	}
+}
+
 int sePuedeUsar(String sval){
 	//0 se puede usar
 	//1 no esta al alcance.
@@ -527,7 +550,7 @@ void setearAmbitoyDeclarada(String sval){
 }
 
 
-//#line 455 "Parser.java"
+//#line 478 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -707,7 +730,7 @@ case 11:
 break;
 case 12:
 //#line 31 "gramatica.y"
-{mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito();}
+{mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa;  }
 break;
 case 13:
 //#line 34 "gramatica.y"
@@ -723,7 +746,7 @@ case 15:
 break;
 case 16:
 //#line 37 "gramatica.y"
-{mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(9).sval); setearAmbito(val_peek(9).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; if(sePuedeUsar(val_peek(9).sval) == 2){mostrarMensaje(val_peek(9).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval); System.out.println("Pasito tum tum: " + val_peek(4).sval);  setearAmbito(val_peek(0).sval); }
+{mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(9).sval); setearAmbito(val_peek(9).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; if(sePuedeUsar(val_peek(9).sval) == 2){mostrarMensaje(val_peek(9).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval);  setearAmbito(val_peek(0).sval); verificarNa(val_peek(4).sval,val_peek(9).sval); }
 break;
 case 17:
 //#line 38 "gramatica.y"
@@ -865,7 +888,7 @@ case 72:
 //#line 137 "gramatica.y"
 {mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea); setearAmbito(val_peek(1).sval); }
 break;
-//#line 788 "Parser.java"
+//#line 811 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
