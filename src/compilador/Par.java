@@ -3,7 +3,7 @@ package compilador;
 public class Par {
 	private Integer clave;
 	private String valor;
-	public static String valorIncompleto = "chagar";
+	public static String valorIncompleto = "";
 	
     public Par(String valor) {
     	this.valor = valor;

@@ -1,0 +1,6 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
+Clave: h	 Value: h	 Uso: ID	 Ambito: h:Main	 Tipo: Var	 Declarada: false
