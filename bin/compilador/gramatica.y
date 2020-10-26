@@ -28,13 +28,13 @@ listaVariables : listaVariables ',' identificador { setearAmbitoyDeclarada($3.sv
 			   | error    {yyerror("Error en la o las varibles, en linea nro: "+compilador.Compilador.nroLinea);}
 			   ;
 
-declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito();}
+declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa;  }
 						 ;
 
 encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($9.sval);  setearAmbito($13.sval); setearAmbitoyDeclarada($5.sval); }
 			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($12.sval); setearAmbito($16.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); }
 			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	    {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($15.sval); setearAmbito($19.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); setearAmbitoyDeclarada($11.sval); }
-			   | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE                                                                      {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($7.sval);  setearAmbito($11.sval); }
+			   | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE                                                                      {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($7.sval);  setearAmbito($11.sval); verificarNa($7.sval,$2.sval); }
 			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE                                                                 {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
@@ -153,6 +153,29 @@ void disminuirAmbito(){
 			aux = aux + ":" + arreglo[i]; 
 	} 
 	compilador.Compilador.ambito = aux;
+}
+
+void verificarNa(String sval, String proc){
+	//0 no hay error
+	//1 error na de proc x es negativo
+	//2 na de proc x es mayor que el na del proc que lo contiene.
+
+	if(compilador.Compilador.primero){
+		compilador.Compilador.na = Integer.parseInt(sval); 
+		compilador.Compilador.primero = false; 
+		compilador.Compilador.naa = Integer.parseInt(sval);
+	}else{
+		compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
+		if(compilador.Compilador.na < 0){
+			//Error 1: la suma de los na actual supera al na de algun proc que lo engloba.  
+			mostrarMensaje("La suma de los na actual supera al na de algun proc que lo engloba.");
+		} 
+		if(compilador.Compilador.naa < Integer.parseInt(sval)){
+			//Error 2: na de proc x es mayor que el na del proc que lo contiene.
+			mostrarMensaje("Na de proc: " + proc + " es mayor que el Na del proc que lo contiene.");
+		} 
+		compilador.Compilador.naa = Integer.parseInt(sval); 
+	}
 }
 
 int sePuedeUsar(String sval){
