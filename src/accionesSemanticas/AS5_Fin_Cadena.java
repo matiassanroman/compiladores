@@ -23,14 +23,34 @@ public class AS5_Fin_Cadena extends AccionSemantica{
 	public int execute(StringBuffer buffer, char c) {
 		this.s = new Simbolo(buffer.toString());
 		s.setTipo("Cadena");
+		
+		/*
 		// Si está en la tabla
-		if(tablaSimbolo.contains(this.s) ){ return tablaToken.get("CADENA"); }
+		if(tablaSimbolo.contains(this.s) ){ 
+			return tablaToken.get("CADENA"); 
+		}
 		// Si no está en la tabla
 		else{                                			
 			s.setUso("CADENA");
 			//tablaSimbolo.put(s.getValor(),s);
 			return tablaToken.get("CADENA");
 		}
+		*/
+		
+		if(!tablaSimbolo.containsKey(s.getValor()) ) {
+			ArrayList<Simbolo> list =new ArrayList<Simbolo>();
+			list.add(s);
+			tablaSimbolo.put(s.getValor(),list);
+		}else {
+			tablaSimbolo.get(s.getValor()).add(s);	
+		}
+		
+		s.setUso("CADENA");
+		//Ambito Main
+		String aux2 = s.getValor() + ":" + "Main";
+		s.setAmbito(aux2,true);
+		return tablaToken.get("CADENA");
+		
 	}
 
 	// Al ser una cadena de texto no se necesitará

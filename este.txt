@@ -1,9 +1,9 @@
-FLOAT ax1;
-FLOAT ax3;
 
-PROC a(){
-	FLOAT ax4;
-	PROC b(){
-		ax3=ax4;
+PROC a() NA=3_i , NS=3_i {
+	PROC b() NA=2_i , NS=2_i {
+		param1=45_i;
+	}
+	PROC c() NA=1_i , NS=1_i {
+		param1=45_i;
 	}
 }

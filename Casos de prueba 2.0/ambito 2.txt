@@ -1,0 +1,10 @@
+PROC b(){
+	FLOAT id2; 
+	PROC b(){
+		FLOAT id1;
+	}
+	PROC a(){
+		FLOAT id1;
+		id2=id1;
+	}
+}

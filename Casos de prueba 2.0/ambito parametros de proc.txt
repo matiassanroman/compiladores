@@ -1,0 +1,8 @@
+FLOAT ax;
+
+PROC a(INTEGER param1) NA=20_i , NS=22_i {
+	param1=45_i;
+	PROC a(INTEGER param4) NA=20_i , NS=22_i {
+		param1=45_i;
+	}
+}

@@ -1,0 +1,17 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Proc	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main	 Tipo: int	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a:a	 Tipo: int	 Declarada: false
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main	 Tipo: int	 Declarada: false
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b:a:b	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main:a:c:a:c	 Tipo: int	 Declarada: false
+Clave: 45	 Value: 45	 Uso: CTE	 Ambito: 45:Main:a:b	 Tipo: int	 Declarada: false
+Clave: 45	 Value: 45	 Uso: CTE	 Ambito: 45:Main:a:c	 Tipo: int	 Declarada: false
+Clave: param1	 Value: param1	 Uso: ID	 Ambito: param1:Main:a:b	 Tipo: Var	 Declarada: false
+Clave: param1	 Value: param1	 Uso: ID	 Ambito: param1:Main:a:c	 Tipo: Var	 Declarada: false
+Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main:a	 Tipo: Proc	 Declarada: false

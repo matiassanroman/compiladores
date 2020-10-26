@@ -31,37 +31,13 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 			System.out.println("Warning: Longitud de identificador excedido, truncado a 20");
 		}
 		
-		String ambitoGeneral = "Main" + Compilador.ambito;
-		/*
-		String ambitoId = tablaSimbolo.get(s.getValor()).getAmbito();
-		
-		String [] arreglo = ambitoId.split("\\:"); 
-		String aux = ""; 
-		for(int i=1; i<arreglo.length; i++){
-			aux = aux + arreglo[i]; 
-		} 
-		ambitoId = aux; */
-		
 		if(!tablaSimbolo.containsKey(s.getValor()) ) {
 			ArrayList<Simbolo> list =new ArrayList<Simbolo>();
 			list.add(s);
 			tablaSimbolo.put(s.getValor(),list);
 		}else {
-			tablaSimbolo.get(s.getValor()).add(s);
-			
+			tablaSimbolo.get(s.getValor()).add(s);	
 		}
-		
-		
-		/* else {			
-			System.out.println("1: " + ambitoGeneral);
-			System.out.println("2: " + ambitoId);
-			if(!ambitoId.equals(ambitoGeneral)) {
-				System.out.println("No se puede asignar, diferentes ambitos");
-			}
-			else {
-				System.out.println("Se puede asignar");
-			}
-		} */
 		
 		s.setUso("ID");
 		s.setTipo("Var");

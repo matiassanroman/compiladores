@@ -19,23 +19,23 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
                ;
 
 sentenciaDeclarativa : tipo listaVariables ';'       {mostrarMensaje("Reconocio declaracion de una o mas variables en linea nro: "+compilador.Compilador.nroLinea);}
-					 | declaracionProcedimiento
+					 | declaracionProcedimiento		
 					 | error listaVariables ';'      {yyerror("Error, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 					 ;
 
-listaVariables : listaVariables ',' identificador { setearAmbitoyDeclarada($3.sval); }
-			   | identificador                    { setearAmbitoyDeclarada($1.sval); }
+listaVariables : listaVariables ',' identificador { setearAmbitoyDeclarada($3.sval); if(sePuedeUsar($3.sval) == 2){mostrarMensaje($3.sval + " esta Redeclarada.");} }
+			   | identificador                    { setearAmbitoyDeclarada($1.sval); if(sePuedeUsar($1.sval) == 2){mostrarMensaje($1.sval + " esta Redeclarada.");} }
 			   | error    {yyerror("Error en la o las varibles, en linea nro: "+compilador.Compilador.nroLinea);}
 			   ;
 
 declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito();}
 						 ;
 
-encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); }
-			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); setearAmbito($8.sval); }
-			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; setearAmbito($5.sval); setearAmbito($8.sval); setearAmbito($11.sval); }
-			   | PROC identificador '(' ')' {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; }
-			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
+encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($9.sval);  setearAmbito($13.sval); setearAmbitoyDeclarada($5.sval); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($12.sval); setearAmbito($16.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	    {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($15.sval); setearAmbito($19.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); setearAmbitoyDeclarada($11.sval); }
+			   | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE                                                                      {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($7.sval);  setearAmbito($11.sval); }
+			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE                                                                 {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
 parametrosProc : parametro
@@ -101,7 +101,7 @@ cuerpoCompleto : '(' condicion ')' '{' bloqueSentencia '}' ELSE '{' bloqueSenten
 cuerpoIncompleto : '(' condicion ')' '{' bloqueSentencia '}' {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
 				 ;
 
-asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea); setearAmbito($1.sval); if(!estaDeclarada($1.sval)){mostrarMensaje($1.sval + " no esta declarada.");} }
+asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea); setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");} }
 		   ;
 
 expresion : expresion '+' termino {mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea); }
@@ -115,7 +115,7 @@ termino : termino '*' factor {mostrarMensaje("Reconocio multiplicacion en linea 
 		;
 
 factor : constante
-	   | identificador { setearAmbito($1.sval); if(!estaDeclarada($1.sval)){mostrarMensaje($1.sval + " no esta declarada.");} }
+	   | identificador { setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");} }
 	   ;
 
 comparador : '<=' {mostrarMensaje("Reconocio comparador menor-igual en linea nro: "+compilador.Compilador.nroLinea);}
@@ -147,27 +147,75 @@ void disminuirAmbito(){
 	String [] arreglo = compilador.Compilador.ambito.split("\\:"); 
 	String aux = ""; 
 	for(int i=0; i<arreglo.length-1; i++){
-		aux = aux + arreglo[i]; 
+		if(i == 0)
+			aux = arreglo[i];
+		else
+			aux = aux + ":" + arreglo[i]; 
 	} 
 	compilador.Compilador.ambito = aux;
 }
 
-boolean estaDeclarada(String sval){
+int sePuedeUsar(String sval){
+	//0 se puede usar
+	//1 no esta al alcance.
+	//2 esta redeclarada
+	//Esta en la tabla de simbolos?
 	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
-		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var")) {
-			//compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
-			boolean aux = false;
+		//Es una variable?
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var")){
+			//No esta declarada?
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Tomo el ambito de la id no declarada y busco si hay una declarada al alcance.
+				String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+					return 1;
+				}else{
+					//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
+					for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
+						//System.out.println("AmbitoId: " + ambitoId);
+						//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
+						if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
+							return 0;
+						}
+					}
+				}
+				//No existe una id declarada al alcance.
+				return 1;	
+			}
+			//Si esta declarada ver que no este Redeclarada.
 			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
-			System.out.println("ambito: " + ambitoId);
-			for(int i=compilador.Compilador.tablaSimbolo.get(sval).size()-1; i>=0; i--)
-				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
-					if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1)
-						return true;
-			return aux;
+			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+				return 0;
+			}else{
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
+					if(ambitoId.equals(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito())){
+						return 2;
+					}
+				}
+			}
+			return 0;
+		//Es un Proc?
+		}else{
+			//Tomo el ambito de la id de proc y veo que no este en el mismo ambito.
+			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+				return 0;
+			}else{
+				//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
+					//System.out.println("AmbitoId: " + ambitoId);
+					//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
+					if(ambitoId.equals(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito())){
+						return 2;
+					}
+				}
+			}
+			//No existe una id declarada en el mismo ambito.
+			return 0;
 		}
-		return true;
 	}
-	return false;
+	//Si no esta en la tabla de simbolos no existe ninguna declaracion.
+	return 1;
 }
 
 void setearProc(String sval){

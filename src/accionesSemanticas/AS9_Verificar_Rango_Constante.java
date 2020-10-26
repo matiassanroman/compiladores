@@ -8,8 +8,8 @@ import compilador.Simbolo;
 
 public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 	
-	Hashtable<String,ArrayList<Simbolo>> TablaSimbolo;
-	HashMap<String,Integer> TablaToken;  
+	Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
+	HashMap<String,Integer> tablaToken;  
 	Simbolo s;
 
 	// se definen rango mminimo y maximo conrrespondientes
@@ -18,9 +18,9 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 	int maxValorCte     =  32767;
 	
 	// Constructor
-	public AS9_Verificar_Rango_Constante(Hashtable<String,ArrayList<Simbolo>> TablaSimbolo, HashMap<String,Integer> TablaToken){
-		this.TablaToken = TablaToken;
-		this.TablaSimbolo = TablaSimbolo;			
+	public AS9_Verificar_Rango_Constante(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo, HashMap<String,Integer> tablaToken){
+		this.tablaToken = tablaToken;
+		this.tablaSimbolo = tablaSimbolo;			
 	}
 	
 	
@@ -31,6 +31,8 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 		// Verifica si la constante esta dentro del rango
 		if((cte>=minValorCte) && (cte<=maxValorCte)){ 	   
 			s.setTipo("int");
+			
+			/*
 			// Si la cte ya está en la TS, retornar referencia
 			if(TablaSimbolo.contains(this.s) )
 				return TablaToken.get("CTE");
@@ -43,6 +45,22 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 				s.setAmbito(aux,true);
 				return TablaToken.get("CTE");
 			}
+			*/
+			
+			if(!tablaSimbolo.containsKey(s.getValor()) ) {
+				ArrayList<Simbolo> list =new ArrayList<Simbolo>();
+				list.add(s);
+				tablaSimbolo.put(s.getValor(),list);
+			}else {
+				tablaSimbolo.get(s.getValor()).add(s);
+			}
+			
+			s.setUso("CTE");
+			//Ambito Main
+			String aux = s.getValor() + ":" + "Main";
+			s.setAmbito(aux,true);
+			return tablaToken.get("CTE");
+			
 		}
 		// Si la cte está fuera de los rangos
 		else                                    	
