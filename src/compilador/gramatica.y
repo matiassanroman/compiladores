@@ -103,21 +103,18 @@ cuerpoIf : cuerpoCompleto
 		 | cuerpoIncompleto 
 		 ;
 		 
-cuerpoCompleto : encabezadoCOMP ELSE '{' bloqueElse '}'	{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}		   	  
+cuerpoCompleto : '(' condicionIf ')' '{' bloqueThen '}' ELSE '{' bloqueElse '}'	{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}		   	  
 			   ;  
 
-encabezadoCOMP : '(' condicionIf ')' '{' bloqueThen '}'
-		   ;
-
-bloqueElse : bloqueSentencia {polaca.completarPolaca(PolacaInversa.getRetrocesosITE());}
-		   ;
-
 condicionIf : condicion {
+			// if algo then
 				Par pasoEnBlanco = new Par(""); 
 				polaca.agregarPaso(pasoEnBlanco);
 				polaca.agregarPasoIncompleto();
 				Par pasoBF = new Par("BF"); 
 				polaca.agregarPaso(pasoBF);
+			// else
+			//	polaca.completarPolaca(PolacaInversa.getRetrocesosIT()); 
 				}
 			;
 
@@ -130,14 +127,11 @@ bloqueThen : bloqueSentencia {
 				}
 		   ;
 
-cuerpoIncompleto : encabezadoINC  {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
-
-
-encabezadoINC : '(' condicionIf ')' '{' bloqueThenINC '}'
+bloqueElse : bloqueSentencia {polaca.completarPolaca(PolacaInversa.getRetrocesosITE());}
 		   ;
 
-bloqueThenINC : condicion {polaca.completarPolaca(PolacaInversa.getRetrocesosIT()); }
-			  
+cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'  {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+
 asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
             setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");}
 			Par id =  new Par($1.sval);
