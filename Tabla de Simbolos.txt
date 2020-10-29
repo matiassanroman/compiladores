@@ -4,7 +4,12 @@
 
 Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true
 Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
+Clave: 5	 Value: 5	 Uso: CTE	 Ambito: 5:Main	 Tipo: int	 Declarada: false
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main	 Tipo: int	 Declarada: false
+Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
+Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
 Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main	 Tipo: Var	 Declarada: true
+Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 %left '*' '/'
 
 %%
-programa : bloquePrograma {mostrarMensaje("Reconoce bien el programa");}
+programa : bloquePrograma {mostrarMensaje("Reconoce bien el programa");
+System.out.println(polaca.toString());}
 		 ;
 
 bloquePrograma : bloquePrograma sentenciaDeclarativa
@@ -63,21 +64,36 @@ sentenciaEjecutable : asignacion
 					| OUT '(' CADENA ')' ';' {mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}                     
 					| identificador '(' parametrosProc ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);}
 					| identificador '(' ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea); }
-					| IF cuerpoIf END_IF   
+					| IF cuerpoIf END_IF { 	if (PolacaInversa.getFlagITE()){
+												polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
+											}
+											else
+												polaca.completarPolaca(PolacaInversa.getRetrocesosIT());
+											}
 					| cicloFor {mostrarMensaje("Reconocio ciclo FOR en linea nro: "+compilador.Compilador.nroLinea);}
 					| OUT '(' error ')' ';'  {yyerror("Error en la cadena en linea nro: "+compilador.Compilador.nroLinea);}
 					| IF error END_IF    {yyerror("Error en el cuerpo del IF en linea nro: "+compilador.Compilador.nroLinea);}
 					;
 
-cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' 
+cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());}
 		 | FOR '(' error ')' '{' bloqueSentencia '}'     {yyerror("Error en la condicion del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 		 | FOR '(' condicionFor ')' '{' error '}'        {yyerror("Error en el cuerpo del FOR en linea nro: "+compilador.Compilador.nroLinea);}
          ;
 
-condicionFor : inicioFor ';' condicion ';' incDec {mostrarMensaje("Reconocio encabezado del FOR en linea nro: "+compilador.Compilador.nroLinea);}
+condicionFor : inicioFor ';' condiFOR ';' incDec {mostrarMensaje("Reconocio encabezado del FOR en linea nro: "+compilador.Compilador.nroLinea);
+polaca.borrarPasoPolaca();}
 			 ;
 
-inicioFor : identificador '=' constante
+condiFOR : condicion {Par pasoEnBlanco = new Par(""); 
+				polaca.agregarPaso(pasoEnBlanco);
+				polaca.agregarPasoIncompleto();
+				Par pasoBF = new Par("BF"); 
+				polaca.agregarPaso(pasoBF);}
+		;
+
+inicioFor : identificador '=' constante { Par id = new Par($1.sval);
+polaca.agregarPaso(id);Par asig = new Par($2.sval);
+polaca.agregarPaso(asig);}
 		  ;
 
 condicion : identificador comparador asignacion {
@@ -91,46 +107,51 @@ condicion : identificador comparador asignacion {
 			polaca.agregarPaso(id); polaca.agregarPaso(comp); }
 		  ;
 
-incDec : UP constante   {mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);}
-	   | DOWN constante {mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);}
+incDec : UP constante   {mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+	//Par mas = new Par("+"); 
+	//polaca.agregarPaso(mas);
+	}
+	   | DOWN constante {mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+	   //Par menos = new Par("-"); 
+	   //polaca.agregarPaso(menos);
+	   }
 	   ;
 
 bloqueSentencia : bloqueSentencia sentenciaEjecutable
 				| sentenciaEjecutable
 				;
 
-cuerpoIf : cuerpoCompleto
-		 | cuerpoIncompleto 
+cuerpoIf : cuerpoCompleto {	PolacaInversa.setFlagITE(true); }
+		 | cuerpoIncompleto { PolacaInversa.setFlagITE(false); 
+		 polaca.borrarPasoPolaca();
+		 polaca.borrarPasoPolaca();
+		 polaca.borrarPasoIncompleto();}
 		 ;
 		 
 cuerpoCompleto : '(' condicionIf ')' '{' bloqueThen '}' ELSE '{' bloqueElse '}'	{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}		   	  
 			   ;  
 
 condicionIf : condicion {
-			// if algo then
 				Par pasoEnBlanco = new Par(""); 
 				polaca.agregarPaso(pasoEnBlanco);
 				polaca.agregarPasoIncompleto();
 				Par pasoBF = new Par("BF"); 
 				polaca.agregarPaso(pasoBF);
-			// else
-			//	polaca.completarPolaca(PolacaInversa.getRetrocesosIT()); 
 				}
 			;
 
-bloqueThen : bloqueSentencia {
-				Par pasoEnBlanco = new Par(""); 
-				polaca.agregarPaso(pasoEnBlanco);
-				polaca.agregarPasoIncompleto();
-				Par pasoBI = new Par("BI"); 
-				polaca.agregarPaso(pasoBI);
-				}
+bloqueThen : bloqueSentencia {Par pasoEnBlanco = new Par(""); 
+	polaca.agregarPaso(pasoEnBlanco);
+	polaca.agregarPasoIncompleto();
+	Par pasoBI = new Par("BI"); 
+	polaca.agregarPaso(pasoBI);}
 		   ;
 
-bloqueElse : bloqueSentencia {polaca.completarPolaca(PolacaInversa.getRetrocesosITE());}
+bloqueElse : bloqueSentencia
 		   ;
 
-cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'  {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'  {mostrarMensaje("Reconocio IF sin ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+
 
 asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
             setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");}

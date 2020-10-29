@@ -1,6 +1,33 @@
-INTEGER a,b;
+INTEGER a,b,c,d;
 
-IF (a == 1_i){
-	b = 2_i;
+%% IF-THEN-ELSE
+
+%%IF (a > 0_i){
+%%	k = 5_i;
+%%}
+%%ELSE{
+%%	j = 3_i;
+%%}
+%%END_IF
+
+%% IF-THEN 
+
+%%IF (a > g){
+%%	b = 15_i;
+%%}
+%%END_IF
+
+%%IF (a > 1_i){
+%%	b = 2_i;
+%%}
+%%ELSE{
+%%	IF (c == 3_i) {
+%%		d = 4_i;
+%%	}
+%%	END_IF
+%%}
+%%END_IF
+
+FOR(i=1_i; i<5_i; UP 1_i){
+	a = b;
 }
-END_IF
