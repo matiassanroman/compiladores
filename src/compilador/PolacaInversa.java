@@ -9,9 +9,15 @@ public class PolacaInversa {
 	
 	public static int retrocesosIfThenElse = 2;
 	public static int retrocesosIfThen = 1;
+	public static int retrocesosFOR = 1;
+	public static boolean flagITF;
+	
+	public static boolean getFlagITE() { return flagITF;}
+	public static void setFlagITE(boolean estado) {flagITF = estado;}
 	
 	public static int getRetrocesosITE() { return retrocesosIfThenElse;	}
 	public static int getRetrocesosIT() { return retrocesosIfThen; }
+	public static int getRetrocesosFOR() { return retrocesosFOR; }
 	
 	public PolacaInversa() {
 		this.pasosPolaca = new ArrayList<Par>();
@@ -42,6 +48,16 @@ public class PolacaInversa {
 			ref = pasosPolaca.get(pos).getClave()+2;
 			this.pasosIncompletos.remove(i);
 		}
+	}
+	
+	public void borrarPasoPolaca() {
+		int pos = this.pasosPolaca.size()-1;
+		this.pasosPolaca.remove(pos);
+	}
+	
+	public void borrarPasoIncompleto() {
+		int pos = this.pasosIncompletos.size()-1;
+		this.pasosIncompletos.remove(pos);
 	}
 	
 	public String toString() {

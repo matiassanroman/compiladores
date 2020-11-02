@@ -2,6 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
+<<<<<<< HEAD
 Clave: id2	 Value: id2	 Uso: ID	 Ambito: id2:Main	 Tipo: Var	 Declarada: false
 Clave: id1	 Value: id1	 Uso: ID	 Ambito: id1:Main	 Tipo: Var	 Declarada: false
 Clave: inic	 Value: inic	 Uso: ID	 Ambito: inic:Main	 Tipo: Var	 Declarada: false
@@ -51,3 +52,16 @@ Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int	 Declarada: false
 Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int	 Declarada: false
 Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int	 Declarada: false
 Clave: 20	 Value: 20	 Uso: CTE	 Ambito: 20:Main	 Tipo: int	 Declarada: false
+=======
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
+Clave: 5	 Value: 5	 Uso: CTE	 Ambito: 5:Main	 Tipo: int	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
+Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
+Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main	 Tipo: Var	 Declarada: true
+Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true
+>>>>>>> 09eadcb14c0a888a816dd93367321a99c52de6b0
