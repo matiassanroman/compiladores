@@ -1,4 +1,4 @@
-INTEGER a,b,c,d;
+INTEGER a,b,c,d,e;
 
 %% IF-THEN-ELSE
 
@@ -28,6 +28,6 @@ INTEGER a,b,c,d;
 %%}
 %%END_IF
 
-FOR(i=1_i; i<5_i; UP 1_i){
+FOR(i=1_i; i<5_i; DOWN 1_i){
 	a = b;
 }

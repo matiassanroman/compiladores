@@ -75,7 +75,7 @@ sentenciaEjecutable : asignacion
 					| IF error END_IF    {yyerror("Error en el cuerpo del IF en linea nro: "+compilador.Compilador.nroLinea);}
 					;
 
-cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());}
+cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {polaca.borrarVariablesControl();Par pasoEnBlanco = new Par(""); polaca.agregarPaso(pasoEnBlanco); polaca.agregarPasoIncompleto(); Par pasoBI = new Par("BI"); polaca.agregarPaso(pasoBI); polaca.completarFOR(); polaca.borrarInicioFOR(); polaca.borrarPasoIncompleto();polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());}
 		 | FOR '(' error ')' '{' bloqueSentencia '}'     {yyerror("Error en la condicion del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 		 | FOR '(' condicionFor ')' '{' error '}'        {yyerror("Error en el cuerpo del FOR en linea nro: "+compilador.Compilador.nroLinea);}
          ;
@@ -88,12 +88,12 @@ condiFOR : condicion {Par pasoEnBlanco = new Par("");
 				polaca.agregarPaso(pasoEnBlanco);
 				polaca.agregarPasoIncompleto();
 				Par pasoBF = new Par("BF"); 
-				polaca.agregarPaso(pasoBF);}
+				polaca.agregarPaso(pasoBF);	}
 		;
 
-inicioFor : identificador '=' constante { Par id = new Par($1.sval);
+inicioFor : identificador '=' constante { polaca.agregarVariableControl($1.sval); Par id = new Par($1.sval);
 polaca.agregarPaso(id);Par asig = new Par($2.sval);
-polaca.agregarPaso(asig);}
+polaca.agregarPaso(asig);polaca.agregarInicioFOR();}
 		  ;
 
 condicion : identificador comparador asignacion {
@@ -108,12 +108,12 @@ condicion : identificador comparador asignacion {
 		  ;
 
 incDec : UP constante   {mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
-	//Par mas = new Par("+"); 
-	//polaca.agregarPaso(mas);
+	polaca.agregarVariableControl("+");
+	polaca.agregarVariableControl($2.sval);
 	}
 	   | DOWN constante {mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
-	   //Par menos = new Par("-"); 
-	   //polaca.agregarPaso(menos);
+	   polaca.agregarVariableControl("-");
+		polaca.agregarVariableControl($2.sval);
 	   }
 	   ;
 

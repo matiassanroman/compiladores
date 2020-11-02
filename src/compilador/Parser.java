@@ -806,7 +806,7 @@ case 36:
 break;
 case 37:
 //#line 78 "gramatica.y"
-{polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());}
+{polaca.borrarVariablesControl();Par pasoEnBlanco = new Par(""); polaca.agregarPaso(pasoEnBlanco); polaca.agregarPasoIncompleto(); Par pasoBI = new Par("BI"); polaca.agregarPaso(pasoBI); polaca.completarFOR(); polaca.borrarInicioFOR(); polaca.borrarPasoIncompleto();polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());}
 break;
 case 38:
 //#line 79 "gramatica.y"
@@ -827,13 +827,13 @@ case 41:
 				polaca.agregarPaso(pasoEnBlanco);
 				polaca.agregarPasoIncompleto();
 				Par pasoBF = new Par("BF"); 
-				polaca.agregarPaso(pasoBF);}
+				polaca.agregarPaso(pasoBF);	}
 break;
 case 42:
 //#line 94 "gramatica.y"
-{ Par id = new Par(val_peek(2).sval);
+{ polaca.agregarVariableControl(val_peek(2).sval); Par id = new Par(val_peek(2).sval);
 polaca.agregarPaso(id);Par asig = new Par(val_peek(1).sval);
-polaca.agregarPaso(asig);}
+polaca.agregarPaso(asig);polaca.agregarInicioFOR();}
 break;
 case 43:
 //#line 99 "gramatica.y"
@@ -856,15 +856,15 @@ break;
 case 46:
 //#line 110 "gramatica.y"
 {mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
-	/*Par mas = new Par("+"); */
-	/*polaca.agregarPaso(mas);*/
+	polaca.agregarVariableControl("+");
+	polaca.agregarVariableControl(val_peek(0).sval);
 	}
 break;
 case 47:
 //#line 114 "gramatica.y"
 {mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
-	   /*Par menos = new Par("-"); */
-	   /*polaca.agregarPaso(menos);*/
+	   polaca.agregarVariableControl("-");
+		polaca.agregarVariableControl(val_peek(0).sval);
 	   }
 break;
 case 50:

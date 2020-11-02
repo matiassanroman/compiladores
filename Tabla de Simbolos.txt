@@ -11,5 +11,6 @@ Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
 Clave: i	 Value: i	 Uso: ID	 Ambito: i:Main	 Tipo: Var	 Declarada: false
 Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
 Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: e	 Value: e	 Uso: ID	 Ambito: e:Main	 Tipo: Var	 Declarada: true
 Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main	 Tipo: Var	 Declarada: true
 Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true
