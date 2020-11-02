@@ -131,12 +131,14 @@ bloqueThen : bloqueSentencia {
 		   ;
 
 cuerpoIncompleto : encabezadoINC  {mostrarMensaje("Reconocio IF sin cuerpo en ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+			;
 
-
+//encabezadoINC : '(' condicionIf ')' '{' bloqueThenINC '}'
 encabezadoINC : '(' condicionIf ')' '{' bloqueThenINC '}'
 		   ;
 
-bloqueThenINC : condicion {polaca.completarPolaca(PolacaInversa.getRetrocesosIT()); }
+bloqueThenINC : bloqueSentencia {polaca.completarPolaca(PolacaInversa.getRetrocesosIT()); }
+			;
 			  
 asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
             setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");}
