@@ -6,6 +6,8 @@ public class PolacaInversa {
 	
 	private ArrayList<Par> pasosPolaca;
 	private ArrayList<Integer> pasosIncompletos;
+	private ArrayList<Integer> iniciosDeFOR;
+	private ArrayList<String> variablesControl;
 	
 	public static int retrocesosIfThenElse = 2;
 	public static int retrocesosIfThen = 1;
@@ -22,6 +24,8 @@ public class PolacaInversa {
 	public PolacaInversa() {
 		this.pasosPolaca = new ArrayList<Par>();
 		this.pasosIncompletos = new ArrayList<Integer>();
+		this.iniciosDeFOR = new ArrayList<Integer>();
+		this.variablesControl = new ArrayList<String>();
 	}
 	
 	public void agregarPaso(Par par) {
@@ -34,6 +38,15 @@ public class PolacaInversa {
 		// tener en cuenta que para completa las pasos de la polaca debe recorrer
 		// la lista de pasos incompletos y completar la lista de pasos desde el final 
 		// hacia el principio
+	}
+	
+	public void agregarInicioFOR() {
+		int inicio = this.pasosPolaca.size();
+		this.iniciosDeFOR.add(inicio);
+	}
+	
+	public void agregarVariableControl(String elemento) {
+		this.variablesControl.add(elemento);
 	}
 	
 	// metodo para completar
@@ -50,6 +63,15 @@ public class PolacaInversa {
 		}
 	}
 	
+	public void completarFOR() {
+		int pos = this.pasosIncompletos.size()-1;
+		int posACompletar = pasosIncompletos.get(pos);
+		int salto = this.iniciosDeFOR.size()-1;
+		int inicio = this.iniciosDeFOR.get(salto);
+		String i = String.valueOf(inicio);
+		this.pasosPolaca.get(posACompletar).setValor(i);
+	}
+	
 	public void borrarPasoPolaca() {
 		int pos = this.pasosPolaca.size()-1;
 		this.pasosPolaca.remove(pos);
@@ -58,6 +80,35 @@ public class PolacaInversa {
 	public void borrarPasoIncompleto() {
 		int pos = this.pasosIncompletos.size()-1;
 		this.pasosIncompletos.remove(pos);
+	}
+	
+	public void borrarInicioFOR() {
+		int pos = this.iniciosDeFOR.size()-1;
+		this.iniciosDeFOR.remove(pos);
+	}
+	
+	private void borrarUnaVariableControl() {
+		int pos = this.variablesControl.size()-1;
+		this.variablesControl.remove(pos);
+	}
+	
+	public void borrarVariablesControl() {
+		int pos = this.variablesControl.size()-1;
+		String incDec = this.variablesControl.get(pos);
+		String comp = this.variablesControl.get(pos-1);
+		String var = this.variablesControl.get(pos-2);
+		Par parIncDec = new  Par(incDec);
+		Par parComp = new  Par(comp);
+		Par parVar = new  Par(var);
+		Par parAsig = new  Par("=");
+		agregarPaso(parIncDec);
+		agregarPaso(parVar);
+		agregarPaso(parComp);
+		agregarPaso(parVar);
+		agregarPaso(parAsig);	
+		borrarUnaVariableControl();
+		borrarUnaVariableControl();
+		borrarUnaVariableControl();
 	}
 	
 	public String toString() {
