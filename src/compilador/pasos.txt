@@ -1,1 +1,0 @@
-yacc -J -v gramatica.y
