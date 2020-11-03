@@ -121,11 +121,5 @@ public class PolacaInversa {
 		}
 		return salida;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }
