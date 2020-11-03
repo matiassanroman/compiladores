@@ -21,7 +21,7 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
                | sentenciaEjecutable 
                ;
 
-sentenciaDeclarativa : tipo listaVariables ';'       {mostrarMensaje("Reconocio declaracion de una o mas variables en linea nro: "+compilador.Compilador.nroLinea);}
+sentenciaDeclarativa : tipo listaVariables ';'       
 					 | declaracionProcedimiento		
 					 | error listaVariables ';'      {yyerror("Error, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 					 ;
@@ -31,13 +31,13 @@ listaVariables : listaVariables ',' identificador { setearAmbitoyDeclarada($3.sv
 			   | error    {yyerror("Error en la o las varibles, en linea nro: "+compilador.Compilador.nroLinea);}
 			   ;
 
-declaracionProcedimiento : encabezadoProc bloqueProc {mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa;  }
+declaracionProcedimiento : encabezadoProc bloqueProc { disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa; }
 						 ;
 
-encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($9.sval);  setearAmbito($13.sval); setearAmbitoyDeclarada($5.sval); }
-			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($12.sval); setearAmbito($16.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); }
-			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	    {mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($15.sval); setearAmbito($19.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); setearAmbitoyDeclarada($11.sval); }
-			   | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE                                                                      {mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc($2.sval); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($7.sval);  setearAmbito($11.sval); verificarNa($7.sval,$2.sval); }
+encabezadoProc : PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 													{ setearProc($2.sval, "1", $9.sval, $13.sval, $4.sval, "COPIA VALOR", $5.sval, "", "", "", "", "", "");  setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($9.sval);  setearAmbito($13.sval); setearAmbitoyDeclarada($5.sval); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 							{  setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($12.sval); setearAmbito($16.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); }
+			   | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE 	    {  setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($15.sval); setearAmbito($19.sval); setearAmbitoyDeclarada($5.sval); setearAmbitoyDeclarada($8.sval); setearAmbitoyDeclarada($11.sval); }
+			   | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE                                                                      { setearProc($2.sval, "0", $7.sval, $11.sval, "", "", "", "", "", "", "", "", ""); setearAmbito($2.sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval; if(sePuedeUsar($2.sval) == 2){mostrarMensaje($2.sval + " esta Redeclarada.");} setearAmbito($7.sval);  setearAmbito($11.sval); verificarNa($7.sval,$2.sval);}
 			   | PROC identificador '(' error ')' NA '=' CTE ',' NS '=' CTE                                                                 {yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 			   ; 
 
@@ -46,11 +46,11 @@ parametrosProc : parametro
 			   | parametro ',' parametro ',' parametro
 			   ;
 
-parametro : tipo identificador  {mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);  setearAmbito($2.sval); }
+parametro : tipo identificador  { setearAmbito($2.sval); }
 		  | error identificador {yyerror("Error, tipo invalido en el parametro, en linea nro: "+compilador.Compilador.nroLinea);}
 		  ;
 
-bloqueProc : '{' bloque '}' {mostrarMensaje("Reconocio bloque de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
+bloqueProc : '{' bloque '}' 
 		   | '{' error '}'  {yyerror("Error en el cuerpo del procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
 		   ;
 
@@ -61,16 +61,16 @@ bloque : bloque sentenciaDeclarativa
        ;
 
 sentenciaEjecutable : asignacion
-					| OUT '(' CADENA ')' ';' {mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}                     
-					| identificador '(' parametrosProc ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-					| identificador '(' ')' ';' {mostrarMensaje("Reconocio llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea); }
+					| OUT '(' CADENA ')' ';'                      
+					| identificador '(' parametrosProc ')' ';' 
+					| identificador '(' ')' ';'
 					| IF cuerpoIf END_IF { 	if (PolacaInversa.getFlagITE()){
 												polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
 											}
 											else
 												polaca.completarPolaca(PolacaInversa.getRetrocesosIT());
 											}
-					| cicloFor {mostrarMensaje("Reconocio ciclo FOR en linea nro: "+compilador.Compilador.nroLinea);}
+					| cicloFor 
 					| OUT '(' error ')' ';'  {yyerror("Error en la cadena en linea nro: "+compilador.Compilador.nroLinea);}
 					| IF error END_IF    {yyerror("Error en el cuerpo del IF en linea nro: "+compilador.Compilador.nroLinea);}
 					;
@@ -80,7 +80,8 @@ cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}' {polaca.borrarVariab
 		 | FOR '(' condicionFor ')' '{' error '}'        {yyerror("Error en el cuerpo del FOR en linea nro: "+compilador.Compilador.nroLinea);}
          ;
 
-condicionFor : inicioFor ';' condiFOR ';' incDec {mostrarMensaje("Reconocio encabezado del FOR en linea nro: "+compilador.Compilador.nroLinea);
+condicionFor : inicioFor ';' condiFOR ';' incDec 
+{
 polaca.borrarPasoPolaca();}
 			 ;
 
@@ -107,11 +108,13 @@ condicion : identificador comparador asignacion {
 			polaca.agregarPaso(id); polaca.agregarPaso(comp); }
 		  ;
 
-incDec : UP constante   {mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+incDec : UP constante   
+{
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl($2.sval);
 	}
-	   | DOWN constante {mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+	   | DOWN constante 
+	   {
 	   polaca.agregarVariableControl("-");
 		polaca.agregarVariableControl($2.sval);
 	   }
@@ -128,7 +131,7 @@ cuerpoIf : cuerpoCompleto {	PolacaInversa.setFlagITE(true); }
 		 polaca.borrarPasoIncompleto();}
 		 ;
 		 
-cuerpoCompleto : '(' condicionIf ')' '{' bloqueThen '}' ELSE '{' bloqueElse '}'	{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}		   	  
+cuerpoCompleto : '(' condicionIf ')' '{' bloqueThen '}' ELSE '{' bloqueElse '}'		   	  
 			   ;  
 
 condicionIf : condicion {
@@ -150,10 +153,11 @@ bloqueThen : bloqueSentencia {Par pasoEnBlanco = new Par("");
 bloqueElse : bloqueSentencia
 		   ;
 
-cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'  {mostrarMensaje("Reconocio IF sin ELSE en linea nro: "+compilador.Compilador.nroLinea);}
+cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'  
 
 
-asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
+asignacion : identificador '=' expresion ';' 
+			{
             setearAmbito($1.sval); if(sePuedeUsar($1.sval) == 1){mostrarMensaje($1.sval + " No esta declarada.");}
 			Par id =  new Par($1.sval);
 			Par asig = new Par($2.sval);
@@ -161,19 +165,23 @@ asignacion : identificador '=' expresion ';' {mostrarMensaje("Reconocio Asignaci
 			polaca.agregarPaso(asig); }
 		   ;
 
-expresion : expresion '+' termino {mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea); 
+expresion : expresion '+' termino 
+		{
 			Par suma =  new Par("+");
 			polaca.agregarPaso(suma);  }
-		  | expresion '-' termino {mostrarMensaje("Reconocio resta en linea nro: "+compilador.Compilador.nroLinea);
+		  | expresion '-' termino 
+		  						{
 		    						Par resta =  new Par("-");
 									polaca.agregarPaso(resta); }
 		  | termino               
 		  ;
 
-termino : termino '*' factor {mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea); 
+termino : termino '*' factor 
+							{
 							  Par multi =  new Par("*");
 							  polaca.agregarPaso(multi);		}
-		| termino '/' factor {mostrarMensaje("Reconocio division en linea nro: "+compilador.Compilador.nroLinea); 
+		| termino '/' factor 
+							{ 
 							  Par division =  new Par("/");
 							  polaca.agregarPaso(division);}
 		| factor          
@@ -185,27 +193,26 @@ factor : constante
 					     polaca.agregarPaso(id); } 
 	   ;
 
-comparador : '<=' {mostrarMensaje("Reconocio comparador menor-igual en linea nro: "+compilador.Compilador.nroLinea);}
-		   | '>=' {mostrarMensaje("Reconocio comparador mayor-igual en linea nro: "+compilador.Compilador.nroLinea);}
-		   | '!=' {mostrarMensaje("Reconocio comparador distinto en linea nro: "+compilador.Compilador.nroLinea);}
-		   | '==' {mostrarMensaje("Reconocio comparador igual en linea nro: "+compilador.Compilador.nroLinea);}
-		   | '>'  {mostrarMensaje("Reconocio comparador mayor en linea nro: "+compilador.Compilador.nroLinea);}
-		   | '<'  {mostrarMensaje("Reconocio comparador menor en linea nro: "+compilador.Compilador.nroLinea);}
+comparador : '<=' 
+		   | '>=' 
+		   | '!=' 
+		   | '==' 
+		   | '>'  
+		   | '<' 
 		   ;
 
-tipo : FLOAT   {mostrarMensaje("Reconocio tipo FLOAT en linea nro: "+compilador.Compilador.nroLinea);}
-     | INTEGER {mostrarMensaje("Reconocio tipo INTEGER en linea nro: "+compilador.Compilador.nroLinea);}
+tipo : FLOAT   
+     | INTEGER
      ;
 
-identificador : ID {mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea);
-					            }
+identificador : ID 
 			  ;
 
-constante : CTE     {mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea);
+constante : CTE     {
                      setearAmbito($1.sval);
 					 Par cte =  new Par($1.sval);
 					 polaca.agregarPaso(cte);            }
-		  | '-' CTE {mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea);  
+		  | '-' CTE {  
                      setearAmbito($2.sval);
 		  			 Par cte =  new Par("-"+$1.sval);
 					 polaca.agregarPaso(cte);            }
@@ -315,8 +322,24 @@ int sePuedeUsar(String sval){
 	return 1;
 }
 
-void setearProc(String sval){
+void setearProc(String sval, String cantParametros, String na, String ns, String tipo1, String pasaje1, String param1, String tipo2, String pasaje2, String param2, String tipo3, String pasaje3, String param3){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
+
+	//Parametros
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo1(tipo1);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasaje1(pasaje1);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setParam1(param1);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo1(tipo2);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasaje1(pasaje2);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setParam1(param2);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo1(tipo3);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasaje1(pasaje3);
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setParam1(param3);
+	
+
 }
 
 void setearAmbito(String sval){

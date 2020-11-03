@@ -1,0 +1,7 @@
+
+PROC a(INTEGER a1, FLOAT a2, FLOAT a3) NA=2_i, NS=2_i{
+FLOAT x1;
+x1=2_i;
+}
+
+a();

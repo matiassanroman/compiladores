@@ -3,15 +3,19 @@ package compilador;
 public class Simbolo {
 
 	private String valor;       //lexema
-	private String tipo = "";   // int - float - string - proc
-	private String uso = "";    //CTE - CADENA - ID	
+	private String tipo = "";   // VAR (int - float - string) - PROC - PARAM_PROC (int - float) - NA_PROC - NS_PROC
+	private String uso = "";    //CTE - CADENA - ID
 	private boolean declarada;
-	private int contador;
+	//private int contador;
 	private String ambito;
+	private int cantParametros;
+	private int na;
+	private int ns;
+	private String tipoParametro;
+	private String pasajeParametro;
 
 	public Simbolo(String valor) {
 	this.valor = valor;
-	this.contador = 1;
 	}
 	
 	public String getAmbito() {
@@ -29,6 +33,14 @@ public class Simbolo {
 		
 		
 	}
+	
+	public String getUso() {
+		return uso;
+	}
+
+	public void setUso(String uso) {
+		this.uso = uso;
+	}
 
 	public boolean isDeclarada() {
 		return declarada;
@@ -36,22 +48,6 @@ public class Simbolo {
 
 	public void setDeclarada(boolean declarada) {
 		this.declarada = declarada;
-	}
-
-	public void aumentarContador() {
-		contador = contador + 1;
-	}
-	
-	public void disminuirrContador() {
-		contador = contador -1;
-	}
-	
-	public int getContador() {
-		return contador;
-	}
-
-	public void setContador(int contador) {
-		this.contador = contador;
 	}
 
 	public String getValor() {
@@ -69,7 +65,7 @@ public class Simbolo {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
+	/*
 	public String getUso() {
 		return uso;
 	}
@@ -77,7 +73,47 @@ public class Simbolo {
 	public void setUso(String uso) {
 		this.uso = uso;
 	}
+	*/
+	public int getCantParametros() {
+		return cantParametros;
+	}
+
+	public void setCantParametros(int cantParametros) {
+		this.cantParametros = cantParametros;
+	}
+
+	public int getNa() {
+		return na;
+	}
+
+	public void setNa(int na) {
+		this.na = na;
+	}
+
+	public int getNs() {
+		return ns;
+	}
+
+	public void setNs(int ns) {
+		this.ns = ns;
+	}
 	
+	public String getTipoParametro() {
+		return tipoParametro;
+	}
+
+	public void setTipoParametro(String tipoParametro) {
+		this.tipoParametro = tipoParametro;
+	}
+
+	public String getPasajeParametro() {
+		return pasajeParametro;
+	}
+
+	public void setPasajeParametro(String pasajeParametro) {
+		this.pasajeParametro = pasajeParametro;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 	Simbolo s = (Simbolo) o;
