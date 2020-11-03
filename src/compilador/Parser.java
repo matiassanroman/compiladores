@@ -436,7 +436,7 @@ final static String yyrule[] = {
 "constante : '-' CTE",
 };
 
-//#line 215 "gramatica.y"
+//#line 222 "gramatica.y"
 
 void mostrarMensaje(String mensaje){
 	System.out.println(mensaje);
@@ -540,19 +540,37 @@ int sePuedeUsar(String sval){
 	return 1;
 }
 
-void setearProc(String sval){
+void setearProc(String sval, String cantParametros, String na, String ns){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
+	compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setTipo("NA_PROC");
+	compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
+}
+
+void setearAmbitoNaNs(String na, String ns){
+	compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setAmbito(compilador.Compilador.ambito,false);
+	compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setAmbito(compilador.Compilador.ambito,false);
 }
 
 void setearAmbito(String sval){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 }
 
-void setearAmbitoyDeclarada(String sval){
-	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
-	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setDeclarada(true);
+void setearAmbitoyDeclarada(String sval, String tipo){
+	if(tipo.equals("")){
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setDeclarada(true);
+	}else{
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setDeclarada(true);
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("PARAM_PROC");
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipoParametro(tipo);
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasajeParametro("COPIA VALOR");
+	}
 }
-//#line 484 "Parser.java"
+//#line 502 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -711,21 +729,17 @@ case 1:
 {mostrarMensaje("Reconoce bien el programa");
 System.out.println(polaca.toString());}
 break;
-case 6:
-//#line 24 "gramatica.y"
-{mostrarMensaje("Reconocio declaracion de una o mas variables en linea nro: "+compilador.Compilador.nroLinea);}
-break;
 case 8:
 //#line 26 "gramatica.y"
 {yyerror("Error, tipo invalido en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 9:
 //#line 29 "gramatica.y"
-{ setearAmbitoyDeclarada(val_peek(0).sval); if(sePuedeUsar(val_peek(0).sval) == 2){mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");} }
+{ setearAmbitoyDeclarada(val_peek(0).sval,""); if(sePuedeUsar(val_peek(0).sval) == 2){mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");} }
 break;
 case 10:
 //#line 30 "gramatica.y"
-{ setearAmbitoyDeclarada(val_peek(0).sval); if(sePuedeUsar(val_peek(0).sval) == 2){mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");} }
+{ setearAmbitoyDeclarada(val_peek(0).sval,""); if(sePuedeUsar(val_peek(0).sval) == 2){mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");} }
 break;
 case 11:
 //#line 31 "gramatica.y"
@@ -733,23 +747,23 @@ case 11:
 break;
 case 12:
 //#line 34 "gramatica.y"
-{mostrarMensaje("Reconocio procedimiento completo en linea nro: "+compilador.Compilador.nroLinea); disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa;  }
+{ disminuirAmbito(); compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa; }
 break;
 case 13:
 //#line 37 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(11).sval); setearAmbito(val_peek(11).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval; if(sePuedeUsar(val_peek(11).sval) == 2){mostrarMensaje(val_peek(11).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval);  setearAmbito(val_peek(0).sval); setearAmbitoyDeclarada(val_peek(8).sval); }
+{ setearProc(val_peek(11).sval, "1", val_peek(4).sval, val_peek(0).sval);  setearAmbito(val_peek(11).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval; setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);  if(sePuedeUsar(val_peek(11).sval) == 2){mostrarMensaje(val_peek(11).sval + " esta Redeclarada.");} setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval); }
 break;
 case 14:
 //#line 38 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(14).sval); setearAmbito(val_peek(14).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval; if(sePuedeUsar(val_peek(14).sval) == 2){mostrarMensaje(val_peek(14).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval); setearAmbito(val_peek(0).sval); setearAmbitoyDeclarada(val_peek(11).sval); setearAmbitoyDeclarada(val_peek(8).sval); }
+{ setearProc(val_peek(14).sval, "2", val_peek(4).sval, val_peek(0).sval); setearAmbito(val_peek(14).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval; setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval); if(sePuedeUsar(val_peek(14).sval) == 2){mostrarMensaje(val_peek(14).sval + " esta Redeclarada.");} setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval); setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval); }
 break;
 case 15:
 //#line 39 "gramatica.y"
-{mostrarMensaje("Reconocio PROC con parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(17).sval); setearAmbito(val_peek(17).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(17).sval; if(sePuedeUsar(val_peek(17).sval) == 2){mostrarMensaje(val_peek(17).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval); setearAmbito(val_peek(0).sval); setearAmbitoyDeclarada(val_peek(14).sval); setearAmbitoyDeclarada(val_peek(11).sval); setearAmbitoyDeclarada(val_peek(8).sval); }
+{ setearProc(val_peek(17).sval, "3", val_peek(4).sval, val_peek(0).sval); setearAmbito(val_peek(17).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(17).sval; setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval); if(sePuedeUsar(val_peek(17).sval) == 2){mostrarMensaje(val_peek(17).sval + " esta Redeclarada.");} setearAmbitoyDeclarada(val_peek(14).sval,val_peek(15).sval); setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval); setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval); }
 break;
 case 16:
 //#line 40 "gramatica.y"
-{mostrarMensaje("Reconocio PROC sin parametros en linea nro: "+compilador.Compilador.nroLinea); setearProc(val_peek(9).sval); setearAmbito(val_peek(9).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; if(sePuedeUsar(val_peek(9).sval) == 2){mostrarMensaje(val_peek(9).sval + " esta Redeclarada.");} setearAmbito(val_peek(4).sval);  setearAmbito(val_peek(0).sval); verificarNa(val_peek(4).sval,val_peek(9).sval); }
+{ setearProc(val_peek(9).sval, "0", val_peek(4).sval, val_peek(0).sval);  setearAmbito(val_peek(9).sval); compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(9).sval; setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);  if(sePuedeUsar(val_peek(9).sval) == 2){mostrarMensaje(val_peek(9).sval + " esta Redeclarada.");} verificarNa(val_peek(4).sval,val_peek(9).sval);}
 break;
 case 17:
 //#line 41 "gramatica.y"
@@ -757,31 +771,15 @@ case 17:
 break;
 case 21:
 //#line 49 "gramatica.y"
-{mostrarMensaje("Reconocio parametro en linea nro: "+compilador.Compilador.nroLinea);  setearAmbito(val_peek(0).sval); }
+{ setearAmbito(val_peek(0).sval); }
 break;
 case 22:
 //#line 50 "gramatica.y"
 {yyerror("Error, tipo invalido en el parametro, en linea nro: "+compilador.Compilador.nroLinea);}
 break;
-case 23:
-//#line 53 "gramatica.y"
-{mostrarMensaje("Reconocio bloque de procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
-break;
 case 24:
 //#line 54 "gramatica.y"
 {yyerror("Error en el cuerpo del procedimiento en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 30:
-//#line 64 "gramatica.y"
-{mostrarMensaje("Reconocio OUT CADENA en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 31:
-//#line 65 "gramatica.y"
-{mostrarMensaje("Reconocio llamda a procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 32:
-//#line 66 "gramatica.y"
-{mostrarMensaje("Reconocio llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea); }
 break;
 case 33:
 //#line 67 "gramatica.y"
@@ -791,10 +789,6 @@ case 33:
 											else
 												polaca.completarPolaca(PolacaInversa.getRetrocesosIT());
 											}
-break;
-case 34:
-//#line 73 "gramatica.y"
-{mostrarMensaje("Reconocio ciclo FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 35:
 //#line 74 "gramatica.y"
@@ -817,12 +811,12 @@ case 39:
 {yyerror("Error en el cuerpo del FOR en linea nro: "+compilador.Compilador.nroLinea);}
 break;
 case 40:
-//#line 83 "gramatica.y"
-{mostrarMensaje("Reconocio encabezado del FOR en linea nro: "+compilador.Compilador.nroLinea);
+//#line 84 "gramatica.y"
+{
 polaca.borrarPasoPolaca();}
 break;
 case 41:
-//#line 87 "gramatica.y"
+//#line 88 "gramatica.y"
 {Par pasoEnBlanco = new Par(""); 
 				polaca.agregarPaso(pasoEnBlanco);
 				polaca.agregarPasoIncompleto();
@@ -830,60 +824,56 @@ case 41:
 				polaca.agregarPaso(pasoBF);	}
 break;
 case 42:
-//#line 94 "gramatica.y"
+//#line 95 "gramatica.y"
 { polaca.agregarVariableControl(val_peek(2).sval); Par id = new Par(val_peek(2).sval);
 polaca.agregarPaso(id);Par asig = new Par(val_peek(1).sval);
 polaca.agregarPaso(asig);polaca.agregarInicioFOR();}
 break;
 case 43:
-//#line 99 "gramatica.y"
+//#line 100 "gramatica.y"
 {
 			Par id = new Par(val_peek(2).sval);Par comp = new Par(val_peek(1).sval);
 			polaca.agregarPaso(id); polaca.agregarPaso(comp);  }
 break;
 case 44:
-//#line 102 "gramatica.y"
+//#line 103 "gramatica.y"
 {
 			Par id1 = new Par(val_peek(2).sval); Par id2 = new Par(val_peek(0).sval); Par comp = new Par(val_peek(1).sval);
 			polaca.agregarPaso(id1); polaca.agregarPaso(id2); polaca.agregarPaso(comp); }
 break;
 case 45:
-//#line 105 "gramatica.y"
+//#line 106 "gramatica.y"
 {
 			Par id = new Par(val_peek(2).sval); Par comp = new Par(val_peek(1).sval);
 			polaca.agregarPaso(id); polaca.agregarPaso(comp); }
 break;
 case 46:
-//#line 110 "gramatica.y"
-{mostrarMensaje("Reconocio incremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+//#line 112 "gramatica.y"
+{
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl(val_peek(0).sval);
 	}
 break;
 case 47:
-//#line 114 "gramatica.y"
-{mostrarMensaje("Reconocio decremento-UP del FOR en linea nro: "+compilador.Compilador.nroLinea);
+//#line 117 "gramatica.y"
+{
 	   polaca.agregarVariableControl("-");
 		polaca.agregarVariableControl(val_peek(0).sval);
 	   }
 break;
 case 50:
-//#line 124 "gramatica.y"
+//#line 127 "gramatica.y"
 {	PolacaInversa.setFlagITE(true); }
 break;
 case 51:
-//#line 125 "gramatica.y"
+//#line 128 "gramatica.y"
 { PolacaInversa.setFlagITE(false); 
 		 polaca.borrarPasoPolaca();
 		 polaca.borrarPasoPolaca();
 		 polaca.borrarPasoIncompleto();}
 break;
-case 52:
-//#line 131 "gramatica.y"
-{mostrarMensaje("Reconocio IF con ELSE en linea nro: "+compilador.Compilador.nroLinea);}
-break;
 case 53:
-//#line 134 "gramatica.y"
+//#line 137 "gramatica.y"
 {
 				Par pasoEnBlanco = new Par(""); 
 				polaca.agregarPaso(pasoEnBlanco);
@@ -893,20 +883,16 @@ case 53:
 				}
 break;
 case 54:
-//#line 143 "gramatica.y"
+//#line 146 "gramatica.y"
 {Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
 	polaca.agregarPasoIncompleto();
 	Par pasoBI = new Par("BI"); 
 	polaca.agregarPaso(pasoBI);}
 break;
-case 56:
-//#line 153 "gramatica.y"
-{mostrarMensaje("Reconocio IF sin ELSE en linea nro: "+compilador.Compilador.nroLinea);}
-break;
 case 57:
-//#line 156 "gramatica.y"
-{mostrarMensaje("Reconocio Asignacion en linea nro: "+compilador.Compilador.nroLinea);
+//#line 160 "gramatica.y"
+{
             setearAmbito(val_peek(3).sval); if(sePuedeUsar(val_peek(3).sval) == 1){mostrarMensaje(val_peek(3).sval + " No esta declarada.");}
 			Par id =  new Par(val_peek(3).sval);
 			Par asig = new Par(val_peek(2).sval);
@@ -914,87 +900,50 @@ case 57:
 			polaca.agregarPaso(asig); }
 break;
 case 58:
-//#line 164 "gramatica.y"
-{mostrarMensaje("Reconocio suma en linea nro: "+compilador.Compilador.nroLinea); 
+//#line 169 "gramatica.y"
+{
 			Par suma =  new Par("+");
 			polaca.agregarPaso(suma);  }
 break;
 case 59:
-//#line 167 "gramatica.y"
-{mostrarMensaje("Reconocio resta en linea nro: "+compilador.Compilador.nroLinea);
+//#line 173 "gramatica.y"
+{
 		    						Par resta =  new Par("-");
 									polaca.agregarPaso(resta); }
 break;
 case 61:
-//#line 173 "gramatica.y"
-{mostrarMensaje("Reconocio multiplicacion en linea nro: "+compilador.Compilador.nroLinea); 
+//#line 180 "gramatica.y"
+{
 							  Par multi =  new Par("*");
 							  polaca.agregarPaso(multi);		}
 break;
 case 62:
-//#line 176 "gramatica.y"
-{mostrarMensaje("Reconocio division en linea nro: "+compilador.Compilador.nroLinea); 
+//#line 184 "gramatica.y"
+{ 
 							  Par division =  new Par("/");
 							  polaca.agregarPaso(division);}
 break;
 case 65:
-//#line 183 "gramatica.y"
+//#line 191 "gramatica.y"
 { setearAmbito(val_peek(0).sval); if(sePuedeUsar(val_peek(0).sval) == 1){mostrarMensaje(val_peek(0).sval + " No esta declarada.");}
                          Par id =  new Par(val_peek(0).sval);
 					     polaca.agregarPaso(id); }
 break;
-case 66:
-//#line 188 "gramatica.y"
-{mostrarMensaje("Reconocio comparador menor-igual en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 67:
-//#line 189 "gramatica.y"
-{mostrarMensaje("Reconocio comparador mayor-igual en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 68:
-//#line 190 "gramatica.y"
-{mostrarMensaje("Reconocio comparador distinto en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 69:
-//#line 191 "gramatica.y"
-{mostrarMensaje("Reconocio comparador igual en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 70:
-//#line 192 "gramatica.y"
-{mostrarMensaje("Reconocio comparador mayor en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 71:
-//#line 193 "gramatica.y"
-{mostrarMensaje("Reconocio comparador menor en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 72:
-//#line 196 "gramatica.y"
-{mostrarMensaje("Reconocio tipo FLOAT en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 73:
-//#line 197 "gramatica.y"
-{mostrarMensaje("Reconocio tipo INTEGER en linea nro: "+compilador.Compilador.nroLinea);}
-break;
-case 74:
-//#line 200 "gramatica.y"
-{mostrarMensaje("Reconocio identificador en linea nro: "+compilador.Compilador.nroLinea);
-					            }
-break;
 case 75:
-//#line 204 "gramatica.y"
-{mostrarMensaje("Reconocio constante en linea nro: "+compilador.Compilador.nroLinea);
+//#line 211 "gramatica.y"
+{
                      setearAmbito(val_peek(0).sval);
 					 Par cte =  new Par(val_peek(0).sval);
 					 polaca.agregarPaso(cte);            }
 break;
 case 76:
-//#line 208 "gramatica.y"
-{mostrarMensaje("Reconocio constante negativa en linea nro: "+compilador.Compilador.nroLinea);  
+//#line 215 "gramatica.y"
+{  
                      setearAmbito(val_peek(0).sval);
 		  			 Par cte =  new Par("-"+val_peek(1).sval);
 					 polaca.agregarPaso(cte);            }
 break;
-//#line 921 "Parser.java"
+//#line 870 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

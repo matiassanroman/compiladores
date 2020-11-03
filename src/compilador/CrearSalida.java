@@ -33,7 +33,15 @@ public class CrearSalida {
 		    while (itr.hasNext()) { 
 		       str = itr.next();
 	    	   for(int i=0; i<tablaSimbolo.get(str).size(); i++) {
-	    		   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada() );
+	    		   if (tablaSimbolo.get(str).get(i).getTipo().equals("Proc")) { 
+	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada() + "\t CantParametros: " + tablaSimbolo.get(str).get(i).getCantParametros() + "\t NA: " + tablaSimbolo.get(str).get(i).getNa() + "\t NS: " + tablaSimbolo.get(str).get(i).getNs());
+	    		   }
+	    		   else if (tablaSimbolo.get(str).get(i).getTipo().equals("PARAM_PROC")) {
+	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada() + "\t tipoParametro: " + tablaSimbolo.get(str).get(i).getTipoParametro() + "\t pasajeParametro: " + tablaSimbolo.get(str).get(i).getPasajeParametro() );
+	    		   }
+	    		   else {
+	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada());
+	    		   } 
 	    		   salida.newLine();
 		       }
 		    }
