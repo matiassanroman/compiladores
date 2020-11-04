@@ -1,0 +1,7 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: 15.15f+4	 Value: 15.15f+4	 Uso: CTE	 Ambito: 15.15f+4:Main	 Tipo: float	 Declarada: false
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: true
+Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
