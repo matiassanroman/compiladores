@@ -46,7 +46,8 @@ parametrosProc : parametro
 			   | parametro ',' parametro ',' parametro
 			   ;
 
-parametro : tipo identificador  { setearAmbito($2.sval); }
+//parametro : tipo identificador  { setearAmbito($2.sval); }
+parametro : identificador  { setearAmbito($2.sval); }
 		  | error identificador {yyerror("Error, tipo invalido en el parametro, en linea nro: "+compilador.Compilador.nroLinea);}
 		  ;
 
