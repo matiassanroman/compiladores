@@ -738,16 +738,19 @@ void setearAmbitoNaNs(String na, String ns){
 }
 
 void setearAmbito(String sval){
-	if(sval.contains("_") && sval.contains("i")) 
+	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') {
+		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 
-	if(sval.charAt(0) > '0' && sval.charAt(0) < '9') {
-		Double flotante = Double.parseDouble(sval.replace('f', 'E'));
-		if (sval.contains("f")) {
-			if(String.valueOf(flotante).contains("E"))
-				sval = String.valueOf(flotante).replace('E', 'f');
 		}
-		if (sval.contains("."))
+		else{
+			Double flotante = Double.parseDouble(sval.replace('f', 'E'));
+			if (sval.contains("f")) {
+				if(String.valueOf(flotante).contains("E"))
+					sval = String.valueOf(flotante).replace('E', 'f');
+			}
+			if (sval.contains("."))
 				sval = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
+		}
 	}		
 
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);

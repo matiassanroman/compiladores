@@ -72,7 +72,7 @@ public class Compilador {
 		//												 lmin					    lmay			           		=                         ;                  		d                       _			            %					  	/n			       		"	    				 -				  		     (				              )			            blanco				      bb   					 	   +   					  	   *    					 	 /   					    , 	  					{   					}		  		   		  <				 			>			   		     	!							  i					.			             f					       tab				      eof                    c
 	AccionSemantica[][] matrizASemanticas =   { 
 									/*  0 */  {as1_agregar_buffer     , as1_agregar_buffer		 , as1_agregar_buffer	    , as6_end_simbolo		   , as1_agregar_buffer	    , as6_end_simbolo		 , as1_agregar_buffer     , as11_no_accion	  	   , as1_agregar_buffer 		, as6_end_simbolo		 , as6_end_simbolo	        , as6_end_simbolo	       , as11_no_accion		   	  , as11_no_accion 		   , as6_end_simbolo   		  , as6_end_simbolo   		 , as6_end_simbolo   		, as6_end_simbolo          , as6_end_simbolo   		, as6_end_simbolo   	 , as1_agregar_buffer       , as1_agregar_buffer	   , as1_agregar_buffer	   	  , as1_agregar_buffer	  , as1_agregar_buffer     , as1_agregar_buffer	    , as11_no_accion	     , as11_no_accion			,as12_error}, /* 0  */
-									/*  1 */  {as1_agregar_buffer     , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as1_agregar_buffer     , as1_agregar_buffer	 , as11_no_accion	      , as2_verificar_longitud_id    	   , as11_no_accion 		, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion 		   , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion    		, as11_no_accion    	 , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as1_agregar_buffer	  , as11_no_accion         , as1_agregar_buffer	    , as11_no_accion , as11_no_accion	        ,as12_error}, /* 1  */
+									/*  1 */  {as1_agregar_buffer     , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as1_agregar_buffer     , as1_agregar_buffer	 , as11_no_accion	      , as2_verificar_longitud_id, as11_no_accion 		, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion 		   , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as11_no_accion    		, as11_no_accion    	 , as2_verificar_longitud_id, as2_verificar_longitud_id, as2_verificar_longitud_id, as1_agregar_buffer	  , as11_no_accion         , as1_agregar_buffer	    , as11_no_accion , as11_no_accion	        ,as12_error}, /* 1  */
 									/*  2 */  {as7_end_simbolo_simple , as7_end_simbolo_simple   , as8_end_simbolo_complejo , as7_end_simbolo_simple   , as7_end_simbolo_simple , as7_end_simbolo_simple , as11_no_accion	      , as11_no_accion    	   , as11_no_accion 		, as7_end_simbolo_simple , as11_no_accion 	        , as11_no_accion	       , as7_end_simbolo_simple   , as11_no_accion 		   , as11_no_accion    		  , as11_no_accion    		 , as11_no_accion    		, as11_no_accion           , as11_no_accion    		, as11_no_accion    	 , as11_no_accion           , as11_no_accion           , as11_no_accion		   	  , as7_end_simbolo_simple, as7_end_simbolo_simple , as7_end_simbolo_simple , as11_no_accion		 , as11_no_accion			,as12_error}, /* 2  */
 									/*  3 */  {as3_devolver_pr        , as1_agregar_buffer       , as3_devolver_pr		    , as3_devolver_pr		   , as3_devolver_pr	    , as1_agregar_buffer	 , as3_devolver_pr	      , as3_devolver_pr   	   , as3_devolver_pr		, as3_devolver_pr		 , as3_devolver_pr	        , as3_devolver_pr	       , as3_devolver_pr		  , as3_devolver_pr		   , as3_devolver_pr   	  	  , as3_devolver_pr   		 , as3_devolver_pr   		, as3_devolver_pr          , as3_devolver_pr   		, as3_devolver_pr   	 , as11_no_accion		    , as11_no_accion           , as11_no_accion           , as11_no_accion		  , as11_no_accion         , as3_devolver_pr	    , as3_devolver_pr		 , as3_devolver_pr			,as12_error}, /* 3  */
 									/*  4 */  {as4_end_comentario  	  , as4_end_comentario		 , as4_end_comentario		, as4_end_comentario	   , as4_end_comentario	 	, as4_end_comentario	 , as1_agregar_buffer     , as4_end_comentario    	       , as4_end_comentario 		    , as4_end_comentario		     , as4_end_comentario	            , as4_end_comentario		       , as4_end_comentario		   	      , as4_end_comentario 		   	   , as4_end_comentario    		  	  , as4_end_comentario    	         , as4_end_comentario    		    , as4_end_comentario               , as4_end_comentario    		    , as4_end_comentario    	     , as4_end_comentario		        , as4_end_comentario               , as4_end_comentario  		      , as4_end_comentario		      , as4_end_comentario             , as4_end_comentario		        , as4_end_comentario		     , as4_end_comentario		,as4_end_comentario}, /* 4  */
@@ -149,7 +149,7 @@ public class Compilador {
 			// y por ultimo actualizo el estado actual, siendo este el estado siguiente
 			asciiAnterior = asciiActual;
 			int columna = diccionario.asciiToColumna(asciiActual);
-			//System.out.println("Fila: " + estadoActual + " Columna: " + columna);
+			//System.out.println("Fila: " + estadoActual + " Columna: " + columna + " Caract: " + (char)asciiActual);
 			estadoSiguiente = matrizTEstados[estadoActual][columna];
 			AccionSemantica AS = matrizASemanticas[estadoActual][columna];
 			token.setToken(AS.execute(buffer, (char)asciiActual));
@@ -170,11 +170,7 @@ public class Compilador {
 			else if (asciiAnterior == -1) {	
 				token.setToken(0); 
 				return token;
-			}
-			// Por ultima damos algun tramatiento de errores lexicos, donde el valor negativo
-			// que se retorna por una accion semantica X, indica de que erroe lexico se trata
-			else if (token.getToken() == -2){ System.out.println("Error: caracter inv�lido "+asciiActual+ " en la linea " + nroLinea); }
-					else if (token.getToken() == -1){ System.out.println("Error en la linea "+nroLinea+": constante fuera del rango permitido"); }			
+			}			
 		}
 		while (!hayToken);
 		return token; 

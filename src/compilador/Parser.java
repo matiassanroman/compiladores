@@ -728,16 +728,19 @@ void setearAmbitoNaNs(String na, String ns){
 }
 
 void setearAmbito(String sval){
-	if(sval.contains("_") && sval.contains("i")) 
+	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') {
+		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 
-	if(sval.charAt(0) > '0' && sval.charAt(0) < '9') {
-		Double flotante = Double.parseDouble(sval.replace('f', 'E'));
-		if (sval.contains("f")) {
-			if(String.valueOf(flotante).contains("E"))
-				sval = String.valueOf(flotante).replace('E', 'f');
 		}
-		if (sval.contains("."))
+		else{
+			Double flotante = Double.parseDouble(sval.replace('f', 'E'));
+			if (sval.contains("f")) {
+				if(String.valueOf(flotante).contains("E"))
+					sval = String.valueOf(flotante).replace('E', 'f');
+			}
+			if (sval.contains("."))
 				sval = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
+		}
 	}		
 
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
@@ -761,7 +764,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 693 "Parser.java"
+//#line 696 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1482,7 +1485,7 @@ case 83:
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1409 "Parser.java"
+//#line 1412 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
