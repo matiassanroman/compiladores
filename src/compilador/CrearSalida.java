@@ -40,7 +40,7 @@ public class CrearSalida {
 	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada() + "\t tipoParametro: " + tablaSimbolo.get(str).get(i).getTipoParametro() + "\t pasajeParametro: " + tablaSimbolo.get(str).get(i).getPasajeParametro() );
 	    		   }
 	    		   else {
-	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada());
+	    			   salida.write("Clave: " + tablaSimbolo.get(str).get(i).getValor() + "\t Value: " + tablaSimbolo.get(str).get(i).getValor() + "\t Uso: " + tablaSimbolo.get(str).get(i).getUso() + "\t Ambito: " + tablaSimbolo.get(str).get(i).getAmbito() + "\t Tipo: " + tablaSimbolo.get(str).get(i).getTipo() + "\t Declarada: " + tablaSimbolo.get(str).get(i).isDeclarada());
 	    		   } 
 	    		   salida.newLine();
 		       }

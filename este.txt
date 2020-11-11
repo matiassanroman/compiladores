@@ -1,2 +1,0 @@
-FLOAT x;
-id_float = -15.15f+4;
