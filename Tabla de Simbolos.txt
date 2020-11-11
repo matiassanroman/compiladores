@@ -2,8 +2,6 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: true
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: false
-Clave: 3.40282346f38	 Value: 3.40282346f38	 Uso: CTE	 Ambito: 3.40282346f38:Main	 Tipo: float	 Declarada: false
-Clave: -1.17549436f-38	 Value: -1.17549436f-38	 Uso: CTE	 Ambito: 1.17549436f-38:Main	 Tipo: float	 Declarada: false
-Clave: y	 Value: y	 Uso: ID	 Ambito: y:Main	 Tipo: Var	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
+Clave: v	 Value: v	 Uso: ID	 Ambito: v:Main	 Tipo: Var	 Declarada: false
+Clave: "g"	 Value: "g"	 Uso: CADENA	 Ambito: "g":Main	 Tipo: Cadena	 Declarada: false
