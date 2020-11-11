@@ -28,8 +28,14 @@ public class AS3_Devolver_PR extends AccionSemantica{
 	public Simbolo getSimbolo() { return this.s; }
 	
 	public int execute(StringBuffer buffer, char c) {
-		//Retorna Palabra Reservada
-		return tablaToken.get(buffer.toString());
+		//Retorna Palabra Reservada 
+		if (tablaToken.containsKey(buffer.toString()))
+			return tablaToken.get(buffer.toString());
+		else {
+			System.out.println("Error en la linea "+compilador.Compilador.nroLinea+": Palabra reservada mal escrita");
+			buffer.delete(0, buffer.length());
+			return 0;
+		}
 	}
 
 	// Como al querer reconocer palabras reservadas, se lee un caracter de más
