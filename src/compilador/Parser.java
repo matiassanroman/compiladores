@@ -628,6 +628,11 @@ void verificarNa(String sval, String proc){
 	//1 error na de proc x es negativo
 	//2 na de proc x es mayor que el na del proc que lo contiene.
 
+	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') 
+		if(sval.contains("_") && sval.contains("i")){
+			sval = sval.toString().substring(0, sval.length()-2); 
+		}
+
 	if(compilador.Compilador.primero){
 		compilador.Compilador.na = Integer.parseInt(sval); 
 		compilador.Compilador.primero = false; 
@@ -635,11 +640,11 @@ void verificarNa(String sval, String proc){
 	}
 	else{
 		compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
-		if(compilador.Compilador.na < 0){
+		if(compilador.Compilador.na <= 0){
 			//Error 1: la suma de los na actual supera al na de algun proc que lo engloba.  
 			mostrarMensaje("La suma de los na actual supera al na de algun proc que lo engloba.");
 		} 
-		if(compilador.Compilador.naa < Integer.parseInt(sval)){
+		if(compilador.Compilador.naa <= Integer.parseInt(sval)){
 			//Error 2: na de proc x es mayor que el na del proc que lo contiene.
 			mostrarMensaje("Na de proc: " + proc + " es mayor que el Na del proc que lo contiene.");
 		} 
@@ -665,10 +670,11 @@ int sePuedeUsar(String sval){
 				else{
 					//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
 					for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
-						//System.out.println("AmbitoId: " + ambitoId);
-						//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
-						if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
-							return 0;
+						if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc")) {
+							//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
+							if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
+								return 0;
+							}
 						}
 					}
 				}
@@ -714,17 +720,54 @@ int sePuedeUsar(String sval){
 }
 
 void setearProc(String sval, String cantParametros, String na, String ns){
+
+	if(na.charAt(0) >= '0' && na.charAt(0) <= '9') 
+		if(na.contains("_") && na.contains("i")){
+			na = na.toString().substring(0, na.length()-2); 
+		}
+	
+	if(ns.charAt(0) >= '0' && ns.charAt(0) <= '9') 
+		if(ns.contains("_") && ns.contains("i")){
+			ns = ns.toString().substring(0, ns.length()-2); 
+		}
+
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
-	compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setTipo("NA_PROC");
-	compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
+	
+	if (na.equals(ns)) {
+		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setTipo("NA_PROC");
+		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
+	}
+	else {
+		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-1).setTipo("NA_PROC");
+		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
+	}
+
 }
 
 void setearAmbitoNaNs(String na, String ns){
-	compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setAmbito(compilador.Compilador.ambito,false);
-	compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setAmbito(compilador.Compilador.ambito,false);
+
+	if(na.charAt(0) >= '0' && na.charAt(0) <= '9') 
+		if(na.contains("_") && na.contains("i")){
+			na = na.toString().substring(0, na.length()-2); 
+		}
+	
+	if(ns.charAt(0) >= '0' && ns.charAt(0) <= '9') 
+		if(ns.contains("_") && ns.contains("i")){
+			ns = ns.toString().substring(0, ns.length()-2); 
+		}
+
+	if (na.equals(ns)) {
+		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setAmbito(compilador.Compilador.ambito,false);
+		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setAmbito(compilador.Compilador.ambito,false);
+	}
+	else {
+		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-1).setAmbito(compilador.Compilador.ambito,false);
+		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setAmbito(compilador.Compilador.ambito,false);
+	}
+
 }
 
 void setearAmbito(String sval){
@@ -746,6 +789,10 @@ void setearAmbito(String sval){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 }
 
+boolean nameManglingNs(String sval) {
+	return false;
+}
+
 void setearAmbitoyDeclarada(String sval, String tipo){
 	if(tipo.equals("")){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
@@ -764,7 +811,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 696 "Parser.java"
+//#line 739 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1485,7 +1532,7 @@ case 83:
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1412 "Parser.java"
+//#line 1455 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -2,11 +2,6 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: id_float	 Value: id_float	 Uso: ID	 Ambito: id_float:Main	 Tipo: Var	 Declarada: false
-Clave: 3.40282346f38	 Value: 3.40282346f38	 Uso: CTE	 Ambito: 3.40282346f38:Main	 Tipo: float	 Declarada: false
-Clave: -3.40282346f38	 Value: -3.40282346f38	 Uso: CTE	 Ambito: 3.40282346f38:Main	 Tipo: float	 Declarada: false
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: true
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: false
+Clave: 3.45f-10	 Value: 3.45f-10	 Uso: CTE	 Ambito: 3.45f-10:Main	 Tipo: float	 Declarada: false
