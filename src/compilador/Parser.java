@@ -639,17 +639,22 @@ void verificarNa(String sval, String proc){
 		compilador.Compilador.naa = Integer.parseInt(sval);
 	}
 	else{
-		compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
-		if(compilador.Compilador.na <= 0){
+		if(Integer.parseInt(sval) == 0)
+			compilador.Compilador.na = compilador.Compilador.na - 1; 
+		else
+			compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
+
+		if(compilador.Compilador.na < 0){
 			//Error 1: la suma de los na actual supera al na de algun proc que lo engloba.  
-			mostrarMensaje("La suma de los na actual supera al na de algun proc que lo engloba.");
+			mostrarMensaje("La suma de los na actual supera al na del proc: " + proc + ".");
 		} 
-		if(compilador.Compilador.naa <= Integer.parseInt(sval)){
+		if(compilador.Compilador.naa < Integer.parseInt(sval)){
 			//Error 2: na de proc x es mayor que el na del proc que lo contiene.
 			mostrarMensaje("Na de proc: " + proc + " es mayor que el Na del proc que lo contiene.");
 		} 
-		compilador.Compilador.naa = Integer.parseInt(sval); 
+		//compilador.Compilador.naa = Integer.parseInt(sval); 
 	}
+	compilador.Compilador.naa = Integer.parseInt(sval);
 }
 
 boolean nameManglingNs(String sval) {
@@ -669,8 +674,6 @@ boolean nameManglingNs(String sval) {
 					//Compruebo que el ambito del id del Proc este contenido
 					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
 					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).ambitoSinNombre();
-					System.out.println("ENTROOO: " + ambitoSinNombreVar);
-					System.out.println("ENTROOO 2: " + ambitoSinNombreProc);
 					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 						//Compruebo que el NS sea >= que la cantidad de anidamientos
 						if(compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).getNs() >= cantidadAnidamientos)
@@ -847,7 +850,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 779 "Parser.java"
+//#line 782 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1568,7 +1571,7 @@ case 83:
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1495 "Parser.java"
+//#line 1498 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

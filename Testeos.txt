@@ -1,9 +1,21 @@
-FLOAT x;
+%%FLOAT x;
 
 PROC a() NA=2_i, NS=0_i{
 	FLOAT x;
 	
-	PROC b() NA=1_i, NS=2_i{
+	PROC b() NA=0_i, NS=0_i{
+		x = 2_i;
+		PROC bb() NA=0_i, NS=0_i{
+			x = 2_i;
+		}
+	}
+	PROC c() NA=0_i, NS=2_i{
+		x = 2_i;
+	}
+	PROC d() NA=0_i, NS=2_i{
+		x = 2_i;
+	}
+	PROC e() NA=0_i, NS=2_i{
 		x = 2_i;
 	}
 }

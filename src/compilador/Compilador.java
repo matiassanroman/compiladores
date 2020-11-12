@@ -26,7 +26,7 @@ public class Compilador {
 	static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
 	public static String ambito = "";
-	public static int na = 0;
+	public static int na = -1;
 	public static boolean primero = true;
 	public static int naa = 0;
 	
