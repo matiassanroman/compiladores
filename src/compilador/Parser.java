@@ -652,6 +652,38 @@ void verificarNa(String sval, String proc){
 	}
 }
 
+boolean nameManglingNs(String sval) {
+	
+	int cantidadAnidamientos = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos();
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
+	//Recorro la lista con todos los id con ese nombre
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
+		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
+			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
+				char idProc = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().charAt(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().length()-1);
+				//Recorro lista de id de Proc
+				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).size(); j++){
+					//Compruebo que el ambito del id del Proc este contenido
+					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).ambitoSinNombre();
+					System.out.println("ENTROOO: " + ambitoSinNombreVar);
+					System.out.println("ENTROOO 2: " + ambitoSinNombreProc);
+					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+						//Compruebo que el NS sea >= que la cantidad de anidamientos
+						if(compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).getNs() >= cantidadAnidamientos)
+							return true;
+					}
+				}
+				return false;
+			}
+		}
+	}
+	return false;
+}
+
 int sePuedeUsar(String sval){
 	//0 se puede usar
 	//1 no esta al alcance.
@@ -662,6 +694,14 @@ int sePuedeUsar(String sval){
 		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var")){
 			//No esta declarada?
 			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Veo si es un id que esta dentro del Proc para evaluar el NS
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos() > 0){
+					if(nameManglingNs(sval))
+						return 0;
+					//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
+					//else
+					//	return 1;
+				}
 				//Tomo el ambito de la id no declarada y busco si hay una declarada al alcance.
 				String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
@@ -789,10 +829,6 @@ void setearAmbito(String sval){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 }
 
-boolean nameManglingNs(String sval) {
-	return false;
-}
-
 void setearAmbitoyDeclarada(String sval, String tipo){
 	if(tipo.equals("")){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false); 
@@ -811,7 +847,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 739 "Parser.java"
+//#line 779 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1532,7 +1568,7 @@ case 83:
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1455 "Parser.java"
+//#line 1495 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

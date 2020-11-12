@@ -2,6 +2,13 @@
 
 /*  Tabla de Simbolos  */
 
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 1	 NS: 2
 Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: true
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main	 Tipo: Var	 Declarada: false
-Clave: 3.45f-10	 Value: 3.45f-10	 Uso: CTE	 Ambito: 3.45f-10:Main	 Tipo: float	 Declarada: false
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a	 Tipo: Var	 Declarada: true
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:b	 Tipo: Var	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 2	 NS: 0
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a	 Tipo: NA_PROC	 Declarada: false
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b	 Tipo: NS_PROC	 Declarada: false
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main:a:b	 Tipo: NA_PROC	 Declarada: false
+Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a	 Tipo: NS_PROC	 Declarada: false

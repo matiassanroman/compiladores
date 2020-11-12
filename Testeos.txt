@@ -1,4 +1,10 @@
-
 FLOAT x;
-x = 3.45f-10;
+
+PROC a() NA=2_i, NS=0_i{
+	FLOAT x;
+	
+	PROC b() NA=1_i, NS=2_i{
+		x = 2_i;
+	}
+}
 
