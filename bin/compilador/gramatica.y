@@ -168,6 +168,10 @@ sentenciaEjecutable : asignacion
 					| OUT '(' CADENA ')' ';'
 {
 	mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
+	Par out = new Par($1.sval);
+	Par cadena = new Par($3.sval);
+	polaca.agregarPaso(cadena);
+	polaca.agregarPaso(out);
 }                 
 					| OUT '(' error ')' ';'
 {
@@ -459,8 +463,17 @@ ctePositiva : CTE
 {
 	setearAmbito($1.sval);
 	comprobarRango($1.sval,false);
-	//Par cte =  new Par($1.sval);
-	//polaca.agregarPaso(cte);
+	String valor = $1.sval;
+	if (valor.contains("_i"))
+		valor = valor.replace("_i", "");
+	else 
+		if (valor.contains("f")) {
+			valor = valor.replace('f', 'E');
+			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
+			valor = valor.replace('f', 'E');
+		}
+	Par cte =  new Par(valor);
+	polaca.agregarPaso(cte);
 }
 			//| error 
 {
@@ -472,8 +485,17 @@ cteNegativa	: '-' CTE
 {  
 	setearAmbito($2.sval);
 	comprobarRango($2.sval,true);
-	//Par cte =  new Par("-"+$1.sval);
-	//polaca.agregarPaso(cte);
+	String valor = $2.sval;
+	if (valor.contains("_i"))
+		valor = valor.replace("_i", "");
+	else 
+		if (valor.contains("f")) {
+			valor = valor.replace('f', 'E');
+			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
+			valor = valor.replace('f', 'E');
+		}
+	Par cte =  new Par(valor);
+	polaca.agregarPaso(cte);
 }
 			//| '-' error
 {
