@@ -89,15 +89,7 @@ public class Simbolo {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	/*
-	public String getUso() {
-		return uso;
-	}
-
-	public void setUso(String uso) {
-		this.uso = uso;
-	}
-	*/
+	
 	public int getCantParametros() {
 		return cantParametros;
 	}

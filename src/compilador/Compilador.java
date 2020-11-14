@@ -26,9 +26,10 @@ public class Compilador {
 	static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
 	public static String ambito = "";
-	public static int na = -1;
+	public static int na = 0;
 	public static boolean primero = true;
 	public static int naa = 0;
+	public static ArrayList<Integer> anidamientos = new ArrayList<Integer>(); 
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();

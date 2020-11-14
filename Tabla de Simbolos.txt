@@ -2,32 +2,18 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: e	 Value: e	 Uso: ID	 Ambito: e:Main:a	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 0	 NS: 2
-Clave: bb	 Value: bb	 Uso: ID	 Ambito: bb:Main:a:b	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 0	 NS: 0
-Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main:a	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 0	 NS: 2
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main:a	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 0	 NS: 2
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 0	 NS: 0
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false	 CantParametros: 0	 NA: 2	 NS: 0
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a	 Tipo: Var	 Declarada: true
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:b	 Tipo: Var	 Declarada: false
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:b:bb	 Tipo: Var	 Declarada: false
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:c	 Tipo: Var	 Declarada: false
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:d	 Tipo: Var	 Declarada: false
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a:e	 Tipo: Var	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b	 Tipo: int	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b:bb	 Tipo: int	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:c	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:c	 Tipo: int	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:d	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:d	 Tipo: int	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:e	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:e	 Tipo: int	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a	 Tipo: NS_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:b	 Tipo: NA_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:b	 Tipo: NS_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:b:bb	 Tipo: NA_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:b:bb	 Tipo: NS_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:c	 Tipo: NA_PROC	 Declarada: false
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Proc	 Declarada: true	 CantParametros: 0	 NA: 2	 NS: 3
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: true	 CantParametros: 0	 NA: 3	 NS: 3
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a	 Tipo: NA_PROC	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a	 Tipo: NS_PROC	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a:b	 Tipo: NS_PROC	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a:b:c	 Tipo: NS_PROC	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a:d	 Tipo: NS_PROC	 Declarada: false
+Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a:z	 Tipo: NS_PROC	 Declarada: false
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a:b	 Tipo: NA_PROC	 Declarada: false
+Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:b:c	 Tipo: NA_PROC	 Declarada: false
 Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:d	 Tipo: NA_PROC	 Declarada: false
-Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:e	 Tipo: NA_PROC	 Declarada: false
+Clave: 0	 Value: 0	 Uso: CTE	 Ambito: 0:Main:a:z	 Tipo: NA_PROC	 Declarada: false
+Clave: z	 Value: z	 Uso: ID	 Ambito: z:Main:a	 Tipo: Proc	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 3
+Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main:a	 Tipo: Proc	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 3
+Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main:a:b	 Tipo: Proc	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 3

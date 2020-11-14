@@ -624,37 +624,17 @@ void disminuirAmbito(){
 }
 
 void verificarNa(String sval, String proc){
-	//0 no hay error
-	//1 error na de proc x es negativo
-	//2 na de proc x es mayor que el na del proc que lo contiene.
-
 	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') 
 		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 
 		}
-
-	if(compilador.Compilador.primero){
-		compilador.Compilador.na = Integer.parseInt(sval); 
-		compilador.Compilador.primero = false; 
-		compilador.Compilador.naa = Integer.parseInt(sval);
-	}
-	else{
-		if(Integer.parseInt(sval) == 0)
-			compilador.Compilador.na = compilador.Compilador.na - 1; 
-		else
-			compilador.Compilador.na = compilador.Compilador.na - Integer.parseInt(sval); 
-
-		if(compilador.Compilador.na < 0){
-			//Error 1: la suma de los na actual supera al na de algun proc que lo engloba.  
-			mostrarMensaje("La suma de los na actual supera al na del proc: " + proc + ".");
-		} 
-		if(compilador.Compilador.naa < Integer.parseInt(sval)){
-			//Error 2: na de proc x es mayor que el na del proc que lo contiene.
-			mostrarMensaje("Na de proc: " + proc + " es mayor que el Na del proc que lo contiene.");
-		} 
-		//compilador.Compilador.naa = Integer.parseInt(sval); 
-	}
-	compilador.Compilador.naa = Integer.parseInt(sval);
+	
+	compilador.Compilador.anidamientos.add(Integer.parseInt(sval));
+	int tamano = compilador.Compilador.anidamientos.size();
+	if(tamano > 1)
+		for(int i=0; i<tamano-1; i++)
+			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i))
+				mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
 }
 
 boolean nameManglingNs(String sval) {
@@ -775,6 +755,7 @@ void setearProc(String sval, String cantParametros, String na, String ns){
 		}
 
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setDeclarada(true);
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
@@ -850,7 +831,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 782 "Parser.java"
+//#line 763 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1071,7 +1052,7 @@ case 11:
 {
 	mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
-	compilador.Compilador.na = compilador.Compilador.na + compilador.Compilador.naa;
+	compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
 }
 break;
 case 13:
@@ -1571,7 +1552,7 @@ case 83:
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1498 "Parser.java"
+//#line 1479 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
