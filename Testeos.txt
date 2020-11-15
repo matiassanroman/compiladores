@@ -1,8 +1,13 @@
-FLOAT a;
-a = -3.0800000f-10;
+INTEGER d;
+d = -4_i;
+PROC a() NA = 1_i, NS = 2_i{
+	INTEGER b;
+	PROC aa(INTEGER b, INTEGER f, INTEGER g) NA = 1_i, NS = 2_i{
+		INTEGER t;
+		t=t;
+	}
+	b=b;
+	aa(b,b,b);
+}
 
-INTEGER b;
-b = -3_i;
-
-OUT("hola -
-bbb");
+a();

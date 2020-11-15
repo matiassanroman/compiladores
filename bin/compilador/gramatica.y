@@ -14,6 +14,7 @@ import accionesSemanticas.*;
 %%
 programa : bloquePrograma
 {
+	polaca.mostrarProcs();
 	mostrarMensaje("Reconoce bien el programa");
 	System.out.println(polaca.toString());
 }
@@ -41,8 +42,10 @@ sentenciaDeclarativa : tipo listaVariables ';'
 {
 	mostrarMensaje("Declaracion de una o mas variables en linea nro: " + compilador.Compilador.nroLinea);
 }     
-					 | declaracionProcedimiento
+					 | declaracionProcedimiento 
 {
+	Par retorno = new Par("RET");
+	polaca.agregarPaso(retorno);
 }
 					 ;
 
@@ -72,6 +75,8 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
+	Par proc = new Par($2.sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "0", $7.sval, $11.sval);
 	setearAmbito($2.sval);
@@ -85,6 +90,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 
 				 | PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
+	Par proc = new Par($2.sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "1", $9.sval, $13.sval);
 	setearAmbito($2.sval);
@@ -97,6 +104,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
+	Par proc = new Par($2.sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "2", $12.sval, $16.sval);
 	setearAmbito($2.sval);
@@ -110,6 +119,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
+	Par proc = new Par($2.sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "3", $15.sval, $19.sval);
 	setearAmbito($2.sval);
@@ -233,7 +244,7 @@ condiFOR : condicion
 	polaca.agregarPaso(pasoBF);
 }
 		;
-//////////////////////////////////////////////////////////////////////////// hasta aca esta bien
+
 inicioFor : identificador '=' constante
 {
 	polaca.agregarVariableControl($1.sval);
@@ -494,7 +505,7 @@ cteNegativa	: '-' CTE
 			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
 			valor = valor.replace('f', 'E');
 		}
-	Par cte =  new Par(valor);
+	Par cte =  new Par('-'+valor);
 	polaca.agregarPaso(cte);
 }
 			//| '-' error

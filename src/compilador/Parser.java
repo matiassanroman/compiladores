@@ -501,7 +501,7 @@ public int yylex() {
     yylval.sval = token.getLexema();
     return token.getToken();
   } catch (IOException e) {
-    // TODO Auto-generated catch block
+    // Auto-generated catch block
     e.printStackTrace();
   }
   return 0;
@@ -528,6 +528,7 @@ void mostrarMensaje(String mensaje){
 
 void comprobarRango(String sval, boolean negativo){
 	double flotante;
+	@SuppressWarnings("unused")
 	int entero;
 
 	//ES NEGATIVO???
@@ -745,7 +746,7 @@ int sePuedeUsar(String sval){
 				return 0;
 			}
 			else{
-				//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
+				//System.out.println("Tamanio: " + compilador.Compilador.tablaSimbolo.get(sval).size());
 				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
 					//System.out.println("AmbitoId: " + ambitoId);
 					//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
@@ -1007,6 +1008,7 @@ boolean doaction;
 case 1:
 //#line 16 "gramatica.y"
 {
+	polaca.mostrarProcs();
 	mostrarMensaje("Reconoce bien el programa");
 	System.out.println(polaca.toString());
 }
@@ -1046,6 +1048,8 @@ break;
 case 8:
 //#line 45 "gramatica.y"
 {
+	Par retorno = new Par("RET");
+	polaca.agregarPaso(retorno);
 }
 break;
 case 9:
@@ -1077,6 +1081,8 @@ break;
 case 13:
 //#line 74 "gramatica.y"
 {
+	Par proc = new Par(val_peek(9).sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(9).sval, "0", val_peek(4).sval, val_peek(0).sval);
 	setearAmbito(val_peek(9).sval);
@@ -1091,6 +1097,8 @@ break;
 case 14:
 //#line 87 "gramatica.y"
 {
+	Par proc = new Par(val_peek(11).sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(11).sval, "1", val_peek(4).sval, val_peek(0).sval);
 	setearAmbito(val_peek(11).sval);
@@ -1105,6 +1113,8 @@ break;
 case 15:
 //#line 99 "gramatica.y"
 {
+	Par proc = new Par(val_peek(14).sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(14).sval, "2", val_peek(4).sval, val_peek(0).sval);
 	setearAmbito(val_peek(14).sval);
@@ -1120,6 +1130,8 @@ break;
 case 16:
 //#line 112 "gramatica.y"
 {
+	Par proc = new Par(val_peek(17).sval);
+	polaca.agregarProcedimiento(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(17).sval, "3", val_peek(4).sval, val_peek(0).sval);
 	setearAmbito(val_peek(17).sval);
@@ -1209,13 +1221,26 @@ break;
 case 30:
 //#line 181 "gramatica.y"
 {
+	String nombreProc = val_peek(4).sval;
+	System.out.println(sePuedeUsar(nombreProc));
+	if (sePuedeUsar(nombreProc)==0) {
+		String pos = polaca.buscarInicioProc(nombreProc);
+		Par iniProc = new Par(pos);
+		polaca.agregarPaso(iniProc);
+	}	
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 }
 break;
 case 31:
 //#line 185 "gramatica.y"
 {
-	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+	String nombreProc = val_peek(3).sval;
+	if (sePuedeUsar(nombreProc)==0) {
+		String pos = polaca.buscarInicioProc(nombreProc);
+		Par iniProc = new Par(pos); 
+		polaca.agregarPaso(iniProc);
+	}	
+	mostrarMensaje("Llamada a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 }
 break;
 case 32:
@@ -1583,7 +1608,7 @@ case 82:
 			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
 			valor = valor.replace('f', 'E');
 		}
-	Par cte =  new Par(valor);
+	Par cte = new Par('-'+valor);
 	polaca.agregarPaso(cte);
 }
 break;

@@ -9,6 +9,11 @@ public class Par {
     	this.valor = valor;
 	}
     
+//    public Par(Integer posicion, String valor) {
+//    	this.clave = posicion;
+//    	this.valor = valor;
+//    }
+    
     public Integer getClave() { return this.clave; }
     public String getValor() { return this.valor; }
     
@@ -18,7 +23,9 @@ public class Par {
     public boolean equals(Par otroPar) {
     	return this.getClave().equals(otroPar.getClave());
 	}
-    
+    public boolean tieneMismoValor(String valor) {
+    	return this.getValor().equals(valor);
+    }
     public String toString() {
     	return this.clave + " " + this.valor;
     }

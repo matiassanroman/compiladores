@@ -8,29 +8,35 @@ public class PolacaInversa {
 	private ArrayList<Integer> pasosIncompletos;
 	private ArrayList<Integer> iniciosDeFOR;
 	private ArrayList<String> variablesControl;
+	private ArrayList<Par> procedimientos; 
 	
 	public static int retrocesosIfThenElse = 2;
 	public static int retrocesosIfThen = 1;
 	public static int retrocesosFOR = 1;
 	public static boolean flagITF;
+	public static int nivelProc = 1;
 	
 	public static boolean getFlagITE() { return flagITF;}
 	public static void setFlagITE(boolean estado) {flagITF = estado;}
 	
 	public static int getRetrocesosITE() { return retrocesosIfThenElse;	}
-	public static int getRetrocesosIT() { return retrocesosIfThen; }
+	public static int getRetrocesosIT()  { return retrocesosIfThen; }
 	public static int getRetrocesosFOR() { return retrocesosFOR; }
+	
+	public static void subirNivelProc() { nivelProc += 1; }
+	public static void bajarNivelProc() { nivelProc -= 1; }
 	
 	public PolacaInversa() {
 		this.pasosPolaca = new ArrayList<Par>();
 		this.pasosIncompletos = new ArrayList<Integer>();
 		this.iniciosDeFOR = new ArrayList<Integer>();
 		this.variablesControl = new ArrayList<String>();
+		this.procedimientos = new ArrayList<Par>();
 	}
 	
-	public void agregarPaso(Par par) {
-		par.setClave(pasosPolaca.size());
-		this.pasosPolaca.add(par);
+	public void agregarPaso(Par paso) {
+		paso.setClave(pasosPolaca.size());
+		this.pasosPolaca.add(paso);
 	}
 	
 	public void agregarPasoIncompleto() {
@@ -111,6 +117,25 @@ public class PolacaInversa {
 		borrarUnaVariableControl();
 	}
 	
+	public void agregarProcedimiento(Par proc){
+		proc.setClave(pasosPolaca.size());
+		this.procedimientos.add(proc);
+	}
+	
+//	public void eliminarProc(){
+//		if(nivelProc > 1) {
+//			int pos = procedimientos.size()-1;
+//			this.procedimientos.remove(pos);
+//		}
+//	}
+	
+	public String buscarInicioProc(String nombreProc) {
+		for ( int i=this.procedimientos.size()-1 ; i>=0 ; i--)
+			if (this.procedimientos.get(i).tieneMismoValor(nombreProc))
+				return Integer.toString(this.procedimientos.get(i).getClave());
+		return "-1";
+	}
+	
 	public String toString() {
 		String salida = "Lista de pasos de la polaca inversa:\n";
 		for (int i = 0; i < pasosPolaca.size(); i++) {
@@ -121,5 +146,9 @@ public class PolacaInversa {
 		}
 		return salida;
 	}
-
+	
+	public void mostrarProcs(){
+		for (int i=0; i< procedimientos.size(); i++)
+			System.out.println(procedimientos.get(i).toString());
+	}
 }
