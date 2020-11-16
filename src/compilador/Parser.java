@@ -471,7 +471,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE $$2",
 };
 
-//#line 485 "gramatica.y"
+//#line 511 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -639,25 +639,35 @@ void verificarNa(String sval, String proc){
 
 boolean nameManglingNs(String sval) {
 	
-	int cantidadAnidamientos = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos();
 	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 	
 	//Recorro la lista con todos los id con ese nombre
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
-		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
+			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
 			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
 			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
-				char idProc = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().charAt(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().length()-1);
+				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\:");
+				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
-				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).size(); j++){
+				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
+					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
 					//Compruebo que el ambito del id del Proc este contenido
 					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
-					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).ambitoSinNombre();
+					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
+					//System.out.println("ambitoSinVar: " + ambitoSinNombreVar);
+					//System.out.println("ambitoSinProc: " + ambitoSinNombreProc);
+					//System.out.println("NSSSSS: " + compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs());
 					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 						//Compruebo que el NS sea >= que la cantidad de anidamientos
-						if(compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).getNs() >= cantidadAnidamientos)
+						String [] id = ambitoSinNombreVar.split("\\:"); 
+						String [] proc = ambitoSinNombreProc.split("\\:"); 
+						//System.out.println("TAMANO: " + (id.length - proc.length));
+						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
 							return true;
+						}
+							
 					}
 				}
 				return false;
@@ -671,6 +681,10 @@ int sePuedeUsar(String sval){
 	//0 se puede usar
 	//1 no esta al alcance.
 	//2 esta redeclarada
+	
+	//Tomo el ambito de la id (asignacion)
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
 	//Esta en la tabla de simbolos?
 	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
 		//Es una variable?
@@ -678,34 +692,22 @@ int sePuedeUsar(String sval){
 			//No esta declarada?
 			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
 				//Veo si es un id que esta dentro del Proc para evaluar el NS
-				if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos() > 0){
+				if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + ":Main")){
 					if(nameManglingNs(sval))
 						return 0;
-					//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
-					//else
-					//	return 1;
 				}
-				//Tomo el ambito de la id no declarada y busco si hay una declarada al alcance.
-				String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
-				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
-					return 1;
-				}
-				else{
-					//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
-					for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
-						if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc")) {
-							//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
-							if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
-								return 0;
-							}
-						}
+				//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Compruebo que el id no sea proc y que el ambito sea Main
+					if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
+							return 0;
 					}
 				}
 				//No existe una id declarada al alcance.
 				return 1;	
 			}
 			//Si esta declarada ver que no este Redeclarada.
-			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
 				return 0;
 			}else{
@@ -719,27 +721,48 @@ int sePuedeUsar(String sval){
 		//Es un Proc?
 		}
 		else{
-			//Tomo el ambito de la id de proc y veo que no este en el mismo ambito.
-			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
-			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
-				return 0;
-			}
-			else{
-				//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
-				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
-					//System.out.println("AmbitoId: " + ambitoId);
-					//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
-					if(ambitoId.equals(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito())){
-						return 2;
+			//Veo si el id de Proc no esta declarado para buscar si existe en el ambito
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Recorro la lista de id de proc
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Busco que esos id esten declarados
+					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+						String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+						String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+						//Pregunto si tienen el mismo ambito
+						if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+							return 0;
+						}
+						//No se admite recursion
+						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
+						if(sval.equals(recurAux[recurAux.length-1]))
+							mostrarMensaje("No se permite recursion.");
+						//Esta al alcance?
+						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+							return 0;							
+						}
 					}
 				}
-			}
-			//No existe una id declarada en el mismo ambito.
-			return 0;
+				return 1;
+			}	
+			else {
+				//Si esta declarada ver que no este Redeclarada
+				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+						return 0;
+				}else{
+					for(int j=0; j<compilador.Compilador.tablaSimbolo.get(sval).size()-1; j++){
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(compilador.Compilador.tablaSimbolo.get(sval).get(j).getAmbito())){
+							return 2;
+						}
+					}
+				}
+				return 0;	
+			}			
 		}
 	}
 	//Si no esta en la tabla de simbolos no existe ninguna declaracion.
 	return 1;
+
 }
 
 void setearProc(String sval, String cantParametros, String na, String ns){
@@ -831,7 +854,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 763 "Parser.java"
+//#line 786 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1052,11 +1075,12 @@ case 11:
 {
 	mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
-	compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
+	if(!(compilador.Compilador.anidamientos.size() == 0))
+		compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
 }
 break;
 case 13:
-//#line 74 "gramatica.y"
+//#line 75 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(9).sval, "0", val_peek(4).sval, val_peek(0).sval);
@@ -1070,7 +1094,7 @@ case 13:
 }
 break;
 case 14:
-//#line 87 "gramatica.y"
+//#line 88 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(11).sval, "1", val_peek(4).sval, val_peek(0).sval);
@@ -1080,11 +1104,12 @@ case 14:
 	if(sePuedeUsar(val_peek(11).sval) == 2){
 		mostrarMensaje(val_peek(11).sval + " esta Redeclarada.");
 	}
+	verificarNa(val_peek(6).sval,val_peek(11).sval);
 	setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 }
 break;
 case 15:
-//#line 99 "gramatica.y"
+//#line 101 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(14).sval, "2", val_peek(4).sval, val_peek(0).sval);
@@ -1094,12 +1119,13 @@ case 15:
 	if(sePuedeUsar(val_peek(14).sval) == 2){
 		mostrarMensaje(val_peek(14).sval + " esta Redeclarada.");
 	}
+	verificarNa(val_peek(9).sval,val_peek(14).sval);
 	setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval);
 	setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 }
 break;
 case 16:
-//#line 112 "gramatica.y"
+//#line 115 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc(val_peek(17).sval, "3", val_peek(4).sval, val_peek(0).sval);
@@ -1109,100 +1135,123 @@ case 16:
 	if(sePuedeUsar(val_peek(17).sval) == 2){
 		mostrarMensaje(val_peek(17).sval + " esta Redeclarada.");
 	}
+	verificarNa(val_peek(12).sval,val_peek(17).sval);
 	setearAmbitoyDeclarada(val_peek(14).sval,val_peek(15).sval);
 	setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval);
 	setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 }
 break;
 case 17:
-//#line 126 "gramatica.y"
+//#line 130 "gramatica.y"
 {
 	yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);
 }
 break;
 case 18:
-//#line 132 "gramatica.y"
+//#line 136 "gramatica.y"
 {
 }
 break;
 case 19:
-//#line 135 "gramatica.y"
+//#line 139 "gramatica.y"
 {
 }
 break;
 case 20:
-//#line 138 "gramatica.y"
+//#line 142 "gramatica.y"
 {
 }
 break;
 case 21:
-//#line 143 "gramatica.y"
+//#line 147 "gramatica.y"
 {
 }
 break;
 case 22:
-//#line 148 "gramatica.y"
+//#line 152 "gramatica.y"
 {
 }
 break;
 case 23:
-//#line 151 "gramatica.y"
+//#line 155 "gramatica.y"
 {
 }
 break;
 case 24:
-//#line 154 "gramatica.y"
+//#line 158 "gramatica.y"
 {
 }
 break;
 case 25:
-//#line 157 "gramatica.y"
+//#line 161 "gramatica.y"
 {
 }
 break;
 case 26:
-//#line 160 "gramatica.y"
+//#line 164 "gramatica.y"
 {
 	yyerror("Error: no puede haber un seccion vacia, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 27:
-//#line 166 "gramatica.y"
+//#line 170 "gramatica.y"
 {
 }
 break;
 case 28:
-//#line 169 "gramatica.y"
+//#line 173 "gramatica.y"
 {
 	mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
 }
 break;
 case 29:
-//#line 173 "gramatica.y"
+//#line 177 "gramatica.y"
 {
 	yyerror("Error: Formato de cadena incorrecto, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 30:
-//#line 177 "gramatica.y"
+//#line 181 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	setearAmbito(val_peek(4).sval);
+	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setTipo("Proc");
+	int aux = sePuedeUsar(val_peek(4).sval);
+	if(aux == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(4).sval + " No esta declarado.");
+	}
+
+	if(aux == 2){
+		mostrarMensaje("Procedimiento " + val_peek(4).sval + " esta Redeclarado.");
+	}
 }
 break;
 case 31:
-//#line 181 "gramatica.y"
+//#line 195 "gramatica.y"
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+	setearAmbito(val_peek(3).sval);
+	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setTipo("Proc");
+	int aux = sePuedeUsar(val_peek(3).sval);
+	if(aux == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(3).sval + " No esta declarado.");
+	}
+
+	if(aux == 2){
+		mostrarMensaje("Procedimiento " + val_peek(3).sval + " esta Redeclarado.");
+	}
+
+
 }
 break;
 case 32:
-//#line 185 "gramatica.y"
+//#line 211 "gramatica.y"
 {
 	yyerror("Error: Cantidad no permitida de parametros, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 33:
-//#line 189 "gramatica.y"
+//#line 215 "gramatica.y"
 {
 	if (PolacaInversa.getFlagITE()){
 		polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
@@ -1212,13 +1261,13 @@ case 33:
 }
 break;
 case 34:
-//#line 197 "gramatica.y"
+//#line 223 "gramatica.y"
 {
 	mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
 }
 break;
 case 35:
-//#line 203 "gramatica.y"
+//#line 229 "gramatica.y"
 {
 	polaca.borrarVariablesControl();
 	Par pasoEnBlanco = new Par("");
@@ -1233,13 +1282,13 @@ case 35:
 }
 break;
 case 36:
-//#line 218 "gramatica.y"
+//#line 244 "gramatica.y"
 {
 	polaca.borrarPasoPolaca();
 }
 break;
 case 37:
-//#line 224 "gramatica.y"
+//#line 250 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1249,7 +1298,7 @@ case 37:
 }
 break;
 case 38:
-//#line 234 "gramatica.y"
+//#line 260 "gramatica.y"
 {
 	polaca.agregarVariableControl(val_peek(2).sval);
 	Par id = new Par(val_peek(2).sval);
@@ -1260,7 +1309,7 @@ case 38:
 }
 break;
 case 39:
-//#line 245 "gramatica.y"
+//#line 271 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1269,7 +1318,7 @@ case 39:
 }
 break;
 case 40:
-//#line 252 "gramatica.y"
+//#line 278 "gramatica.y"
 {
 	Par id1 = new Par(val_peek(2).sval);
 	Par id2 = new Par(val_peek(0).sval);
@@ -1280,7 +1329,7 @@ case 40:
 }
 break;
 case 41:
-//#line 261 "gramatica.y"
+//#line 287 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1289,43 +1338,43 @@ case 41:
 }
 break;
 case 42:
-//#line 270 "gramatica.y"
+//#line 296 "gramatica.y"
 {
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 43:
-//#line 275 "gramatica.y"
+//#line 301 "gramatica.y"
 {
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 44:
-//#line 280 "gramatica.y"
+//#line 306 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 45:
-//#line 286 "gramatica.y"
+//#line 312 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 289 "gramatica.y"
+//#line 315 "gramatica.y"
 {
 }
 break;
 case 47:
-//#line 294 "gramatica.y"
+//#line 320 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 48:
-//#line 298 "gramatica.y"
+//#line 324 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -1334,27 +1383,27 @@ case 48:
 }
 break;
 case 49:
-//#line 307 "gramatica.y"
+//#line 333 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 310 "gramatica.y"
+//#line 336 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 313 "gramatica.y"
+//#line 339 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 316 "gramatica.y"
+//#line 342 "gramatica.y"
 {
 }
 break;
 case 53:
-//#line 321 "gramatica.y"
+//#line 347 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1364,7 +1413,7 @@ case 53:
 }
 break;
 case 54:
-//#line 331 "gramatica.y"
+//#line 357 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1374,22 +1423,22 @@ case 54:
 }
 break;
 case 55:
-//#line 341 "gramatica.y"
+//#line 367 "gramatica.y"
 {
 }
 break;
 case 56:
-//#line 346 "gramatica.y"
+//#line 372 "gramatica.y"
 {
 }
 break;
 case 57:
-//#line 349 "gramatica.y"
+//#line 375 "gramatica.y"
 {
 }
 break;
 case 58:
-//#line 354 "gramatica.y"
+//#line 380 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	if(sePuedeUsar(val_peek(3).sval) == 1){
@@ -1402,56 +1451,56 @@ case 58:
 }
 break;
 case 59:
-//#line 365 "gramatica.y"
+//#line 391 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 60:
-//#line 371 "gramatica.y"
+//#line 397 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 61:
-//#line 376 "gramatica.y"
+//#line 402 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 62:
-//#line 381 "gramatica.y"
+//#line 407 "gramatica.y"
 {
 }
 break;
 case 63:
-//#line 386 "gramatica.y"
+//#line 412 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 64:
-//#line 391 "gramatica.y"
+//#line 417 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 65:
-//#line 396 "gramatica.y"
+//#line 422 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 401 "gramatica.y"
+//#line 427 "gramatica.y"
 {
 }
 break;
 case 67:
-//#line 404 "gramatica.y"
+//#line 430 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	if(sePuedeUsar(val_peek(0).sval) == 1)
@@ -1462,68 +1511,68 @@ case 67:
 }
 break;
 case 68:
-//#line 415 "gramatica.y"
+//#line 441 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 418 "gramatica.y"
+//#line 444 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 421 "gramatica.y"
+//#line 447 "gramatica.y"
 {
 }
 break;
 case 71:
-//#line 424 "gramatica.y"
+//#line 450 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 427 "gramatica.y"
+//#line 453 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 430 "gramatica.y"
+//#line 456 "gramatica.y"
 {
 }
 break;
 case 74:
-//#line 433 "gramatica.y"
+//#line 459 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 75:
-//#line 439 "gramatica.y"
+//#line 465 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 442 "gramatica.y"
+//#line 468 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 447 "gramatica.y"
+//#line 473 "gramatica.y"
 {
 }
 break;
 case 78:
-//#line 452 "gramatica.y"
+//#line 478 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 455 "gramatica.y"
+//#line 481 "gramatica.y"
 {
 }
 break;
 case 80:
-//#line 459 "gramatica.y"
+//#line 485 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -1532,13 +1581,13 @@ case 80:
 }
 break;
 case 81:
-//#line 466 "gramatica.y"
+//#line 492 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 82:
-//#line 472 "gramatica.y"
+//#line 498 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -1547,12 +1596,12 @@ case 82:
 }
 break;
 case 83:
-//#line 479 "gramatica.y"
+//#line 505 "gramatica.y"
 {
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1479 "Parser.java"
+//#line 1528 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

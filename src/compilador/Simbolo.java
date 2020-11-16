@@ -34,20 +34,11 @@ public class Simbolo {
 		
 	}
 	
-	public int cantidadAnidamientos() {
-		if(this.getAmbito().equals(getValor()+":Main"))
-			return 0;
-		else {
-			String [] arreglo = compilador.Compilador.ambito.split("\\:"); 
-			return arreglo.length-2;
-		}
-	}
-	
 	public String ambitoSinNombre() {
 		String [] arreglo = getAmbito().split("\\:");
 		String auxSinNombre = "";
 		boolean primero = true;
-		for(int z=1; z<arreglo.length-1; z++) {
+		for(int z=1; z<arreglo.length; z++) {
 			if(primero) {
 				primero = false;
 				auxSinNombre = arreglo[z];

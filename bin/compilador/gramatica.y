@@ -180,6 +180,16 @@ sentenciaEjecutable : asignacion
 					| identificador '(' ')' ';'
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+	setearAmbito($1.sval);
+	if(sePuedeUsar($1.sval) == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+	}
+
+	if(sePuedeUsar($1.sval) == 2){
+		mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+	}
+
+
 }
 					| identificador '(' error ')' ';'
 {
@@ -649,25 +659,35 @@ void verificarNa(String sval, String proc){
 
 boolean nameManglingNs(String sval) {
 	
-	int cantidadAnidamientos = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos();
 	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 	
 	//Recorro la lista con todos los id con ese nombre
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
-		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
+			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
 			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
 			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
-				char idProc = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().charAt(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().length()-1);
+				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\:");
+				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
-				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).size(); j++){
+				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
+					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
 					//Compruebo que el ambito del id del Proc este contenido
 					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
-					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).ambitoSinNombre();
+					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
+					//System.out.println("ambitoSinVar: " + ambitoSinNombreVar);
+					//System.out.println("ambitoSinProc: " + ambitoSinNombreProc);
+					//System.out.println("NSSSSS: " + compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs());
 					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 						//Compruebo que el NS sea >= que la cantidad de anidamientos
-						if(compilador.Compilador.tablaSimbolo.get(String.valueOf(idProc)).get(j).getNs() >= cantidadAnidamientos)
+						String [] id = ambitoSinNombreVar.split("\\:"); 
+						String [] proc = ambitoSinNombreProc.split("\\:"); 
+						//System.out.println("TAMANO: " + (id.length - proc.length));
+						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
 							return true;
+						}
+							
 					}
 				}
 				return false;
@@ -681,6 +701,10 @@ int sePuedeUsar(String sval){
 	//0 se puede usar
 	//1 no esta al alcance.
 	//2 esta redeclarada
+	
+	//Tomo el ambito de la id (asignacion)
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
 	//Esta en la tabla de simbolos?
 	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
 		//Es una variable?
@@ -688,20 +712,27 @@ int sePuedeUsar(String sval){
 			//No esta declarada?
 			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
 				//Veo si es un id que esta dentro del Proc para evaluar el NS
-				if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).cantidadAnidamientos() > 0){
+				if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + ":Main")){
 					if(nameManglingNs(sval))
 						return 0;
-					//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
-					//else
-					//	return 1;
 				}
-				//Tomo el ambito de la id no declarada y busco si hay una declarada al alcance.
-				String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+				//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Compruebo que el id no sea proc y que el ambito sea Main
+					if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
+							return 0;
+					}
+				}
+				
+
+				
+				/*
 				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
 					return 1;
 				}
 				else{
-					//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
+					//System.out.println("TamÃ±o: " + compilador.Compilador.tablaSimbolo.get(sval).size());
 					for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
 						if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc")) {
 							//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
@@ -710,12 +741,11 @@ int sePuedeUsar(String sval){
 							}
 						}
 					}
-				}
+				}*/
 				//No existe una id declarada al alcance.
 				return 1;	
 			}
 			//Si esta declarada ver que no este Redeclarada.
-			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
 				return 0;
 			}else{
@@ -730,12 +760,11 @@ int sePuedeUsar(String sval){
 		}
 		else{
 			//Tomo el ambito de la id de proc y veo que no este en el mismo ambito.
-			String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
 				return 0;
 			}
 			else{
-				//System.out.println("Tamño: " + compilador.Compilador.tablaSimbolo.get(sval).size());
+				//System.out.println("TamÃ±o: " + compilador.Compilador.tablaSimbolo.get(sval).size());
 				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
 					//System.out.println("AmbitoId: " + ambitoId);
 					//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
