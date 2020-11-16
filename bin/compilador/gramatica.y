@@ -66,78 +66,92 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 {
 	mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
-	compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
+	if(!(compilador.Compilador.anidamientos.size() == 0))
+		compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
 }
 						 ;
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearProc($2.sval, "0", $7.sval, $11.sval);
-	setearAmbito($2.sval);
-	compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
-	setearAmbitoNaNs($7.sval,$11.sval);
-	if(sePuedeUsar($2.sval) == 2){
-		mostrarMensaje($2.sval + " esta Redeclarada.");
+	if(verficarNANSEnteras($7.sval, $11.sval)){
+		setearProc($2.sval, "0", $7.sval, $11.sval);
+		setearAmbito($2.sval);
+		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
+		setearAmbitoNaNs($7.sval,$11.sval);
+		if(sePuedeUsar($2.sval) == 2){
+			mostrarMensaje($2.sval + " esta Redeclarada.");
+		}
+		verificarNa($7.sval,$2.sval);
 	}
-	verificarNa($7.sval,$2.sval);
+	else{
+		mostrarMensaje("NA o NS no es una CTE ENTERA");
+	}
+	
 }
 
 				 | PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearProc($2.sval, "1", $9.sval, $13.sval);
-	setearAmbito($2.sval);
-	compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
-	setearAmbitoNaNs($9.sval,$13.sval);
-	if(sePuedeUsar($2.sval) == 2){
-		mostrarMensaje($2.sval + " esta Redeclarada.");
+	if(verficarNANSEnteras($9.sval, $13.sval)){
+		setearProc($2.sval, "1", $9.sval, $13.sval);
+		setearAmbito($2.sval);
+		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
+		setearAmbitoNaNs($9.sval,$13.sval);
+		if(sePuedeUsar($2.sval) == 2){
+			mostrarMensaje($2.sval + " esta Redeclarada.");
+		}
+		verificarNa($9.sval,$13.sval);
+		setearAmbitoyDeclarada($5.sval,$4.sval);
 	}
-	setearAmbitoyDeclarada($5.sval,$4.sval);
+	else{
+		mostrarMensaje("NA o NS no es una CTE ENTERA");
+	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearProc($2.sval, "2", $12.sval, $16.sval);
-	setearAmbito($2.sval);
-	compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
-	setearAmbitoNaNs($12.sval,$16.sval);
-	if(sePuedeUsar($2.sval) == 2){
-		mostrarMensaje($2.sval + " esta Redeclarada.");
+	if(verficarNANSEnteras($12.sval, $16.sval)){
+		setearProc($2.sval, "2", $12.sval, $16.sval);
+		setearAmbito($2.sval);
+		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
+		setearAmbitoNaNs($12.sval,$16.sval);
+		if(sePuedeUsar($2.sval) == 2){
+			mostrarMensaje($2.sval + " esta Redeclarada.");
+		}
+		verificarNa($12.sval,$16.sval);
+		setearAmbitoyDeclarada($5.sval,$4.sval);
+		setearAmbitoyDeclarada($8.sval,$7.sval);
 	}
-	setearAmbitoyDeclarada($5.sval,$4.sval);
-	setearAmbitoyDeclarada($8.sval,$7.sval);
+	else{
+		mostrarMensaje("NA o NS no es una CTE ENTERA");
+	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearProc($2.sval, "3", $15.sval, $19.sval);
-	setearAmbito($2.sval);
-	compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
-	setearAmbitoNaNs($15.sval,$19.sval);
-	if(sePuedeUsar($2.sval) == 2){
-		mostrarMensaje($2.sval + " esta Redeclarada.");
+	if(verficarNANSEnteras($15.sval, $19.sval)){
+		setearProc($2.sval, "3", $15.sval, $19.sval);
+		setearAmbito($2.sval);
+		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
+		setearAmbitoNaNs($15.sval,$19.sval);
+		if(sePuedeUsar($2.sval) == 2){
+			mostrarMensaje($2.sval + " esta Redeclarada.");
+		}
+		verificarNa($15.sval,$19.sval);
+		setearAmbitoyDeclarada($5.sval,$4.sval);
+		setearAmbitoyDeclarada($8.sval,$7.sval);
+		setearAmbitoyDeclarada($11.sval,$10.sval);
 	}
-	setearAmbitoyDeclarada($5.sval,$4.sval);
-	setearAmbitoyDeclarada($8.sval,$7.sval);
-	setearAmbitoyDeclarada($11.sval,$10.sval);
+	else{
+		mostrarMensaje("NA o NS no es una CTE ENTERA");
+	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador error ')' NA '=' CTE ',' NS '=' CTE
 {
 	yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);
 }
 			   ; 
-
-nombres : identificador
-{
-}
-		| identificador ',' identificador
-{
-}
-		| identificador ',' identificador ',' identificador
-{
-}
-		;
 
 bloqueProc : '{' bloque '}'
 {
@@ -173,20 +187,89 @@ sentenciaEjecutable : asignacion
 {
 	yyerror("Error: Formato de cadena incorrecto, en linea nro: "+ compilador.Compilador.nroLinea);
 }
-					| identificador '(' nombres ')' ';'
+					| identificador '(' identificador ')' ';'
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	setearAmbito($1.sval);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	int aux = sePuedeUsar($1.sval);
+	if(aux == 1 || aux == 2){
+		if(aux == 1){
+			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+		}
+		else{
+			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+		}
+	}
+	else{
+		if(!verificarCantParam($1.sval))
+			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+	}
+
 }
-					| identificador '(' ')' ';'
+
+					| identificador '(' identificador ',' identificador ')' ';'
+{
+	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	setearAmbito($1.sval);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
+	int aux = sePuedeUsar($1.sval);
+	if(aux == 1 || aux == 2){
+		if(aux == 1){
+			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+		}
+		else{
+			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+		}
+	}
+	else{
+		if(!verificarCantParam($1.sval))
+			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+	}
+
+}
+
+					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
+{
+	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	setearAmbito($1.sval);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
+	int aux = sePuedeUsar($1.sval);
+	if(aux == 1 || aux == 2){
+		if(aux == 1){
+			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+		}
+		else{
+			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+		}
+	}
+	else{
+		if(!verificarCantParam($1.sval))
+			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+	}
+
+}
+				| identificador '(' ')' ';'
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearAmbito($1.sval);
-	if(sePuedeUsar($1.sval) == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
+	int aux = sePuedeUsar($1.sval);
+	if(aux == 1 || aux == 2){
+		if(aux == 1){
+			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+		}
+		else{
+			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+		}
 	}
-
-	if(sePuedeUsar($1.sval) == 2){
-		mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+	else{
+		if(!verificarCantParam($1.sval))
+			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
 
 
@@ -724,24 +807,6 @@ int sePuedeUsar(String sval){
 							return 0;
 					}
 				}
-				
-
-				
-				/*
-				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
-					return 1;
-				}
-				else{
-					//System.out.println("TamÃ±o: " + compilador.Compilador.tablaSimbolo.get(sval).size());
-					for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
-						if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc")) {
-							//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
-							if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
-								return 0;
-							}
-						}
-					}
-				}*/
 				//No existe una id declarada al alcance.
 				return 1;	
 			}
@@ -759,26 +824,82 @@ int sePuedeUsar(String sval){
 		//Es un Proc?
 		}
 		else{
-			//Tomo el ambito de la id de proc y veo que no este en el mismo ambito.
-			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
-				return 0;
-			}
-			else{
-				//System.out.println("TamÃ±o: " + compilador.Compilador.tablaSimbolo.get(sval).size());
-				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
-					//System.out.println("AmbitoId: " + ambitoId);
-					//System.out.println("Tabla: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
-					if(ambitoId.equals(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito())){
-						return 2;
+			//Veo si el id de Proc no esta declarado para buscar si existe en el ambito
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Recorro la lista de id de proc
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Busco que esos id esten declarados
+					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+						String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+						String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+						//Pregunto si tienen el mismo ambito
+						if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+							return 0;
+						}
+						//No se admite recursion
+						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
+						if(sval.equals(recurAux[recurAux.length-1]))
+							mostrarMensaje("No se permite recursion.");
+						//Esta al alcance?
+						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+							return 0;							
+						}
 					}
 				}
-			}
-			//No existe una id declarada en el mismo ambito.
-			return 0;
+				return 1;
+			}	
+			else {
+				//Si esta declarada ver que no este Redeclarada
+				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+						return 0;
+				}else{
+					for(int j=0; j<compilador.Compilador.tablaSimbolo.get(sval).size()-1; j++){
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(compilador.Compilador.tablaSimbolo.get(sval).get(j).getAmbito())){
+							return 2;
+						}
+					}
+				}
+				return 0;	
+			}			
 		}
 	}
 	//Si no esta en la tabla de simbolos no existe ninguna declaracion.
 	return 1;
+
+}
+
+boolean verificarCantParam(String sval){
+
+	int cantLlamdor = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getCantParametros();
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+		//Busco que esos id esten declarados y sea Proc
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+			String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+			String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+			//Pregunto si tienen el mismo ambito
+			if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getCantParametros() == cantLlamdor)
+					return true;
+			}
+			//Esta al alcance?
+			if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getCantParametros() == cantLlamdor)
+					return true;							
+			}
+		}
+	}
+	return false;
+}
+
+boolean verficarNANSEnteras(String na, String ns){
+	
+	if(na.charAt(0) >= '0' && na.charAt(0) <= '9' && ns.charAt(0) >= '0' && ns.charAt(0) <= '9') 
+		if(na.contains("_") && na.contains("i") && ns.contains("_") && ns.contains("i")){
+			return true;
+		}
+
+	return false;
+
 }
 
 void setearProc(String sval, String cantParametros, String na, String ns){
@@ -838,7 +959,7 @@ void setearAmbito(String sval){
 		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 
 		}
-		else{
+		else if(sval.contains("f") || sval.contains(".")){
 			Double flotante = Double.parseDouble(sval.replace('f', 'E'));
 			if (sval.contains("f")) {
 				if(String.valueOf(flotante).contains("E"))
@@ -847,9 +968,9 @@ void setearAmbito(String sval){
 			if (sval.contains("."))
 				sval = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
 		}
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}		
 
-	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 }
 
 void setearAmbitoyDeclarada(String sval, String tipo){

@@ -1,19 +1,8 @@
-
-PROC a1() NA=2_i, NS=1_i{
-	INTEGER id;
-	PROC b1() NA=1_i, NS=2_i{
-		id = 0_i;
-		PROC c1() NA=0_i, NS=2_i{
-			id = 0_i;
-			c1();
-		}
-	}
-	PROC b1() NA=1_i, NS=2_i{
-		id = 0_i;
-		c1();
-	}
+INTEGER a,b;
+PROC a1(INTEGER x, FLOAT y) NA=15_i, NS=1_i{
+	a = b;
 }
 
-
+a1(h,j,k);
 
 
