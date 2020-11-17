@@ -41,7 +41,7 @@ public class CrearSalida {
 	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Tipo: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoParametro: " + aux.get(i).getTipoParametro() + "\t pasajeParametro: " + aux.get(i).getPasajeParametro() );
 	    		   }
 	    		   else {
-	    			   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Tipo: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada());
+	    			   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Tipo: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoVar: " + aux.get(i).getTipoParametro() );
 	    		   } 
 	    		   salida.newLine();
 		       }

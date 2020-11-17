@@ -3,6 +3,8 @@ package compilador;
 import java.io.IOException;
 import java.util.ArrayList;
 import accionesSemanticas.*;
+import java.util.Iterator;
+import java.util.Set;
 %}
 
 %token ID IF THEN ELSE END_IF OUT FUNC RETURN FOR INTEGER FLOAT PROC NS NA CADENA UP DOWN CTE
@@ -40,6 +42,7 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
 sentenciaDeclarativa : tipo listaVariables ';'
 {
 	mostrarMensaje("Declaracion de una o mas variables en linea nro: " + compilador.Compilador.nroLinea);
+	setearTipoParam($1.sval);
 }     
 					 | declaracionProcedimiento
 {
@@ -868,6 +871,29 @@ int sePuedeUsar(String sval){
 
 }
 
+void setearTipoParam(String sval){
+
+	//Se setean todos las variables que son declaradas con su tipo
+	Set<String> keys = c.getTablaSimbolo().keySet();
+	Iterator<String> itr = keys.iterator();
+	String str;
+	
+	while (itr.hasNext()) { 
+		str = itr.next();
+		Simbolo s = compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1);
+
+		if(s.getTipo().equals("Var") && s.isDeclarada() && s.getTipoParametro().equals(null))
+			compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1).setTipoParametro(sval);
+	}
+
+}
+/*
+boolean verificarParamFormales(String sval){
+	//Verifico que el parametro real que venga este al alcance, declarado y que sea del mismo tipo que el de la definicion (parametro formal)
+	if(sePuedeUsar(sval) == 0)
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).
+}
+*/
 boolean verificarCantParam(String sval){
 
 	int cantLlamdor = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getCantParametros();
