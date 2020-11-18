@@ -196,6 +196,8 @@ sentenciaEjecutable : asignacion
 	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	
+	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -209,6 +211,13 @@ sentenciaEjecutable : asignacion
 		if(!verificarCantParam($1.sval))
 			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
+	
+	//Compruebo que el parametro real se pueda usar
+	int aux2 = sePuedeUsar($3.sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+	}
+	
 
 }
 
@@ -218,6 +227,8 @@ sentenciaEjecutable : asignacion
 	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
+	
+	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -230,6 +241,16 @@ sentenciaEjecutable : asignacion
 	else{
 		if(!verificarCantParam($1.sval))
 			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+	}
+
+	//Compruebo que el parametro real se pueda usar
+	int aux2 = sePuedeUsar($3.sval);
+	int aux3 = sePuedeUsar($5.sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+	}
+	if(aux3 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
 	}
 
 }
@@ -240,6 +261,8 @@ sentenciaEjecutable : asignacion
 	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
+	
+	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -254,6 +277,20 @@ sentenciaEjecutable : asignacion
 			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
 
+	//Compruebo que el parametro real se pueda usar
+	int aux2 = sePuedeUsar($3.sval);
+	int aux3 = sePuedeUsar($5.sval);
+	int aux4 = sePuedeUsar($7.sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+	}
+	if(aux3 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+	}
+	if(aux4 == 1){
+		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
+	}
+
 }
 				| identificador '(' ')' ';'
 {
@@ -261,6 +298,8 @@ sentenciaEjecutable : asignacion
 	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
+	
+	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -882,16 +921,33 @@ void setearTipoParam(String sval){
 		str = itr.next();
 		Simbolo s = compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1);
 
-		if(s.getTipo().equals("Var") && s.isDeclarada() && s.getTipoParametro().equals(null))
+		if(s.getTipo().equals("Var") && s.isDeclarada() && s.getTipoParametro() == null)
 			compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1).setTipoParametro(sval);
 	}
 
 }
 /*
-boolean verificarParamFormales(String sval){
+boolean verificarParamFormales(String sval, String proc){
 	//Verifico que el parametro real que venga este al alcance, declarado y que sea del mismo tipo que el de la definicion (parametro formal)
-	if(sePuedeUsar(sval) == 0)
-		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).
+	if(sePuedeUsar(sval) == 0) {
+		String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(proc).get(compilador.Compilador.tablaSimbolo.get(proc).size()-1).ambitoSinNombre();
+		//Busco el proc declarado
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(proc).size(); i++) {
+			if(compilador.Compilador.tablaSimbolo.get(proc).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(proc).get(i).isDeclarada()) {
+				String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+				//Pregunto si tienen el mismo ambito
+				if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+					return true;
+				}
+				//Esta al alcance?
+				else if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+					return true;							
+				}
+			}		
+		}
+	}
+	else
+		return false;
 }
 */
 boolean verificarCantParam(String sval){

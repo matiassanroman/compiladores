@@ -1,12 +1,7 @@
-INTEGER a,b,c,d;
-FLOAT g;
+INTEGER a,b;
 
-PROC a1(FLOAT x) NA=15_i, NS=1_i{
+PROC a1(FLOAT x, INTEGER y, FLOAT Z) NA=15_i, NS=1_i{
 	a = b;
 }
 
-a1(h);
-
-FLOAT h1,h2,h3;
-
-
+a1(bb,aa,a);

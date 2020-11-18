@@ -468,7 +468,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE $$2",
 };
 
-//#line 581 "gramatica.y"
+//#line 620 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -773,16 +773,33 @@ void setearTipoParam(String sval){
 		str = itr.next();
 		Simbolo s = compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1);
 
-		if(s.getTipo().equals("Var") && s.isDeclarada() && s.getTipoParametro().equals(null))
+		if(s.getTipo().equals("Var") && s.isDeclarada() && s.getTipoParametro() == null)
 			compilador.Compilador.tablaSimbolo.get(str).get(compilador.Compilador.tablaSimbolo.get(str).size()-1).setTipoParametro(sval);
 	}
 
 }
 /*
-boolean verificarParamFormales(String sval){
+boolean verificarParamFormales(String sval, String proc){
 	//Verifico que el parametro real que venga este al alcance, declarado y que sea del mismo tipo que el de la definicion (parametro formal)
-	if(sePuedeUsar(sval) == 0)
-		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).
+	if(sePuedeUsar(sval) == 0) {
+		String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(proc).get(compilador.Compilador.tablaSimbolo.get(proc).size()-1).ambitoSinNombre();
+		//Busco el proc declarado
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(proc).size(); i++) {
+			if(compilador.Compilador.tablaSimbolo.get(proc).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(proc).get(i).isDeclarada()) {
+				String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+				//Pregunto si tienen el mismo ambito
+				if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+					return true;
+				}
+				//Esta al alcance?
+				else if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+					return true;							
+				}
+			}		
+		}
+	}
+	else
+		return false;
 }
 */
 boolean verificarCantParam(String sval){
@@ -908,7 +925,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 840 "Parser.java"
+//#line 857 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1278,6 +1295,8 @@ case 27:
 	setearAmbito(val_peek(4).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setCantParametros(1);
+	
+	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(4).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -1291,16 +1310,25 @@ case 27:
 		if(!verificarCantParam(val_peek(4).sval))
 			mostrarMensaje("Llamador del procedimiento: " + val_peek(4).sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
+	
+	/*Compruebo que el parametro real se pueda usar*/
+	int aux2 = sePuedeUsar(val_peek(2).sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(4).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+	}
+	
 
 }
 break;
 case 28:
-//#line 216 "gramatica.y"
+//#line 225 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(6).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(2);
+	
+	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(6).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -1315,15 +1343,27 @@ case 28:
 			mostrarMensaje("Llamador del procedimiento: " + val_peek(6).sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
 
+	/*Compruebo que el parametro real se pueda usar*/
+	int aux2 = sePuedeUsar(val_peek(4).sval);
+	int aux3 = sePuedeUsar(val_peek(2).sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
+	}
+	if(aux3 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+	}
+
 }
 break;
 case 29:
-//#line 238 "gramatica.y"
+//#line 259 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(8).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setCantParametros(3);
+	
+	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(8).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -1338,15 +1378,31 @@ case 29:
 			mostrarMensaje("Llamador del procedimiento: " + val_peek(8).sval + " no coincide con la cantidad de parametros de su definicion.");
 	}
 
+	/*Compruebo que el parametro real se pueda usar*/
+	int aux2 = sePuedeUsar(val_peek(6).sval);
+	int aux3 = sePuedeUsar(val_peek(4).sval);
+	int aux4 = sePuedeUsar(val_peek(2).sval);
+	if(aux2 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(6).sval +  " No declarado.");
+	}
+	if(aux3 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
+	}
+	if(aux4 == 1){
+		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+	}
+
 }
 break;
 case 30:
-//#line 259 "gramatica.y"
+//#line 296 "gramatica.y"
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(3).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setCantParametros(0);
+	
+	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(3).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
@@ -1365,13 +1421,13 @@ case 30:
 }
 break;
 case 31:
-//#line 281 "gramatica.y"
+//#line 320 "gramatica.y"
 {
 	yyerror("Error: Cantidad no permitida de parametros, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 32:
-//#line 285 "gramatica.y"
+//#line 324 "gramatica.y"
 {
 	if (PolacaInversa.getFlagITE()){
 		polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
@@ -1381,13 +1437,13 @@ case 32:
 }
 break;
 case 33:
-//#line 293 "gramatica.y"
+//#line 332 "gramatica.y"
 {
 	mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
 }
 break;
 case 34:
-//#line 299 "gramatica.y"
+//#line 338 "gramatica.y"
 {
 	polaca.borrarVariablesControl();
 	Par pasoEnBlanco = new Par("");
@@ -1402,13 +1458,13 @@ case 34:
 }
 break;
 case 35:
-//#line 314 "gramatica.y"
+//#line 353 "gramatica.y"
 {
 	polaca.borrarPasoPolaca();
 }
 break;
 case 36:
-//#line 320 "gramatica.y"
+//#line 359 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1418,7 +1474,7 @@ case 36:
 }
 break;
 case 37:
-//#line 330 "gramatica.y"
+//#line 369 "gramatica.y"
 {
 	polaca.agregarVariableControl(val_peek(2).sval);
 	Par id = new Par(val_peek(2).sval);
@@ -1429,7 +1485,7 @@ case 37:
 }
 break;
 case 38:
-//#line 341 "gramatica.y"
+//#line 380 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1438,7 +1494,7 @@ case 38:
 }
 break;
 case 39:
-//#line 348 "gramatica.y"
+//#line 387 "gramatica.y"
 {
 	Par id1 = new Par(val_peek(2).sval);
 	Par id2 = new Par(val_peek(0).sval);
@@ -1449,7 +1505,7 @@ case 39:
 }
 break;
 case 40:
-//#line 357 "gramatica.y"
+//#line 396 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1458,43 +1514,43 @@ case 40:
 }
 break;
 case 41:
-//#line 366 "gramatica.y"
+//#line 405 "gramatica.y"
 {
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 42:
-//#line 371 "gramatica.y"
+//#line 410 "gramatica.y"
 {
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 43:
-//#line 376 "gramatica.y"
+//#line 415 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 44:
-//#line 382 "gramatica.y"
+//#line 421 "gramatica.y"
 {
 }
 break;
 case 45:
-//#line 385 "gramatica.y"
+//#line 424 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 390 "gramatica.y"
+//#line 429 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 47:
-//#line 394 "gramatica.y"
+//#line 433 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -1503,27 +1559,27 @@ case 47:
 }
 break;
 case 48:
-//#line 403 "gramatica.y"
+//#line 442 "gramatica.y"
 {
 }
 break;
 case 49:
-//#line 406 "gramatica.y"
+//#line 445 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 409 "gramatica.y"
+//#line 448 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 412 "gramatica.y"
+//#line 451 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 417 "gramatica.y"
+//#line 456 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1533,7 +1589,7 @@ case 52:
 }
 break;
 case 53:
-//#line 427 "gramatica.y"
+//#line 466 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1543,22 +1599,22 @@ case 53:
 }
 break;
 case 54:
-//#line 437 "gramatica.y"
+//#line 476 "gramatica.y"
 {
 }
 break;
 case 55:
-//#line 442 "gramatica.y"
+//#line 481 "gramatica.y"
 {
 }
 break;
 case 56:
-//#line 445 "gramatica.y"
+//#line 484 "gramatica.y"
 {
 }
 break;
 case 57:
-//#line 450 "gramatica.y"
+//#line 489 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	if(sePuedeUsar(val_peek(3).sval) == 1){
@@ -1571,56 +1627,56 @@ case 57:
 }
 break;
 case 58:
-//#line 461 "gramatica.y"
+//#line 500 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 59:
-//#line 467 "gramatica.y"
+//#line 506 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 60:
-//#line 472 "gramatica.y"
+//#line 511 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 61:
-//#line 477 "gramatica.y"
+//#line 516 "gramatica.y"
 {
 }
 break;
 case 62:
-//#line 482 "gramatica.y"
+//#line 521 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 63:
-//#line 487 "gramatica.y"
+//#line 526 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 64:
-//#line 492 "gramatica.y"
+//#line 531 "gramatica.y"
 {
 }
 break;
 case 65:
-//#line 497 "gramatica.y"
+//#line 536 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 500 "gramatica.y"
+//#line 539 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	if(sePuedeUsar(val_peek(0).sval) == 1)
@@ -1631,68 +1687,68 @@ case 66:
 }
 break;
 case 67:
-//#line 511 "gramatica.y"
+//#line 550 "gramatica.y"
 {
 }
 break;
 case 68:
-//#line 514 "gramatica.y"
+//#line 553 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 517 "gramatica.y"
+//#line 556 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 520 "gramatica.y"
+//#line 559 "gramatica.y"
 {
 }
 break;
 case 71:
-//#line 523 "gramatica.y"
+//#line 562 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 526 "gramatica.y"
+//#line 565 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 529 "gramatica.y"
+//#line 568 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 74:
-//#line 535 "gramatica.y"
+//#line 574 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 538 "gramatica.y"
+//#line 577 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 543 "gramatica.y"
+//#line 582 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 548 "gramatica.y"
+//#line 587 "gramatica.y"
 {
 }
 break;
 case 78:
-//#line 551 "gramatica.y"
+//#line 590 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 555 "gramatica.y"
+//#line 594 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -1701,13 +1757,13 @@ case 79:
 }
 break;
 case 80:
-//#line 562 "gramatica.y"
+//#line 601 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 81:
-//#line 568 "gramatica.y"
+//#line 607 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -1716,12 +1772,12 @@ case 81:
 }
 break;
 case 82:
-//#line 575 "gramatica.y"
+//#line 614 "gramatica.y"
 {
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1648 "Parser.java"
+//#line 1704 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

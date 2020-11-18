@@ -2,11 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
+Clave: 15	 Value: 15	 Uso: CTE	 Ambito: 15:Main	 Tipo: int	 Declarada: false	 tipoVar: null
 Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: h3	 Value: h3	 Uso: ID	 Ambito: h3:Main	 Tipo: Var	 Declarada: true	 tipoVar: FLOAT
-Clave: h2	 Value: h2	 Uso: ID	 Ambito: h2:Main	 Tipo: Var	 Declarada: true	 tipoVar: FLOAT
-Clave: h1	 Value: h1	 Uso: ID	 Ambito: h1:Main	 Tipo: Var	 Declarada: true	 tipoVar: FLOAT
-Clave: g	 Value: g	 Uso: ID	 Ambito: g:Main	 Tipo: Var	 Declarada: true	 tipoVar: FLOAT
-Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false	 tipoVar: null
