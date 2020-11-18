@@ -81,7 +81,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($7.sval, $11.sval)){
 		setearProc($2.sval, "0", $7.sval, $11.sval);
-		setearAmbito($2.sval);
+		//setearAmbito($2.sval);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($7.sval,$11.sval);
 		if(sePuedeUsar($2.sval) == 2){
@@ -102,14 +102,14 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($9.sval, $13.sval)){
 		setearProc($2.sval, "1", $9.sval, $13.sval);
-		setearAmbito($2.sval);
+		//setearAmbito($2.sval);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($9.sval,$13.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada.");
 		}
-		verificarNa($9.sval,$13.sval);
+		verificarNa($9.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 	}
 	else{
@@ -122,14 +122,14 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($12.sval, $16.sval)){
 		setearProc($2.sval, "2", $12.sval, $16.sval);
-		setearAmbito($2.sval);
+		//setearAmbito($2.sval);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($12.sval,$16.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada.");
 		}
-		verificarNa($12.sval,$16.sval);
+		verificarNa($12.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 	}
@@ -143,14 +143,14 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($15.sval, $19.sval)){
 		setearProc($2.sval, "3", $15.sval, $19.sval);
-		setearAmbito($2.sval);
+		//setearAmbito($2.sval);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($15.sval,$19.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada.");
 		}
-		verificarNa($15.sval,$19.sval);
+		verificarNa($15.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 		setearAmbitoyDeclarada($11.sval,$10.sval);
@@ -203,9 +203,10 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ')' ';'
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito($1.sval);
+	
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	setearAmbito($1.sval);
 	
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
@@ -239,9 +240,9 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ',' identificador ')' ';'
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
+	setearAmbito($1.sval);
 	
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
@@ -279,10 +280,10 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito($1.sval);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
-	
+	setearAmbito($1.sval);
+
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
@@ -323,10 +324,11 @@ sentenciaEjecutable : asignacion
 				| identificador '(' ')' ';'
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearAmbito($1.sval);
+	
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
-	
+	setearAmbito($1.sval);
+
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
@@ -737,7 +739,8 @@ void comprobarRango(String sval, boolean negativo){
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
-				mostrarMensaje("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		//ES ENTERO Y NEGATIVO
@@ -759,7 +762,8 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(sval);
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
-				mostrarMensaje("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 	//ES POSITIVO	
@@ -772,7 +776,8 @@ void comprobarRango(String sval, boolean negativo){
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
-				mostrarMensaje("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		// ES ENTERA Y POSITIVA
@@ -783,7 +788,8 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(sval);
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
-				mostrarMensaje("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		
@@ -810,10 +816,23 @@ void verificarNa(String sval, String proc){
 	
 	compilador.Compilador.anidamientos.add(Integer.parseInt(sval));
 	int tamano = compilador.Compilador.anidamientos.size();
+	/*
 	if(tamano > 1)
 		for(int i=0; i<tamano-1; i++)
-			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i))
-				mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
+				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " tiene problemas con los NA de: " + compilador.Compilador.anidamientos.get(i).getValor());
+			}
+	*/
+	if(tamano > 1)
+		for(int i=0; i<tamano-1; i++){
+			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
+				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc);
+				break;
+			}
+		}
+		
 }
 
 boolean nameManglingNs(String sval) {
@@ -914,8 +933,10 @@ int sePuedeUsar(String sval){
 						}
 						//No se admite recursion
 						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
-						if(sval.equals(recurAux[recurAux.length-1]))
-							mostrarMensaje("No se permite recursion.");
+						if(sval.equals(recurAux[recurAux.length-1])){
+							//mostrarMensaje("No se permite recursion.");
+							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido.");
+						}
 						//Esta al alcance?
 						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
 							return 0;							
@@ -1035,7 +1056,8 @@ void setearProc(String sval, String cantParametros, String na, String ns){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
-	
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+
 	if (na.equals(ns)) {
 		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setTipo("NA_PROC");
 		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
@@ -1085,7 +1107,10 @@ void setearAmbito(String sval){
 				sval = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
 		}
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
-	}		
+	}	
+	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Proc") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+	}	
 
 }
 

@@ -468,7 +468,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE $$2",
 };
 
-//#line 654 "gramatica.y"
+//#line 656 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -555,7 +555,8 @@ void comprobarRango(String sval, boolean negativo){
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
-				mostrarMensaje("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		//ES ENTERO Y NEGATIVO
@@ -577,7 +578,8 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(sval);
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
-				mostrarMensaje("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 	//ES POSITIVO	
@@ -590,7 +592,8 @@ void comprobarRango(String sval, boolean negativo){
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
-				mostrarMensaje("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		// ES ENTERA Y POSITIVA
@@ -601,7 +604,8 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(sval);
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
-				mostrarMensaje("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				//mostrarMensaje("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
 			}
 		}
 		
@@ -628,10 +632,23 @@ void verificarNa(String sval, String proc){
 	
 	compilador.Compilador.anidamientos.add(Integer.parseInt(sval));
 	int tamano = compilador.Compilador.anidamientos.size();
+	/*
 	if(tamano > 1)
 		for(int i=0; i<tamano-1; i++)
-			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i))
-				mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
+				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " tiene problemas con los NA de: " + compilador.Compilador.anidamientos.get(i).getValor());
+			}
+	*/
+	if(tamano > 1)
+		for(int i=0; i<tamano-1; i++){
+			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
+				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc);
+				break;
+			}
+		}
+		
 }
 
 boolean nameManglingNs(String sval) {
@@ -732,8 +749,10 @@ int sePuedeUsar(String sval){
 						}
 						//No se admite recursion
 						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
-						if(sval.equals(recurAux[recurAux.length-1]))
-							mostrarMensaje("No se permite recursion.");
+						if(sval.equals(recurAux[recurAux.length-1])){
+							//mostrarMensaje("No se permite recursion.");
+							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido.");
+						}
 						//Esta al alcance?
 						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
 							return 0;							
@@ -853,7 +872,8 @@ void setearProc(String sval, String cantParametros, String na, String ns){
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setCantParametros(Integer.parseInt(cantParametros));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNa(Integer.parseInt(na));
 	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setNs(Integer.parseInt(ns));
-	
+	compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+
 	if (na.equals(ns)) {
 		compilador.Compilador.tablaSimbolo.get(na).get(compilador.Compilador.tablaSimbolo.get(na).size()-2).setTipo("NA_PROC");
 		compilador.Compilador.tablaSimbolo.get(ns).get(compilador.Compilador.tablaSimbolo.get(ns).size()-1).setTipo("NS_PROC");
@@ -903,7 +923,10 @@ void setearAmbito(String sval){
 				sval = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
 		}
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
-	}		
+	}	
+	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Proc") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+	}	
 
 }
 
@@ -925,7 +948,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 857 "Parser.java"
+//#line 880 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1159,7 +1182,7 @@ case 13:
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
 		setearProc(val_peek(9).sval, "0", val_peek(4).sval, val_peek(0).sval);
-		setearAmbito(val_peek(9).sval);
+		/*setearAmbito($2.sval);*/
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + val_peek(9).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(9).sval) == 2){
@@ -1181,14 +1204,14 @@ case 14:
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
 		setearProc(val_peek(11).sval, "1", val_peek(4).sval, val_peek(0).sval);
-		setearAmbito(val_peek(11).sval);
+		/*setearAmbito($2.sval);*/
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(11).sval) == 2){
 			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
 			yyerror(val_peek(11).sval + " esta Redeclarada.");
 		}
-		verificarNa(val_peek(4).sval,val_peek(0).sval);
+		verificarNa(val_peek(4).sval,val_peek(11).sval);
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 	}
 	else{
@@ -1203,14 +1226,14 @@ case 15:
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
 		setearProc(val_peek(14).sval, "2", val_peek(4).sval, val_peek(0).sval);
-		setearAmbito(val_peek(14).sval);
+		/*setearAmbito($2.sval);*/
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(14).sval) == 2){
 			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
 			yyerror(val_peek(14).sval + " esta Redeclarada.");
 		}
-		verificarNa(val_peek(4).sval,val_peek(0).sval);
+		verificarNa(val_peek(4).sval,val_peek(14).sval);
 		setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval);
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 	}
@@ -1226,14 +1249,14 @@ case 16:
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
 		setearProc(val_peek(17).sval, "3", val_peek(4).sval, val_peek(0).sval);
-		setearAmbito(val_peek(17).sval);
+		/*setearAmbito($2.sval);*/
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + val_peek(17).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(17).sval) == 2){
 			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
 			yyerror(val_peek(17).sval + " esta Redeclarada.");
 		}
-		verificarNa(val_peek(4).sval,val_peek(0).sval);
+		verificarNa(val_peek(4).sval,val_peek(17).sval);
 		setearAmbitoyDeclarada(val_peek(14).sval,val_peek(15).sval);
 		setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval);
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
@@ -1302,9 +1325,10 @@ case 27:
 //#line 204 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito(val_peek(4).sval);
+	
 	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setCantParametros(1);
+	setearAmbito(val_peek(4).sval);
 	
 	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(4).sval);
@@ -1336,12 +1360,12 @@ case 27:
 }
 break;
 case 28:
-//#line 240 "gramatica.y"
+//#line 241 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito(val_peek(6).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(2);
+	setearAmbito(val_peek(6).sval);
 	
 	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(6).sval);
@@ -1377,13 +1401,13 @@ case 28:
 }
 break;
 case 29:
-//#line 280 "gramatica.y"
+//#line 281 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-	setearAmbito(val_peek(8).sval);
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setCantParametros(3);
-	
+	setearAmbito(val_peek(8).sval);
+
 	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(8).sval);
 	if(aux == 1 || aux == 2){
@@ -1423,13 +1447,14 @@ case 29:
 }
 break;
 case 30:
-//#line 324 "gramatica.y"
+//#line 325 "gramatica.y"
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
-	setearAmbito(val_peek(3).sval);
+	
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setCantParametros(0);
-	
+	setearAmbito(val_peek(3).sval);
+
 	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
 	int aux = sePuedeUsar(val_peek(3).sval);
 	if(aux == 1 || aux == 2){
@@ -1453,13 +1478,13 @@ case 30:
 }
 break;
 case 31:
-//#line 352 "gramatica.y"
+//#line 354 "gramatica.y"
 {
 	yyerror("Error: Cantidad no permitida de parametros, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 32:
-//#line 356 "gramatica.y"
+//#line 358 "gramatica.y"
 {
 	if (PolacaInversa.getFlagITE()){
 		polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
@@ -1469,13 +1494,13 @@ case 32:
 }
 break;
 case 33:
-//#line 364 "gramatica.y"
+//#line 366 "gramatica.y"
 {
 	mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
 }
 break;
 case 34:
-//#line 370 "gramatica.y"
+//#line 372 "gramatica.y"
 {
 	polaca.borrarVariablesControl();
 	Par pasoEnBlanco = new Par("");
@@ -1490,13 +1515,13 @@ case 34:
 }
 break;
 case 35:
-//#line 385 "gramatica.y"
+//#line 387 "gramatica.y"
 {
 	polaca.borrarPasoPolaca();
 }
 break;
 case 36:
-//#line 391 "gramatica.y"
+//#line 393 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1506,7 +1531,7 @@ case 36:
 }
 break;
 case 37:
-//#line 401 "gramatica.y"
+//#line 403 "gramatica.y"
 {
 	polaca.agregarVariableControl(val_peek(2).sval);
 	Par id = new Par(val_peek(2).sval);
@@ -1517,7 +1542,7 @@ case 37:
 }
 break;
 case 38:
-//#line 412 "gramatica.y"
+//#line 414 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1526,7 +1551,7 @@ case 38:
 }
 break;
 case 39:
-//#line 419 "gramatica.y"
+//#line 421 "gramatica.y"
 {
 	Par id1 = new Par(val_peek(2).sval);
 	Par id2 = new Par(val_peek(0).sval);
@@ -1537,7 +1562,7 @@ case 39:
 }
 break;
 case 40:
-//#line 428 "gramatica.y"
+//#line 430 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1546,43 +1571,43 @@ case 40:
 }
 break;
 case 41:
-//#line 437 "gramatica.y"
+//#line 439 "gramatica.y"
 {
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 42:
-//#line 442 "gramatica.y"
+//#line 444 "gramatica.y"
 {
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 43:
-//#line 447 "gramatica.y"
+//#line 449 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 44:
-//#line 453 "gramatica.y"
+//#line 455 "gramatica.y"
 {
 }
 break;
 case 45:
-//#line 456 "gramatica.y"
+//#line 458 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 461 "gramatica.y"
+//#line 463 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 47:
-//#line 465 "gramatica.y"
+//#line 467 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -1591,27 +1616,27 @@ case 47:
 }
 break;
 case 48:
-//#line 474 "gramatica.y"
+//#line 476 "gramatica.y"
 {
 }
 break;
 case 49:
-//#line 477 "gramatica.y"
+//#line 479 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 480 "gramatica.y"
+//#line 482 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 483 "gramatica.y"
+//#line 485 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 488 "gramatica.y"
+//#line 490 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1621,7 +1646,7 @@ case 52:
 }
 break;
 case 53:
-//#line 498 "gramatica.y"
+//#line 500 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1631,22 +1656,22 @@ case 53:
 }
 break;
 case 54:
-//#line 508 "gramatica.y"
+//#line 510 "gramatica.y"
 {
 }
 break;
 case 55:
-//#line 513 "gramatica.y"
+//#line 515 "gramatica.y"
 {
 }
 break;
 case 56:
-//#line 516 "gramatica.y"
+//#line 518 "gramatica.y"
 {
 }
 break;
 case 57:
-//#line 521 "gramatica.y"
+//#line 523 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	if(sePuedeUsar(val_peek(3).sval) == 1){
@@ -1660,56 +1685,56 @@ case 57:
 }
 break;
 case 58:
-//#line 533 "gramatica.y"
+//#line 535 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 59:
-//#line 539 "gramatica.y"
+//#line 541 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 60:
-//#line 544 "gramatica.y"
+//#line 546 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 61:
-//#line 549 "gramatica.y"
+//#line 551 "gramatica.y"
 {
 }
 break;
 case 62:
-//#line 554 "gramatica.y"
+//#line 556 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 63:
-//#line 559 "gramatica.y"
+//#line 561 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 64:
-//#line 564 "gramatica.y"
+//#line 566 "gramatica.y"
 {
 }
 break;
 case 65:
-//#line 569 "gramatica.y"
+//#line 571 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 572 "gramatica.y"
+//#line 574 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	if(sePuedeUsar(val_peek(0).sval) == 1){
@@ -1721,68 +1746,68 @@ case 66:
 }
 break;
 case 67:
-//#line 584 "gramatica.y"
+//#line 586 "gramatica.y"
 {
 }
 break;
 case 68:
-//#line 587 "gramatica.y"
+//#line 589 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 590 "gramatica.y"
+//#line 592 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 593 "gramatica.y"
+//#line 595 "gramatica.y"
 {
 }
 break;
 case 71:
-//#line 596 "gramatica.y"
+//#line 598 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 599 "gramatica.y"
+//#line 601 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 602 "gramatica.y"
+//#line 604 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 74:
-//#line 608 "gramatica.y"
+//#line 610 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 611 "gramatica.y"
+//#line 613 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 616 "gramatica.y"
+//#line 618 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 621 "gramatica.y"
+//#line 623 "gramatica.y"
 {
 }
 break;
 case 78:
-//#line 624 "gramatica.y"
+//#line 626 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 628 "gramatica.y"
+//#line 630 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -1791,13 +1816,13 @@ case 79:
 }
 break;
 case 80:
-//#line 635 "gramatica.y"
+//#line 637 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 81:
-//#line 641 "gramatica.y"
+//#line 643 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -1806,12 +1831,12 @@ case 81:
 }
 break;
 case 82:
-//#line 648 "gramatica.y"
+//#line 650 "gramatica.y"
 {
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1738 "Parser.java"
+//#line 1763 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

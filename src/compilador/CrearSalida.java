@@ -35,21 +35,21 @@ public class CrearSalida {
 		       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
 	    	   for(int i=0; i<aux.size(); i++) {
 	    		   if (aux.get(i).getTipo().equals("Proc")) { 
-	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t CantParametros: " + aux.get(i).getCantParametros() + "\t NA: " + aux.get(i).getNa() + "\t NS: " + aux.get(i).getNs());
+	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t CantParametros: " + aux.get(i).getCantParametros() + "\t NA: " + aux.get(i).getNa() + "\t NS: " + aux.get(i).getNs());
 	    		   }
 	    		   else if (aux.get(i).getTipo().equals("PARAM_PROC")) {
-	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoParametro: " + aux.get(i).getTipoParametro() + "\t pasajeParametro: " + aux.get(i).getPasajeParametro() );
+	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoParametro: " + aux.get(i).getTipoParametro() + "\t pasajeParametro: " + aux.get(i).getPasajeParametro() );
 	    		   }
 	    		   else {
 	    			   if(aux.get(i).getUso().equals("ID"))
-	    				   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoVar: " + aux.get(i).getTipoParametro() );
+	    				   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() +  "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoVar: " + aux.get(i).getTipoParametro() );
 	    			   else if(aux.get(i).getUso().equals("CTE")) {
 	    				   if(aux.get(i).getTipo().equals("int"))
-	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + "CTE" + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
+	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    				   else if(aux.get(i).getTipo().equals("float"))
-	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + "CTE" + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
+	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    				   else
-	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t Ambito: " + aux.get(i).getAmbito() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
+	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    			   }
 	    				   
 	    		   } 

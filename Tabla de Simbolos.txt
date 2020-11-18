@@ -2,10 +2,23 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a1	 TipoDeUso: PARAM_PROC	 Declarada: true	 tipoParametro: FLOAT	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 TipoDeUso: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: a1	 Value: a1	 Uso: ID	 Ambito: a1:Main	 TipoDeUso: Proc	 Declarada: true	 CantParametros: 1	 NA: 2	 NS: 2
-Clave: 2.0E31	 Value: 2.0E31	 Uso: CTE	 Ambito: 2.0E31:Main	 TipoDeUso: CTE	 Declarada: false	 tipoCTE: FLOAT
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 TipoDeUso: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a1	 TipoDeUso: NA_PROC	 Declarada: false	 tipoCTE: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a1	 TipoDeUso: NS_PROC	 Declarada: false	 tipoCTE: INTEGER
+Clave: d1	 Value: d1	 Uso: ID	 TipoDeUso: Proc	 Ambito: d1:Main:a1:b1:c1	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 2
+Clave: a1	 Value: a1	 Uso: ID	 TipoDeUso: Proc	 Ambito: a1:Main	 Declarada: true	 CantParametros: 0	 NA: 3	 NS: 2
+Clave: f1	 Value: f1	 Uso: ID	 TipoDeUso: Proc	 Ambito: f1:Main:a1:e1	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 2
+Clave: c1	 Value: c1	 Uso: ID	 TipoDeUso: Proc	 Ambito: c1:Main:a1:b1	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 2
+Clave: e1	 Value: e1	 Uso: ID	 TipoDeUso: Proc	 Ambito: e1:Main:a1	 Declarada: true	 CantParametros: 0	 NA: 2	 NS: 2
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 3	 Value: 3	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 3:Main:a1	 Declarada: false	 tipoCTE: INTEGER
+Clave: b1	 Value: b1	 Uso: ID	 TipoDeUso: Proc	 Ambito: b1:Main:a1	 Declarada: true	 CantParametros: 0	 NA: 2	 NS: 2
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 2:Main:a1:b1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1:b1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1:b1:c1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1:b1:c1:d1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 2:Main:a1:e1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1:e1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:a1:e1:f1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1:Main:a1:b1:c1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1:Main:a1:e1:f1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0:Main:a1:b1:c1:d1	 Declarada: false	 tipoCTE: INTEGER

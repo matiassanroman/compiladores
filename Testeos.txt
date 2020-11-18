@@ -1,7 +1,26 @@
 INTEGER a,b;
 
-a = 20.f+30;
+PROC a1() NA=3_i, NS=2_i{
 
-PROC a1(FLOAT x) NA=2_i, NS=2_i{
-	a = a;
+	PROC b1() NA=2_i, NS=2_i{
+	
+		PROC c1() NA=1_i, NS=2_i{
+		
+			PROC d1() NA=0_i, NS=2_i{
+				a1();
+			}
+		}
+	}
+		
+	PROC e1() NA=2_i, NS=2_i{
+		
+		PROC f1() NA=1_i, NS=2_i{
+			f1();
+			e1();
+			a1();
+			b1();
+			c1();
+		}
+	}
+	
 }
