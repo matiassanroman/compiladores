@@ -53,14 +53,16 @@ listaVariables : listaVariables ',' identificador
 {
 	setearAmbitoyDeclarada($3.sval,"");
 	if(sePuedeUsar($3.sval) == 2){
-		mostrarMensaje($3.sval + " esta Redeclarada.");
+		//mostrarMensaje($3.sval + " esta Redeclarada.");
+		yyerror($3.sval + " esta Redeclarada.");
 	}
 }
 			   | identificador
 {
 	setearAmbitoyDeclarada($1.sval,"");
 	if(sePuedeUsar($1.sval) == 2){
-		mostrarMensaje($1.sval + " esta Redeclarada.");
+		//mostrarMensaje($1.sval + " esta Redeclarada.");
+		yyerror($1.sval + " esta Redeclarada.");
 	}
 }
 			   ;
@@ -83,12 +85,14 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($7.sval,$11.sval);
 		if(sePuedeUsar($2.sval) == 2){
-			mostrarMensaje($2.sval + " esta Redeclarada.");
+			//mostrarMensaje($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada.");
 		}
 		verificarNa($7.sval,$2.sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		//mostrarMensaje("NA o NS no es una CTE ENTERA");
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 	
 }
@@ -102,13 +106,15 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($9.sval,$13.sval);
 		if(sePuedeUsar($2.sval) == 2){
-			mostrarMensaje($2.sval + " esta Redeclarada.");
+			//mostrarMensaje($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada.");
 		}
 		verificarNa($9.sval,$13.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		//mostrarMensaje("NA o NS no es una CTE ENTERA");
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
@@ -120,14 +126,16 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($12.sval,$16.sval);
 		if(sePuedeUsar($2.sval) == 2){
-			mostrarMensaje($2.sval + " esta Redeclarada.");
+			//mostrarMensaje($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada.");
 		}
 		verificarNa($12.sval,$16.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		//mostrarMensaje("NA o NS no es una CTE ENTERA");
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
@@ -139,7 +147,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($15.sval,$19.sval);
 		if(sePuedeUsar($2.sval) == 2){
-			mostrarMensaje($2.sval + " esta Redeclarada.");
+			//mostrarMensaje($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada.");
 		}
 		verificarNa($15.sval,$19.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
@@ -147,7 +156,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoyDeclarada($11.sval,$10.sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		//mostrarMensaje("NA o NS no es una CTE ENTERA");
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador error ')' NA '=' CTE ',' NS '=' CTE
@@ -201,21 +211,26 @@ sentenciaEjecutable : asignacion
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam($1.sval))
-			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam($1.sval)){
+			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 	
 	//Compruebo que el parametro real se pueda usar
 	int aux2 = sePuedeUsar($3.sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
 	}
 	
 
@@ -232,25 +247,31 @@ sentenciaEjecutable : asignacion
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam($1.sval))
-			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam($1.sval)){
+			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 	//Compruebo que el parametro real se pueda usar
 	int aux2 = sePuedeUsar($3.sval);
 	int aux3 = sePuedeUsar($5.sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
 	}
 	if(aux3 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
 	}
 
 }
@@ -266,15 +287,19 @@ sentenciaEjecutable : asignacion
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam($1.sval))
-			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam($1.sval)){
+			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 	//Compruebo que el parametro real se pueda usar
@@ -282,13 +307,16 @@ sentenciaEjecutable : asignacion
 	int aux3 = sePuedeUsar($5.sval);
 	int aux4 = sePuedeUsar($7.sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
 	}
 	if(aux3 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
 	}
 	if(aux4 == 1){
-		mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
 	}
 
 }
@@ -303,15 +331,19 @@ sentenciaEjecutable : asignacion
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
 		}
 		else{
 			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam($1.sval))
+		if(!verificarCantParam($1.sval)){
 			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 
@@ -489,7 +521,8 @@ asignacion : identificador '=' expresion ';'
 {
 	setearAmbito($1.sval);
 	if(sePuedeUsar($1.sval) == 1){
-		mostrarMensaje($1.sval + " No esta declarada.");
+		//mostrarMensaje($1.sval + " No esta declarada.");
+		yyerror($1.sval + " No esta declarada.");
 	}
 	Par id =  new Par($1.sval);
 	Par asig = new Par($2.sval);
@@ -538,8 +571,9 @@ factor : constante
 	   | identificador
 { 
 	setearAmbito($1.sval);
-	if(sePuedeUsar($1.sval) == 1)
-		{mostrarMensaje($1.sval + " No esta declarada.");
+	if(sePuedeUsar($1.sval) == 1){
+		//mostrarMensaje($1.sval + " No esta declarada.");
+		yyerror($1.sval + " No esta declarada.");
 	}
     Par id =  new Par($1.sval);
 	polaca.agregarPaso(id);

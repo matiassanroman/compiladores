@@ -468,7 +468,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE $$2",
 };
 
-//#line 620 "gramatica.y"
+//#line 654 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,21 +1129,23 @@ case 9:
 {
 	setearAmbitoyDeclarada(val_peek(0).sval,"");
 	if(sePuedeUsar(val_peek(0).sval) == 2){
-		mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");
+		/*mostrarMensaje($3.sval + " esta Redeclarada.");*/
+		yyerror(val_peek(0).sval + " esta Redeclarada.");
 	}
 }
 break;
 case 10:
-//#line 60 "gramatica.y"
+//#line 61 "gramatica.y"
 {
 	setearAmbitoyDeclarada(val_peek(0).sval,"");
 	if(sePuedeUsar(val_peek(0).sval) == 2){
-		mostrarMensaje(val_peek(0).sval + " esta Redeclarada.");
+		/*mostrarMensaje($1.sval + " esta Redeclarada.");*/
+		yyerror(val_peek(0).sval + " esta Redeclarada.");
 	}
 }
 break;
 case 11:
-//#line 69 "gramatica.y"
+//#line 71 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
@@ -1152,7 +1154,7 @@ case 11:
 }
 break;
 case 13:
-//#line 78 "gramatica.y"
+//#line 80 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
@@ -1161,18 +1163,20 @@ case 13:
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + val_peek(9).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(9).sval) == 2){
-			mostrarMensaje(val_peek(9).sval + " esta Redeclarada.");
+			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
+			yyerror(val_peek(9).sval + " esta Redeclarada.");
 		}
 		verificarNa(val_peek(4).sval,val_peek(9).sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		/*mostrarMensaje("NA o NS no es una CTE ENTERA");*/
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 	
 }
 break;
 case 14:
-//#line 97 "gramatica.y"
+//#line 101 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
@@ -1181,18 +1185,20 @@ case 14:
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(11).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(11).sval) == 2){
-			mostrarMensaje(val_peek(11).sval + " esta Redeclarada.");
+			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
+			yyerror(val_peek(11).sval + " esta Redeclarada.");
 		}
 		verificarNa(val_peek(4).sval,val_peek(0).sval);
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		/*mostrarMensaje("NA o NS no es una CTE ENTERA");*/
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 break;
 case 15:
-//#line 115 "gramatica.y"
+//#line 121 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
@@ -1201,19 +1207,21 @@ case 15:
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  val_peek(14).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(14).sval) == 2){
-			mostrarMensaje(val_peek(14).sval + " esta Redeclarada.");
+			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
+			yyerror(val_peek(14).sval + " esta Redeclarada.");
 		}
 		verificarNa(val_peek(4).sval,val_peek(0).sval);
 		setearAmbitoyDeclarada(val_peek(11).sval,val_peek(12).sval);
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		/*mostrarMensaje("NA o NS no es una CTE ENTERA");*/
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 break;
 case 16:
-//#line 134 "gramatica.y"
+//#line 142 "gramatica.y"
 {
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras(val_peek(4).sval, val_peek(0).sval)){
@@ -1222,7 +1230,8 @@ case 16:
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + val_peek(17).sval;
 		setearAmbitoNaNs(val_peek(4).sval,val_peek(0).sval);
 		if(sePuedeUsar(val_peek(17).sval) == 2){
-			mostrarMensaje(val_peek(17).sval + " esta Redeclarada.");
+			/*mostrarMensaje($2.sval + " esta Redeclarada.");*/
+			yyerror(val_peek(17).sval + " esta Redeclarada.");
 		}
 		verificarNa(val_peek(4).sval,val_peek(0).sval);
 		setearAmbitoyDeclarada(val_peek(14).sval,val_peek(15).sval);
@@ -1230,66 +1239,67 @@ case 16:
 		setearAmbitoyDeclarada(val_peek(8).sval,val_peek(9).sval);
 	}
 	else{
-		mostrarMensaje("NA o NS no es una CTE ENTERA");
+		/*mostrarMensaje("NA o NS no es una CTE ENTERA");*/
+		yyerror("NA o NS no es una CTE ENTERA");
 	}
 }
 break;
 case 17:
-//#line 154 "gramatica.y"
+//#line 164 "gramatica.y"
 {
 	yyerror("Error en los parametros de procedimiento en linea nro: "+compilador.Compilador.nroLinea);
 }
 break;
 case 18:
-//#line 160 "gramatica.y"
+//#line 170 "gramatica.y"
 {
 }
 break;
 case 19:
-//#line 165 "gramatica.y"
+//#line 175 "gramatica.y"
 {
 }
 break;
 case 20:
-//#line 168 "gramatica.y"
+//#line 178 "gramatica.y"
 {
 }
 break;
 case 21:
-//#line 171 "gramatica.y"
+//#line 181 "gramatica.y"
 {
 }
 break;
 case 22:
-//#line 174 "gramatica.y"
+//#line 184 "gramatica.y"
 {
 }
 break;
 case 23:
-//#line 177 "gramatica.y"
+//#line 187 "gramatica.y"
 {
 	yyerror("Error: no puede haber un seccion vacia, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 24:
-//#line 183 "gramatica.y"
+//#line 193 "gramatica.y"
 {
 }
 break;
 case 25:
-//#line 186 "gramatica.y"
+//#line 196 "gramatica.y"
 {
 	mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
 }
 break;
 case 26:
-//#line 190 "gramatica.y"
+//#line 200 "gramatica.y"
 {
 	yyerror("Error: Formato de cadena incorrecto, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 27:
-//#line 194 "gramatica.y"
+//#line 204 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(4).sval);
@@ -1300,28 +1310,33 @@ case 27:
 	int aux = sePuedeUsar(val_peek(4).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + val_peek(4).sval + " No esta declarado.");
+			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
+			yyerror("Procedimiento: " + val_peek(4).sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + val_peek(4).sval + " esta Redeclarado.");
+			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
+			yyerror("Procedimiento " + val_peek(4).sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam(val_peek(4).sval))
-			mostrarMensaje("Llamador del procedimiento: " + val_peek(4).sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam(val_peek(4).sval)){
+			/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
+			yyerror("Llamador del procedimiento: " + val_peek(4).sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 	
 	/*Compruebo que el parametro real se pueda usar*/
 	int aux2 = sePuedeUsar(val_peek(2).sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(4).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(4).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
 	}
 	
 
 }
 break;
 case 28:
-//#line 225 "gramatica.y"
+//#line 240 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(6).sval);
@@ -1332,31 +1347,37 @@ case 28:
 	int aux = sePuedeUsar(val_peek(6).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + val_peek(6).sval + " No esta declarado.");
+			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
+			yyerror("Procedimiento: " + val_peek(6).sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + val_peek(6).sval + " esta Redeclarado.");
+			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
+			yyerror("Procedimiento " + val_peek(6).sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam(val_peek(6).sval))
-			mostrarMensaje("Llamador del procedimiento: " + val_peek(6).sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam(val_peek(6).sval)){
+			/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
+			yyerror("Llamador del procedimiento: " + val_peek(6).sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 	/*Compruebo que el parametro real se pueda usar*/
 	int aux2 = sePuedeUsar(val_peek(4).sval);
 	int aux3 = sePuedeUsar(val_peek(2).sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
 	}
 	if(aux3 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
 	}
 
 }
 break;
 case 29:
-//#line 259 "gramatica.y"
+//#line 280 "gramatica.y"
 {
 	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(8).sval);
@@ -1367,15 +1388,19 @@ case 29:
 	int aux = sePuedeUsar(val_peek(8).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + val_peek(8).sval + " No esta declarado.");
+			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
+			yyerror("Procedimiento: " + val_peek(8).sval + " No esta declarado.");
 		}
 		else{
-			mostrarMensaje("Procedimiento " + val_peek(8).sval + " esta Redeclarado.");
+			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
+			yyerror("Procedimiento " + val_peek(8).sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam(val_peek(8).sval))
-			mostrarMensaje("Llamador del procedimiento: " + val_peek(8).sval + " no coincide con la cantidad de parametros de su definicion.");
+		if(!verificarCantParam(val_peek(8).sval)){
+			/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
+			yyerror("Llamador del procedimiento: " + val_peek(8).sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 	/*Compruebo que el parametro real se pueda usar*/
@@ -1383,19 +1408,22 @@ case 29:
 	int aux3 = sePuedeUsar(val_peek(4).sval);
 	int aux4 = sePuedeUsar(val_peek(2).sval);
 	if(aux2 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(6).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(6).sval +  " No declarado.");
 	}
 	if(aux3 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado.");
 	}
 	if(aux4 == 1){
-		mostrarMensaje("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
+		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");*/
+		yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado.");
 	}
 
 }
 break;
 case 30:
-//#line 296 "gramatica.y"
+//#line 324 "gramatica.y"
 {
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(3).sval);
@@ -1406,28 +1434,32 @@ case 30:
 	int aux = sePuedeUsar(val_peek(3).sval);
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
-			mostrarMensaje("Procedimiento: " + val_peek(3).sval + " No esta declarado.");
+			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
+			yyerror("Procedimiento: " + val_peek(3).sval + " No esta declarado.");
 		}
 		else{
 			mostrarMensaje("Procedimiento " + val_peek(3).sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + val_peek(3).sval + " esta Redeclarado.");
 		}
 	}
 	else{
-		if(!verificarCantParam(val_peek(3).sval))
+		if(!verificarCantParam(val_peek(3).sval)){
 			mostrarMensaje("Llamador del procedimiento: " + val_peek(3).sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + val_peek(3).sval + " no coincide con la cantidad de parametros de su definicion.");
+		}
 	}
 
 
 }
 break;
 case 31:
-//#line 320 "gramatica.y"
+//#line 352 "gramatica.y"
 {
 	yyerror("Error: Cantidad no permitida de parametros, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 32:
-//#line 324 "gramatica.y"
+//#line 356 "gramatica.y"
 {
 	if (PolacaInversa.getFlagITE()){
 		polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
@@ -1437,13 +1469,13 @@ case 32:
 }
 break;
 case 33:
-//#line 332 "gramatica.y"
+//#line 364 "gramatica.y"
 {
 	mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
 }
 break;
 case 34:
-//#line 338 "gramatica.y"
+//#line 370 "gramatica.y"
 {
 	polaca.borrarVariablesControl();
 	Par pasoEnBlanco = new Par("");
@@ -1458,13 +1490,13 @@ case 34:
 }
 break;
 case 35:
-//#line 353 "gramatica.y"
+//#line 385 "gramatica.y"
 {
 	polaca.borrarPasoPolaca();
 }
 break;
 case 36:
-//#line 359 "gramatica.y"
+//#line 391 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1474,7 +1506,7 @@ case 36:
 }
 break;
 case 37:
-//#line 369 "gramatica.y"
+//#line 401 "gramatica.y"
 {
 	polaca.agregarVariableControl(val_peek(2).sval);
 	Par id = new Par(val_peek(2).sval);
@@ -1485,7 +1517,7 @@ case 37:
 }
 break;
 case 38:
-//#line 380 "gramatica.y"
+//#line 412 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1494,7 +1526,7 @@ case 38:
 }
 break;
 case 39:
-//#line 387 "gramatica.y"
+//#line 419 "gramatica.y"
 {
 	Par id1 = new Par(val_peek(2).sval);
 	Par id2 = new Par(val_peek(0).sval);
@@ -1505,7 +1537,7 @@ case 39:
 }
 break;
 case 40:
-//#line 396 "gramatica.y"
+//#line 428 "gramatica.y"
 {
 	Par id = new Par(val_peek(2).sval);
 	Par comp = new Par(val_peek(1).sval);
@@ -1514,43 +1546,43 @@ case 40:
 }
 break;
 case 41:
-//#line 405 "gramatica.y"
+//#line 437 "gramatica.y"
 {
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 42:
-//#line 410 "gramatica.y"
+//#line 442 "gramatica.y"
 {
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl(val_peek(0).sval);
 }
 break;
 case 43:
-//#line 415 "gramatica.y"
+//#line 447 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 44:
-//#line 421 "gramatica.y"
+//#line 453 "gramatica.y"
 {
 }
 break;
 case 45:
-//#line 424 "gramatica.y"
+//#line 456 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 429 "gramatica.y"
+//#line 461 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 47:
-//#line 433 "gramatica.y"
+//#line 465 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -1559,27 +1591,27 @@ case 47:
 }
 break;
 case 48:
-//#line 442 "gramatica.y"
+//#line 474 "gramatica.y"
 {
 }
 break;
 case 49:
-//#line 445 "gramatica.y"
+//#line 477 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 448 "gramatica.y"
+//#line 480 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 451 "gramatica.y"
+//#line 483 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 456 "gramatica.y"
+//#line 488 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1589,7 +1621,7 @@ case 52:
 }
 break;
 case 53:
-//#line 466 "gramatica.y"
+//#line 498 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1599,26 +1631,27 @@ case 53:
 }
 break;
 case 54:
-//#line 476 "gramatica.y"
+//#line 508 "gramatica.y"
 {
 }
 break;
 case 55:
-//#line 481 "gramatica.y"
+//#line 513 "gramatica.y"
 {
 }
 break;
 case 56:
-//#line 484 "gramatica.y"
+//#line 516 "gramatica.y"
 {
 }
 break;
 case 57:
-//#line 489 "gramatica.y"
+//#line 521 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	if(sePuedeUsar(val_peek(3).sval) == 1){
-		mostrarMensaje(val_peek(3).sval + " No esta declarada.");
+		/*mostrarMensaje($1.sval + " No esta declarada.");*/
+		yyerror(val_peek(3).sval + " No esta declarada.");
 	}
 	Par id =  new Par(val_peek(3).sval);
 	Par asig = new Par(val_peek(2).sval);
@@ -1627,128 +1660,129 @@ case 57:
 }
 break;
 case 58:
-//#line 500 "gramatica.y"
+//#line 533 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 59:
-//#line 506 "gramatica.y"
+//#line 539 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 60:
-//#line 511 "gramatica.y"
+//#line 544 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 61:
-//#line 516 "gramatica.y"
+//#line 549 "gramatica.y"
 {
 }
 break;
 case 62:
-//#line 521 "gramatica.y"
+//#line 554 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 63:
-//#line 526 "gramatica.y"
+//#line 559 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 64:
-//#line 531 "gramatica.y"
+//#line 564 "gramatica.y"
 {
 }
 break;
 case 65:
-//#line 536 "gramatica.y"
+//#line 569 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 539 "gramatica.y"
+//#line 572 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
-	if(sePuedeUsar(val_peek(0).sval) == 1)
-		{mostrarMensaje(val_peek(0).sval + " No esta declarada.");
+	if(sePuedeUsar(val_peek(0).sval) == 1){
+		/*mostrarMensaje($1.sval + " No esta declarada.");*/
+		yyerror(val_peek(0).sval + " No esta declarada.");
 	}
     Par id =  new Par(val_peek(0).sval);
 	polaca.agregarPaso(id);
 }
 break;
 case 67:
-//#line 550 "gramatica.y"
+//#line 584 "gramatica.y"
 {
 }
 break;
 case 68:
-//#line 553 "gramatica.y"
+//#line 587 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 556 "gramatica.y"
+//#line 590 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 559 "gramatica.y"
+//#line 593 "gramatica.y"
 {
 }
 break;
 case 71:
-//#line 562 "gramatica.y"
+//#line 596 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 565 "gramatica.y"
+//#line 599 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 568 "gramatica.y"
+//#line 602 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 74:
-//#line 574 "gramatica.y"
+//#line 608 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 577 "gramatica.y"
+//#line 611 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 582 "gramatica.y"
+//#line 616 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 587 "gramatica.y"
+//#line 621 "gramatica.y"
 {
 }
 break;
 case 78:
-//#line 590 "gramatica.y"
+//#line 624 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 594 "gramatica.y"
+//#line 628 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -1757,13 +1791,13 @@ case 79:
 }
 break;
 case 80:
-//#line 601 "gramatica.y"
+//#line 635 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 81:
-//#line 607 "gramatica.y"
+//#line 641 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -1772,12 +1806,12 @@ case 81:
 }
 break;
 case 82:
-//#line 614 "gramatica.y"
+//#line 648 "gramatica.y"
 {
 	/*yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	*/
 }
 break;
-//#line 1704 "Parser.java"
+//#line 1738 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
