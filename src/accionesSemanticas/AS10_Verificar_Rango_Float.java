@@ -46,6 +46,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 				}
 				
 				s.setTipo("float");
+				s.setTipoParametro("FLOAT");
 				
 				if(!tablaSimbolo.containsKey(s.getValor()) ) {
 					ArrayList<Simbolo> list =new ArrayList<Simbolo>();

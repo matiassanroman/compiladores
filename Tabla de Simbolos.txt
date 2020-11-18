@@ -2,11 +2,10 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: a1	 Value: a1	 Uso: ID	 Ambito: a1:Main	 Tipo: Proc	 Declarada: true	 CantParametros: 3	 NA: 15	 NS: 1
-Clave: 15	 Value: 15	 Uso: CTE	 Ambito: 15:Main:a1	 Tipo: NA_PROC	 Declarada: false	 tipoVar: null
-Clave: z	 Value: z	 Uso: ID	 Ambito: z:Main:a1	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: FLOAT	 pasajeParametro: COPIA VALOR
-Clave: y	 Value: y	 Uso: ID	 Ambito: y:Main:a1	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true	 tipoVar: INTEGER
-Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a1	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: FLOAT	 pasajeParametro: COPIA VALOR
-Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main:a1	 Tipo: NS_PROC	 Declarada: false	 tipoVar: null
+Clave: x	 Value: x	 Uso: ID	 Ambito: x:Main:a1	 TipoDeUso: PARAM_PROC	 Declarada: true	 tipoParametro: FLOAT	 pasajeParametro: COPIA VALOR
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 TipoDeUso: Var	 Declarada: true	 tipoVar: INTEGER
+Clave: a1	 Value: a1	 Uso: ID	 Ambito: a1:Main	 TipoDeUso: Proc	 Declarada: true	 CantParametros: 1	 NA: 2	 NS: 2
+Clave: 2.0E31	 Value: 2.0E31	 Uso: CTE	 Ambito: 2.0E31:Main	 TipoDeUso: CTE	 Declarada: false	 tipoCTE: FLOAT
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 TipoDeUso: Var	 Declarada: true	 tipoVar: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a1	 TipoDeUso: NA_PROC	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a1	 TipoDeUso: NS_PROC	 Declarada: false	 tipoCTE: INTEGER

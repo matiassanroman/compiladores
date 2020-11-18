@@ -28,7 +28,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 		if(buffer.toString().contains("_") && buffer.toString().contains("i")) {
 			this.s = new Simbolo(buffer.toString().substring(0, buffer.toString().length()-2)); 
 			s.setTipo("int");
-			
+			s.setTipoParametro("INTEGER");
 			// Si la cte no esta la agrego y sino retorno  referencia
 			if(!tablaSimbolo.containsKey(s.getValor()) ) {
 				ArrayList<Simbolo> list =new ArrayList<Simbolo>();
