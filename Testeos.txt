@@ -1,13 +1,16 @@
-INTEGER a,b;
+INTEGER x;
 
 PROC a1() NA=3_i, NS=2_i{
-
-	PROC b1() NA=2_i, NS=2_i{
 	
-		PROC c1() NA=1_i, NS=2_i{
+	INTEGER x;
+	PROC b1() NA=2_i, NS=2_i{
 		
+		x = 20_i;
+		PROC c1() NA=1_i, NS=2_i{
+			
+			x = 20_i;
 			PROC d1() NA=0_i, NS=2_i{
-				a1();
+				x = 20_i;
 			}
 		}
 	}
@@ -15,12 +18,10 @@ PROC a1() NA=3_i, NS=2_i{
 	PROC e1() NA=2_i, NS=2_i{
 		
 		PROC f1() NA=1_i, NS=2_i{
-			f1();
+			x = 22_i;
 			e1();
-			a1();
-			b1();
-			c1();
 		}
-	}
-	
+	}	
 }
+
+
