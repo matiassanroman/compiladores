@@ -1,27 +1,22 @@
-INTEGER x;
+INTEGER a,b;
 
-PROC a1() NA=3_i, NS=2_i{
-	
-	INTEGER x;
-	PROC b1() NA=2_i, NS=2_i{
-		
-		x = 20_i;
-		PROC c1() NA=1_i, NS=2_i{
-			
-			x = 20_i;
-			PROC d1() NA=0_i, NS=2_i{
-				x = 20_i;
-			}
-		}
-	}
-		
-	PROC e1() NA=2_i, NS=2_i{
-		
-		PROC f1() NA=1_i, NS=2_i{
-			x = 22_i;
-			e1();
-		}
-	}	
+a = c;
+
+FLOAT a;
+
+PROC asignacion(INTEGER asig1, FLOAT asig2) NA=1_i, NS=1_i{
+	INTEGER g;
+	FLOAT g;	
 }
+		
+PROC asignacion(INTEGER h) NA=1_i, NS=1_i{
+		INTEGER h;
+}
+
+asignacion(a,d);
+
+asignacion2();
+
+
 
 

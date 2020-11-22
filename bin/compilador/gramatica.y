@@ -41,7 +41,7 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
 
 sentenciaDeclarativa : tipo listaVariables ';'
 {
-	mostrarMensaje("Declaracion de una o mas variables en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Declaracion de una o mas variables en linea nro: " + compilador.Compilador.nroLinea);
 	setearTipoParam($1.sval);
 }     
 					 | declaracionProcedimiento
@@ -54,7 +54,7 @@ listaVariables : listaVariables ',' identificador
 	setearAmbitoyDeclarada($3.sval,"");
 	if(sePuedeUsar($3.sval) == 2){
 		//mostrarMensaje($3.sval + " esta Redeclarada.");
-		yyerror($3.sval + " esta Redeclarada.");
+		yyerror($3.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 }
 			   | identificador
@@ -62,14 +62,14 @@ listaVariables : listaVariables ',' identificador
 	setearAmbitoyDeclarada($1.sval,"");
 	if(sePuedeUsar($1.sval) == 2){
 		//mostrarMensaje($1.sval + " esta Redeclarada.");
-		yyerror($1.sval + " esta Redeclarada.");
+		yyerror($1.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 }
 			   ;
 
 declaracionProcedimiento : encabezadoProc bloqueProc
 {
-	mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
 	if(!(compilador.Compilador.anidamientos.size() == 0))
 		compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
@@ -78,7 +78,7 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
-	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($7.sval, $11.sval)){
 		setearProc($2.sval, "0", $7.sval, $11.sval);
 		//setearAmbito($2.sval);
@@ -86,7 +86,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoNaNs($7.sval,$11.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
-			yyerror($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		verificarNa($7.sval,$2.sval);
 	}
@@ -99,7 +99,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 
 				 | PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($9.sval, $13.sval)){
 		setearProc($2.sval, "1", $9.sval, $13.sval);
 		//setearAmbito($2.sval);
@@ -107,7 +107,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoNaNs($9.sval,$13.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
-			yyerror($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		verificarNa($9.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
@@ -119,7 +119,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($12.sval, $16.sval)){
 		setearProc($2.sval, "2", $12.sval, $16.sval);
 		//setearAmbito($2.sval);
@@ -127,7 +127,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoNaNs($12.sval,$16.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
-			yyerror($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		verificarNa($12.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
@@ -140,7 +140,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($15.sval, $19.sval)){
 		setearProc($2.sval, "3", $15.sval, $19.sval);
 		//setearAmbito($2.sval);
@@ -148,7 +148,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoNaNs($15.sval,$19.sval);
 		if(sePuedeUsar($2.sval) == 2){
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
-			yyerror($2.sval + " esta Redeclarada.");
+			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		verificarNa($15.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
@@ -194,7 +194,7 @@ sentenciaEjecutable : asignacion
 }
 					| OUT '(' CADENA ')' ';'
 {
-	mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
 }                 
 					| OUT '(' error ')' ';'
 {
@@ -202,7 +202,7 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ')' ';'
 {
-	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
@@ -213,17 +213,17 @@ sentenciaEjecutable : asignacion
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
-			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		else{
 			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
-			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
 		if(!verificarCantParam($1.sval)){
 			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	
@@ -231,7 +231,7 @@ sentenciaEjecutable : asignacion
 	int aux2 = sePuedeUsar($3.sval);
 	if(aux2 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	
 
@@ -239,7 +239,7 @@ sentenciaEjecutable : asignacion
 
 					| identificador '(' identificador ',' identificador ')' ';'
 {
-	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
 	setearAmbito($1.sval);
@@ -249,17 +249,17 @@ sentenciaEjecutable : asignacion
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
-			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		else{
 			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
-			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
 		if(!verificarCantParam($1.sval)){
 			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 
@@ -268,18 +268,18 @@ sentenciaEjecutable : asignacion
 	int aux3 = sePuedeUsar($5.sval);
 	if(aux2 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	if(aux3 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 
 }
 
 					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
 {
-	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
 	setearAmbito($1.sval);
@@ -289,17 +289,17 @@ sentenciaEjecutable : asignacion
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
-			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		else{
 			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
-			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
 		if(!verificarCantParam($1.sval)){
 			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 
@@ -309,21 +309,21 @@ sentenciaEjecutable : asignacion
 	int aux4 = sePuedeUsar($7.sval);
 	if(aux2 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	if(aux3 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	if(aux4 == 1){
 		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 
 }
 				| identificador '(' ')' ';'
 {
-	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
@@ -334,17 +334,17 @@ sentenciaEjecutable : asignacion
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
-			yyerror("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		else{
 			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
-			yyerror("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
 		if(!verificarCantParam($1.sval)){
 			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 
@@ -364,7 +364,7 @@ sentenciaEjecutable : asignacion
 }
 					| cicloFor
 {
-	mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
+	//mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
 }
 					;
 
@@ -524,7 +524,7 @@ asignacion : identificador '=' expresion ';'
 	setearAmbito($1.sval);
 	if(sePuedeUsar($1.sval) == 1){
 		//mostrarMensaje($1.sval + " No esta declarada.");
-		yyerror($1.sval + " No esta declarada.");
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	Par id =  new Par($1.sval);
 	Par asig = new Par($2.sval);
@@ -575,7 +575,7 @@ factor : constante
 	setearAmbito($1.sval);
 	if(sePuedeUsar($1.sval) == 1){
 		//mostrarMensaje($1.sval + " No esta declarada.");
-		yyerror($1.sval + " No esta declarada.");
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
     Par id =  new Par($1.sval);
 	polaca.agregarPaso(id);
@@ -740,7 +740,7 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
 				//mostrarMensaje("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
-				yyerror("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos. Error en linea: " + compilador.Compilador.nroLinea);
 			}
 		}
 		//ES ENTERO Y NEGATIVO
@@ -763,7 +763,7 @@ void comprobarRango(String sval, boolean negativo){
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
 				//mostrarMensaje("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
-				yyerror("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA negativa esta fuera del rango por lo tanto no aparece en la tabla de simbolos. Error en linea: " + compilador.Compilador.nroLinea);
 			}
 		}
 	//ES POSITIVO	
@@ -777,7 +777,7 @@ void comprobarRango(String sval, boolean negativo){
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
 				//mostrarMensaje("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
-				yyerror("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE FLOAT positiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos. Error en linea: " + compilador.Compilador.nroLinea);
 			}
 		}
 		// ES ENTERA Y POSITIVA
@@ -789,7 +789,7 @@ void comprobarRango(String sval, boolean negativo){
 				sval = sval.toString().substring(0, sval.length()-2);
 				compilador.Compilador.tablaSimbolo.get(sval).remove(compilador.Compilador.tablaSimbolo.get(sval).size()-1);
 				//mostrarMensaje("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
-				yyerror("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos.");
+				yyerror("CTE ENTERA postiva esta fuera del rango por lo tanto no aparece en la tabla de simbolos. Error en linea: " + compilador.Compilador.nroLinea);
 			}
 		}
 		
@@ -821,14 +821,14 @@ void verificarNa(String sval, String proc){
 		for(int i=0; i<tamano-1; i++)
 			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
 				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
-				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " tiene problemas con los NA de: " + compilador.Compilador.anidamientos.get(i).getValor());
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " tiene problemas con los NA de: " + compilador.Compilador.anidamientos.get(i).getValor() + " Error en linea: " + compilador.Compilador.nroLinea);
 			}
 	*/
 	if(tamano > 1)
 		for(int i=0; i<tamano-1; i++){
 			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
 				//mostrarMensaje("Error en los niveles de anidamientos en el proc: " + proc);
-				yyerror("Error en los niveles de anidamientos en el proc: " + proc);
+				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " Error en linea: " + compilador.Compilador.nroLinea);
 				break;
 			}
 		}
@@ -935,7 +935,7 @@ int sePuedeUsar(String sval){
 						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
 						if(sval.equals(recurAux[recurAux.length-1])){
 							//mostrarMensaje("No se permite recursion.");
-							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido.");
+							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido. Error en linea: " + compilador.Compilador.nroLinea);
 						}
 						//Esta al alcance?
 						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
