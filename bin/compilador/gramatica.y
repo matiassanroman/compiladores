@@ -209,6 +209,7 @@ sentenciaEjecutable : asignacion
 					| OUT '(' CADENA ')' ';'
 {
 	//mostrarMensaje("Sentencia OUT, en linea " + compilador.Compilador.nroLinea);
+	setearAmbito($3.sval);
 	Par out = new Par($1.sval);
 	Par cadena = new Par($3.sval);
 	polaca.agregarPaso(cadena);
@@ -435,6 +436,9 @@ condiFOR : condicion
 
 inicioFor : identificador '=' constante
 {
+	if(!verficarCTEEnteras($3.sval))
+		yyerror("CTE de: " + $1.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+
 	polaca.agregarVariableControl($1.sval);
 	Par id = new Par($1.sval);
 	polaca.agregarPaso(id);
@@ -454,6 +458,27 @@ condicion : identificador comparador asignacion
 }
 		  | identificador comparador identificador
 {
+	if(sePuedeUsar(val_peek(0).sval) == 0 ) {
+		boolean aux = false;
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
+			//Compruebo que el id no sea proc y que el ambito sea Main
+			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
+				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
+				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
+				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
+						aux = true;
+						break;
+					}
+			}
+		}
+		if(aux) {
+			yyerror("Variable de comparacion: " + val_peek(0).sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+	}else {
+		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
 	Par id1 = new Par($1.sval);
 	Par id2 = new Par($3.sval);
 	Par comp = new Par($2.sval);
@@ -471,12 +496,16 @@ condicion : identificador comparador asignacion
 		  ;
 
 incDec : UP constante   
-{
+{	
+	if(!verficarCTEEnteras($2.sval))
+		yyerror("CTE del UP debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl($2.sval);
 }
 	   | DOWN constante 
 {
+	if(!verficarCTEEnteras($2.sval))
+		yyerror("CTE del DOWN debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl($2.sval);
 }
@@ -1100,6 +1129,17 @@ boolean verificarCantParam(String sval){
 	return false;
 }
 
+boolean verficarCTEEnteras(String cte){
+	
+	if(cte.charAt(0) >= '0' && cte.charAt(0) <= '9') 
+		if(cte.contains("_") && cte.contains("i")){
+			return true;
+		}
+
+	return false;
+
+}
+
 boolean verficarNANSEnteras(String na, String ns){
 	
 	if(na.charAt(0) >= '0' && na.charAt(0) <= '9' && ns.charAt(0) >= '0' && ns.charAt(0) <= '9') 
@@ -1184,6 +1224,9 @@ void setearAmbito(String sval){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+	}	
+	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getUso().equals("CADENA")){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}	
 

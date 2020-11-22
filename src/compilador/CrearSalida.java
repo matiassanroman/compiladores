@@ -51,6 +51,10 @@ public class CrearSalida {
 	    				   else
 	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    			   }
+	    			   else {
+	    				   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() +  "\t Ambito: " + aux.get(i).getAmbito() );
+	    				   
+	    			   }
 	    				   
 	    		   } 
 	    		   salida.newLine();
@@ -85,6 +89,10 @@ public class CrearSalida {
 	    			p = false;
 	    			aux.add(l.get(i));
 	    		}
+	    		else if(l.get(i).getUso().equals("CADENA")){
+	    			p = false;
+	    			aux.add(l.get(i));
+	    		}
 	    	}
 	    	else{
 	    		boolean r = true;
@@ -93,6 +101,10 @@ public class CrearSalida {
 	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
 	    					r = false;
 	    			}
+	    			else if(aux.get(j).getUso().equals("CADENA")){
+	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    					r = false;
+		    		}
 	    		}
 	    		if(r)
 	    			aux.add(l.get(i));

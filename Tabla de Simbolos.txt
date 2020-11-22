@@ -1,0 +1,8 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: 15	 Value: 15	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 15:Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: hola	 Value: hola	 Uso: ID	 TipoDeUso: Var	 Ambito: hola:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2:Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: 10	 Value: 10	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 10:Main	 Declarada: false	 tipoCTE: INTEGER
