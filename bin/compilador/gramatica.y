@@ -14,7 +14,6 @@ import accionesSemanticas.*;
 %%
 programa : bloquePrograma
 {
-	polaca.mostrarProcs();
 	mostrarMensaje("Reconoce bien el programa");
 	System.out.println(polaca.toString());
 }
@@ -75,8 +74,8 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
-	Par proc = new Par($2.sval);
-	polaca.agregarProcedimiento(proc);
+	Par proc = new Par($1.sval+" "+$2.sval);
+	polaca.agregarPaso(proc);
 	mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "0", $7.sval, $11.sval);
 	setearAmbito($2.sval);
@@ -87,11 +86,14 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 	}
 	verificarNa($7.sval,$2.sval);
 }
-
 				 | PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	Par proc = new Par($2.sval);
-	polaca.agregarProcedimiento(proc);
+	PolacaInversa.subirNivelProc();
+	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+	polaca.agregarParametro(val_peek(12).sval+" "+val_peek(11).sval);
+	polaca.agregarParametro(val_peek(8).sval);
+	Par proc = new Par($1.sval+" "+$2.sval);
+	polaca.agregarPaso(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "1", $9.sval, $13.sval);
 	setearAmbito($2.sval);
@@ -104,8 +106,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	Par proc = new Par($2.sval);
-	polaca.agregarProcedimiento(proc);
+	Par proc = new Par($1.sval+" "+$2.sval);
+	polaca.agregarPaso(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "2", $12.sval, $16.sval);
 	setearAmbito($2.sval);
@@ -119,8 +121,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	Par proc = new Par($2.sval);
-	polaca.agregarProcedimiento(proc);
+	Par proc = new Par($1.sval+" "+$2.sval);
+	polaca.agregarPaso(proc);
 	mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
 	setearProc($2.sval, "3", $15.sval, $19.sval);
 	setearAmbito($2.sval);
@@ -139,19 +141,11 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			   ; 
 
-nombres : identificador
-{
-}
-		| identificador ',' identificador
-{
-}
-		| identificador ',' identificador ',' identificador
-{
-}
-		;
-
 bloqueProc : '{' bloque '}'
 {
+	PolacaInversa.bajarNivelProc();
+	int posProc = polaca.inicioProc();
+	System.out.println("procedimiento de berga inicia "+ posProc);
 }
 		   ;
 
@@ -188,13 +182,37 @@ sentenciaEjecutable : asignacion
 {
 	yyerror("Error: Formato de cadena incorrecto, en linea nro: "+ compilador.Compilador.nroLinea);
 }
-					| identificador '(' nombres ')' ';'
-{
-	mostrarMensaje("Llamada a procedimiento con parametros en linea nro: " + compilador.Compilador.nroLinea);
-}
 					| identificador '(' ')' ';'
 {
+	Par nomProc = new Par($1.sval); 
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
 	mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
+}
+					| identificador '(' identificador ')' ';'
+{
+	Par nomProc = new Par($1.sval); 
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
+	mostrarMensaje("Llamada a procedimiento con 1 parametro en linea nro: " + compilador.Compilador.nroLinea);
+}
+					| identificador '(' identificador ',' identificador ')' ';'
+{
+	Par nomProc = new Par($1.sval); 
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
+	mostrarMensaje("Llamada a procedimiento con 2 parametros en linea nro: " + compilador.Compilador.nroLinea);
+}
+					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
+{
+	Par nomProc = new Par($1.sval); 
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
+	mostrarMensaje("Llamada a procedimiento con 3 parametros en linea nro: " + compilador.Compilador.nroLinea);
 }
 					| identificador '(' error ')' ';'
 {
@@ -207,6 +225,7 @@ sentenciaEjecutable : asignacion
 	}
 	else
 		polaca.completarPolaca(PolacaInversa.getRetrocesosIT());
+	polaca.agregarLabel();
 }
 					| cicloFor
 {
@@ -222,6 +241,7 @@ cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}'
 	polaca.agregarPasoIncompleto();
 	Par pasoBI = new Par("BI");
 	polaca.agregarPaso(pasoBI);
+	polaca.agregarLabel();
 	polaca.completarFOR();
 	polaca.borrarInicioFOR();
 	polaca.borrarPasoIncompleto();
@@ -253,6 +273,7 @@ inicioFor : identificador '=' constante
 	Par asig = new Par($2.sval);
 	polaca.agregarPaso(asig);
 	polaca.agregarInicioFOR();
+	polaca.agregarLabel();
 }
 		  ;
 
@@ -314,6 +335,7 @@ cuerpoIf : cuerpoCompleto END_IF
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
 	polaca.borrarPasoPolaca();
+	polaca.borrarPasoPolaca();
 	polaca.borrarPasoIncompleto();
 }
 		 ;
@@ -321,16 +343,33 @@ cuerpoIf : cuerpoCompleto END_IF
 cuerpoCompleto : '(' condicionIf ')' '{' bloqueThen '}' ELSE '{' bloqueElse '}'
 {
 }	   	  
-			   | '(' condicionIf ')' sentenciaEjecutable ELSE '{' bloqueElse '}'
+			   | '(' condicionIf ')' senteciaUnicaThen ELSE '{' bloqueElse '}'
 {
 }
- 			   | '(' condicionIf ')' '{' bloqueThen '}' ELSE sentenciaEjecutable
+ 			   | '(' condicionIf ')' '{' bloqueThen '}' ELSE senteciaUnicaElse
 {
 }
-			   | '(' condicionIf ')' sentenciaEjecutable ELSE sentenciaEjecutable
+			   | '(' condicionIf ')' senteciaUnicaThen ELSE senteciaUnicaElse
 {
 }
 			   ;  
+
+
+senteciaUnicaThen : sentenciaEjecutable
+{
+	Par pasoEnBlanco = new Par(""); 
+	polaca.agregarPaso(pasoEnBlanco);
+	polaca.agregarPasoIncompleto();
+	Par pasoBI = new Par("BI"); 
+	polaca.agregarPaso(pasoBI);
+	polaca.agregarLabel();
+}
+				  ;
+
+senteciaUnicaElse : sentenciaEjecutable
+{
+}
+				  ;
 
 condicionIf : condicion
 {
@@ -349,6 +388,7 @@ bloqueThen : bloqueSentencia
 	polaca.agregarPasoIncompleto();
 	Par pasoBI = new Par("BI"); 
 	polaca.agregarPaso(pasoBI);
+	polaca.agregarLabel();
 }
 		   ;
 
@@ -360,7 +400,7 @@ bloqueElse : bloqueSentencia
 cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'
 {
 }
-				 | '(' condicionIf ')' sentenciaEjecutable
+				 | '(' condicionIf ')' senteciaUnicaThen
 {
 }
 				 ; 
@@ -509,9 +549,9 @@ cteNegativa	: '-' CTE
 	polaca.agregarPaso(cte);
 }
 			//| '-' error
-{
+//{
 	//yyerror("Error: constante negativa mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);	
-}
+//}
 		  ;
 
 %%

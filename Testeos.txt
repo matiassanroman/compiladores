@@ -1,13 +1,21 @@
-INTEGER d;
-d = -4_i;
-PROC a() NA = 1_i, NS = 2_i{
-	INTEGER b;
-	PROC aa(INTEGER b, INTEGER f, INTEGER g) NA = 1_i, NS = 2_i{
-		INTEGER t;
-		t=t;
-	}
-	b=b;
-	aa(b,b,b);
+INTEGER c,a;
+PROC a(INTEGER b) NA = 2_i, NS =2_i{
+	b=3_i;
 }
+PROC o(INTEGER b) NA = 2_i, NS =2_i{
+	b=3_i;
+	PROC d(INTEGER b) NA = 2_i, NS =2_i{
+		b=3_i;
+		PROC t(INTEGER b) NA = 2_i, NS =2_i{
+			b=3_i;	
+		}
+	}
+}
+PROC u(INTEGER b) NA = 2_i, NS =2_i{
+		b=3_i;
+		
+	}
 
-a();
+
+a(c);
+
