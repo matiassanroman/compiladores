@@ -4,5 +4,7 @@
 
 Clave: 15	 Value: 15	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 15:Main	 Declarada: false	 tipoCTE: INTEGER
 Clave: hola	 Value: hola	 Uso: ID	 TipoDeUso: Var	 Ambito: hola:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 2.0E30	 Value: 2.0E30	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2.0E30:Main	 Declarada: false	 tipoCTE: FLOAT
 Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2:Main	 Declarada: false	 tipoCTE: INTEGER
 Clave: 10	 Value: 10	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 10:Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: final	 Value: final	 Uso: ID	 TipoDeUso: Var	 Ambito: final:Main	 Declarada: true	 tipoVar: INTEGER

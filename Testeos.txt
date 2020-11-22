@@ -1,6 +1,7 @@
 
 INTEGER hola;
+INTEGER final;
 
-FOR(inic=10_i; inic>final; UP 15_i){
+FOR(inic=10_i; inic>2.0f+30; UP 15_i){
 	hola=2_i;
 }

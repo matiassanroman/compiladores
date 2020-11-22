@@ -488,6 +488,9 @@ condicion : identificador comparador asignacion
 }
 		  | identificador comparador constante
 {
+	if(!verficarCTEEnteras($3.sval))
+		yyerror("CTE de la comparacion debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+
 	Par id = new Par($1.sval);
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
