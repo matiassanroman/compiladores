@@ -2,37 +2,14 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: o	 Value: o	 Uso: ID	 Ambito: o:Main	 Tipo: Proc	 Declarada: false	 CantParametros: 1	 NA: 2	 NS: 2
-Clave: d	 Value: d	 Uso: ID	 Ambito: d:Main:o	 Tipo: Proc	 Declarada: false	 CantParametros: 1	 NA: 2	 NS: 2
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:a	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o:d	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o:d	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o:d:t	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:o:d:t	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:u	 Tipo: PARAM_PROC	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main:u	 Tipo: Var	 Declarada: false
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:a	 Tipo: int	 Declarada: false
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:o	 Tipo: int	 Declarada: false
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:o:d	 Tipo: int	 Declarada: false
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:o:d:t	 Tipo: int	 Declarada: false
-Clave: 3	 Value: 3	 Uso: CTE	 Ambito: 3:Main:u	 Tipo: int	 Declarada: false
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
+Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Proc	 Declarada: false	 CantParametros: 1	 NA: 2	 NS: 2
 Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:a	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o:d	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o:d	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o:d:t	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:o:d:t	 Tipo: NS_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:u	 Tipo: NA_PROC	 Declarada: false
-Clave: 2	 Value: 2	 Uso: CTE	 Ambito: 2:Main:u	 Tipo: NS_PROC	 Declarada: false
-Clave: u	 Value: u	 Uso: ID	 Ambito: u:Main	 Tipo: Proc	 Declarada: false	 CantParametros: 1	 NA: 2	 NS: 2
-Clave: t	 Value: t	 Uso: ID	 Ambito: t:Main:o:d	 Tipo: Proc	 Declarada: false	 CantParametros: 1	 NA: 2	 NS: 2
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
+Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
+Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true

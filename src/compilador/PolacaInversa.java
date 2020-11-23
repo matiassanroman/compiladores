@@ -9,7 +9,7 @@ public class PolacaInversa {
 	private ArrayList<Integer> iniciosDeFOR;
 	private ArrayList<String> variablesControl;
 	//private ArrayList<Par> procedimientos;
-	private ArrayList<String> parametros;
+	private ArrayList<String> parametrosFormales;
 	
 	public static int retrocesosIfThenElse = 2;
 	public static int retrocesosIfThen = 1;
@@ -34,7 +34,7 @@ public class PolacaInversa {
 		this.iniciosDeFOR = new ArrayList<Integer>();
 		this.variablesControl = new ArrayList<String>();
 		//this.procedimientos = new ArrayList<Par>();
-		this.parametros = new ArrayList<String>();
+		this.parametrosFormales = new ArrayList<String>();
 	}
 	/// FIN CONSTRUNCTOR
 	
@@ -64,6 +64,11 @@ public class PolacaInversa {
 	public ArrayList<Par> getPolaca(){
 		return this.pasosPolaca;
 	}
+	
+	public Par getPasoEnPos(int pos){
+		return this.pasosPolaca.get(pos);
+	}
+	
 	// FIN FUNCIONALIDAD POLACA
 	//////////////////////////////////////////////////////////////
 	
@@ -169,46 +174,56 @@ public class PolacaInversa {
 	// FUNCIONALIDAD PARA PASAJE DE PARAMETROS
 	
 	public void agregarParametro(String procParam) {
-		this.parametros.add(procParam);
+		this.parametrosFormales.add(procParam);
 	}
 
 	public int inicioProc(String nombre) {
-		int pos =  this.parametros.size()-1;
-		while (pos>=0 && !parametros.get(pos).contains("PROC "+nombre)) {
+		int pos =  this.parametrosFormales.size()-1;
+		while (pos>=0 && !parametrosFormales.get(pos).contains("PROC "+nombre)) {
 			pos--;
 		}
 		return pos-1;
 	}
 	
-	public void borrarProcYParametros() {
-		int pos = this.parametros.size()-1;		
-		while (pos >=0 && !this.parametros.get(pos).contains("PROC")) {
-			pos--;
+	public void asignarParametros(ArrayList<String> parametrosInvocados, int inicio) {
+		// 'parametros' son los parametros de la invocacion
+		// inicio es el nivel de ese procedimiento en la lista de 
+		int cant = parametrosInvocados.size();
+		int posParamFormales = inicio+2;
+		for (int i=0; i < cant; i++) {
+			Par operando1 = new Par(parametrosInvocados.get(i));
+			Par operador  = new Par("=");
+			Par operando2 = new Par(this.parametrosFormales.get(posParamFormales));
+			this.agregarPaso(operando1);
+			this.agregarPaso(operando2);
+			this.agregarPaso(operador);
+			posParamFormales++;
 		}
-		
-//		if (nivelProc > 1) {
-//			for(int i=parametros.size()-1; (i>=0 && !parametros.get(i).contains("PROC"));i--)
-//				this.parametros.remove(i);
-//			int pos = this.parametros.size()-1;
-//			this.parametros.remove(pos);
-//			nivelProc--;
-//		}
 	}
 	
-	public void asignarParametros(ArrayList<String> parametros, int inicio) {
-		int cant = parametros.size();
-		int posP = inicio+2;
-		//for (int i=0, i < cant, i++)
-			// par1 oper1
-			// par2 oper2
-			// par3 operacion
-			// agregar pasos a la polaca
+	public void borrarProcYParametros() {
+		int i=0;
+		while( (i < this.parametrosFormales.size()) && (i+1 < this.parametrosFormales.size()) ) {
+			if (this.parametrosFormales.get(i+1).contains("PROC")) {
+				int nivelActual = Integer.parseInt(this.parametrosFormales.get(i));
+				if ( Math.abs(nivelActual - nivelProc) >= 2 ) {
+					this.parametrosFormales.remove(i);
+					this.parametrosFormales.remove(i);
+					int j=i;
+					while ((j < this.parametrosFormales.size()-1)&&!this.parametrosFormales.get(j+2).contains("PROC")) {
+						this.parametrosFormales.remove(i);
+						j++;
+					}
+					this.parametrosFormales.remove(i);
+				}
+			}
+			i++;
+		}
 	}
 	
-	
-	public void mostrarParametros() {
-		for (int i=0; i < parametros.size(); i++)
-			System.out.println(this.parametros.get(i).toString());
+	public void mostrarParametrosFormales() {
+		for (int i=0; i < parametrosFormales.size(); i++)
+			System.out.println(this.parametrosFormales.get(i).toString());
 	}
 	
 	// FIN FUNCIONALIDAD PARA PASAJE DE PARAMETROS

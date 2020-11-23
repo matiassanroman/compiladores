@@ -224,6 +224,12 @@ public class Compilador {
 		
 				CrearSalida.crearTxtSalida(c);
 				
+				GeneradorAssembler generador = new GeneradorAssembler();
+				if (errores.size() == 0) {
+					System.out.println(generador);
+				}
+					
+					
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
 			}

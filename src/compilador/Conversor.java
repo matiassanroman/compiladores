@@ -23,14 +23,14 @@ public class Conversor {
 //	           INTEGER    FLOAT    CADENA	
 /*INTEGER*/  {"INTEGER", "FLOAT",      "X"},
 /*FLOAT*/    {  "FLOAT", "FLOAT",      "X"},
-/*CADENA*/   {      "X",     "X", "CADENA"}  };
+/*CADENA*/   {      "X",     "X",      "X"}  };
 	
 	private boolean[][] habilitacionOperacion = {
 // Forma de lectura: posicion (x,y) indica si es posible operar entre el tipo de fila y el tipo de la columna
 //		       INTEGER    FLOAT   CADENA	
 /*INTEGER*/  {    true,    true ,  false},
 /*  FLOAT*/  {    true,    true ,  false},
-/* CADENA*/  {   false,   false ,   true}  };
+/* CADENA*/  {   false,   false ,  false}  };
 	
 	private String[][] asignaciones = {
 // Forma de lectura: Al tipo fila, cuando se le asigna el tipo columna da como resultado el tipo de casilla (x,y)
@@ -71,7 +71,7 @@ private boolean[][] habilitacionAsignacion = {
 		return this.habilitacionAsignacion[mapear(tipoIzq)][mapear(tipoDer)];
 	}
 	
-	// Retorna si en compatible asignar entre dos tipos dados
+	// Retorna si es compatible asignar entre dos tipos dados
 	public String TipoRetornAsignacion(String tipoIzq, String tipoDer) {
 		return this.asignaciones[mapear(tipoIzq)][mapear(tipoDer)];
 	}

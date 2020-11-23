@@ -1,21 +1,8 @@
-INTEGER c,a;
-PROC a(INTEGER b) NA = 2_i, NS =2_i{
-	b=3_i;
+INTEGER a,b,c;
+IF (a<b=1_i;){
+	a = a + 1_i;
 }
-PROC o(INTEGER b) NA = 2_i, NS =2_i{
-	b=3_i;
-	PROC d(INTEGER b) NA = 2_i, NS =2_i{
-		b=3_i;
-		PROC t(INTEGER b) NA = 2_i, NS =2_i{
-			b=3_i;	
-		}
-	}
+ELSE{
+	a = b;
 }
-PROC u(INTEGER b) NA = 2_i, NS =2_i{
-		b=3_i;
-		
-	}
-
-
-a(c);
-
+END_IF
