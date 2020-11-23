@@ -3,6 +3,7 @@
 
 package compilador;
 import java.io.*;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -208,7 +209,6 @@ public class Compilador {
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
 		ArrayList<String> reconocidos = new ArrayList<String>();		
-			
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
@@ -223,7 +223,9 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				CrearSalida.crearTxtSalida(c);
+				GeneradorAssembler ga = new GeneradorAssembler(tablaSimbolo);
+				
+				//CrearSalida.crearTxtSalida(c);
 				
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
