@@ -263,6 +263,8 @@ public class PolacaInversa {
 			int finAux = 0;
 			while(finAux < pasosPolaca.size()) {
 				//Si no veo Proc agrego a aux2 y elimino de pasosPolaca
+				if(aux.size() == 0)
+					i=finAux;
 				if(!(pasosPolaca.get(i).getValor().length() > 3 && pasosPolaca.get(i).getValor().substring(0, 4).equals("PROC"))){
 					if(!(pasosPolaca.get(i).getValor().length() > 2 && pasosPolaca.get(i).getValor().substring(0, 3).equals("REC"))){
 						aux2.add(pasosPolaca.get(i));
@@ -285,7 +287,7 @@ public class PolacaInversa {
 						}
 						j++;
 					}
-					
+				
 					if(!p) {
 						for(int z=inicio.getClave(); z<=fin.getClave(); z++) {
 							if(aux2.size() > 0) {
@@ -297,15 +299,14 @@ public class PolacaInversa {
 							else {
 								finAux++;
 								aux2.add(pasosPolaca.get(z));
-								i++;
+								//i++;
 							}
 						}
 						
 					}
 				}
 			}
+			pasosPolaca = aux2;
 		}
-		for(int y=0; y<aux2.size(); y++)
-			System.out.println("ENTROOO: " + aux2.get(y));
 	}
 }
