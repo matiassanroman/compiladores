@@ -36,7 +36,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 				if (numero.contains("f")) {
 					flotante = Double.parseDouble(numero.replace('f', 'E'));
 					if(String.valueOf(flotante).contains("E"))
-						s = new Simbolo(String.valueOf(flotante).replace('E', 'f'));
+						s = new Simbolo(String.valueOf(flotante).replace('f', 'E'));
 					else
 						s = new Simbolo(String.valueOf(normalizar(flotante)));
 				}
@@ -46,6 +46,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 				}
 				
 				s.setTipo("float");
+				s.setTipoParametro("FLOAT");
 				
 				if(!tablaSimbolo.containsKey(s.getValor()) ) {
 					ArrayList<Simbolo> list =new ArrayList<Simbolo>();
@@ -85,7 +86,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
         	return String.valueOf(numero);
         //Caso de 1.051
         if(Integer.valueOf(division[0]) >= 1 && Integer.valueOf(division[0]) <= 9) {
-		    return String.valueOf(numero).replace('E', 'f');
+		    return String.valueOf(numero).replace('f', 'E');
         }
         // Caso de 100.001
         else if(Integer.valueOf(division[0]) > 9) {
@@ -93,7 +94,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 		         aux = aux + String.valueOf(division[0].charAt(i));
 		         contador++;
 		     } 
-        	 return String.valueOf(division[0].charAt(0)) + "." + aux + "f+" + contador;  
+        	 return String.valueOf(division[0].charAt(0)) + "." + aux + "E+" + contador;  
         }
         //Caso de 0.0001050
         else {
@@ -114,7 +115,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
         			aux = aux + subdivision.charAt(i);	
         		}
         	}
-        	return aux + "f" + contador;
+        	return aux + "E" + contador;
         }
 	}
 	

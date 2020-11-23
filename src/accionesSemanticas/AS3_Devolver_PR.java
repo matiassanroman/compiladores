@@ -32,7 +32,7 @@ public class AS3_Devolver_PR extends AccionSemantica{
 		if (tablaToken.containsKey(buffer.toString()))
 			return tablaToken.get(buffer.toString());
 		else {
-			System.out.println("Error en la linea "+compilador.Compilador.nroLinea+": Palabra reservada mal escrita");
+			System.out.println("Error en la linea "+compilador.Compilador.nroLinea+": Palabra reservada mal escrita.");
 			buffer.delete(0, buffer.length());
 			return 0;
 		}

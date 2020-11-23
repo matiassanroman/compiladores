@@ -3,6 +3,7 @@
 
 package compilador;
 import java.io.*;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -26,9 +27,10 @@ public class Compilador {
 	static HashMap<String, Integer> tablaToken = new HashMap<String,Integer>();
 
 	public static String ambito = "";
-	public static int na = -1;
+	public static int na = 0;
 	public static boolean primero = true;
 	public static int naa = 0;
+	public static ArrayList<Integer> anidamientos = new ArrayList<Integer>(); 
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
@@ -87,7 +89,7 @@ public class Compilador {
 				   				   /* 13 */   {as9_verificar_rango_cte, as9_verificar_rango_cte	 , as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte 	, as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as1_agregar_buffer    , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	,as12_error}, /* 13 */
 				   				    /* 14 */  {as10_verificar_float	  , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float     , as1_agregar_buffer     , as10_verificar_float   , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float     , as10_verificar_float   , as10_verificar_float     , as10_verificar_float     , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	 	, as10_verificar_float	   , as10_verificar_float     , as10_verificar_float  , as1_agregar_buffer     , as1_agregar_buffer     , as10_verificar_float   , as10_verificar_float		,as12_error}, /* 14 */
 				   				    /* 15 */  {as10_verificar_float	      	  , as10_verificar_float	         	 , as10_verificar_float           , as10_verificar_float           , as10_verificar_float   	    , as10_verificar_float   		 , as10_verificar_float	      , as10_verificar_float         , as10_verificar_float         , as1_agregar_buffer     , as10_verificar_float	        , as10_verificar_float           , as10_verificar_float           , as10_verificar_float         , as1_agregar_buffer       , as10_verificar_float     		 	 , as10_verificar_float 			, as10_verificar_float     	   , as10_verificar_float   		, as10_verificar_float    	 , as10_verificar_float	 		, as10_verificar_float	       , as10_verificar_float               , as10_verificar_float   	      , as10_verificar_float         , as10_verificar_float    	    , as10_verificar_float		 , as10_verificar_float				,as12_error}, /* 15 */
-				   				    /* 16 */  {as10_verificar_float	  , as11_no_accion	 		 , as11_no_accion     		, as10_verificar_float     , as1_agregar_buffer   	, as11_no_accion   		 , as11_no_accion	  , as11_no_accion   , as11_no_accion   , as11_no_accion   , as11_no_accion	    , as11_no_accion     , as11_no_accion     , as11_no_accion   , as11_no_accion     , as11_no_accion     , as11_no_accion 	, as11_no_accion     , as11_no_accion   , as11_no_accion   , as11_no_accion	 	, as11_no_accion	   , as11_no_accion     , as11_no_accion  , as11_no_accion   , as11_no_accion   , as11_no_accion   , as11_no_accion		,as12_error}, /* 16 */
+				   				    /* 16 */  {as10_verificar_float	  , as10_verificar_float	 , as11_no_accion     		, as10_verificar_float     , as1_agregar_buffer   	, as11_no_accion   		 , as11_no_accion	      , as11_no_accion         , as11_no_accion    		, as11_no_accion         , as11_no_accion	        , as11_no_accion           , as11_no_accion           , as11_no_accion         , as11_no_accion     	  , as11_no_accion           , as11_no_accion 	        , as10_verificar_float     , as11_no_accion   , as11_no_accion   , as11_no_accion	 	, as11_no_accion	   , as11_no_accion     , as11_no_accion  , as11_no_accion   , as11_no_accion   , as11_no_accion   , as11_no_accion		,as12_error}, /* 16 */
 				   				    /* 17 */  {as9_verificar_rango_cte, as9_verificar_rango_cte	 , as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte 	, as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte        , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	,as12_error}, /* 17 */
 				   				    /* 18 */  {as10_verificar_float   , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float	   , as1_agregar_buffer		, as10_verificar_float	 , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float  	  , as10_verificar_float  	 , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float	, as10_verificar_float 	 , as10_verificar_float	 	, as10_verificar_float	   , as10_verificar_float  	  , as10_verificar_float  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float		,as12_error}, /* 18 */
 				   				    /* 19 */  {as10_verificar_float   , as10_verificar_float	 , as10_verificar_float           	, as10_verificar_float	   , as1_agregar_buffer		, as10_verificar_float        	 , as10_verificar_float	  		  , as10_verificar_float   		   , as10_verificar_float				, as10_verificar_float	 		 , as10_verificar_float				, as10_verificar_float     		   , as10_verificar_float 	  		  , as10_verificar_float   		   , as10_verificar_float     		  , as10_verificar_float  	 		 , as10_verificar_float 	  	 		, as10_verificar_float     		   , as10_verificar_float				, as10_verificar_float   			 , as10_verificar_float	 			, as10_verificar_float	  		   , as10_verificar_float  	  		  , as10_verificar_float  		  , as10_verificar_float   		   , as1_agregar_buffer	    , as10_verificar_float   			 , as10_verificar_float				,as12_error}, /* 19 */
@@ -207,7 +209,6 @@ public class Compilador {
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
 		ArrayList<String> reconocidos = new ArrayList<String>();		
-			
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
@@ -222,9 +223,10 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				CrearSalida.crearTxtSalida(c);
 				
-				GeneradorAssembler generador = new GeneradorAssembler();
+				//CrearSalida.crearTxtSalida(c);
+				
+				GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo);
 				if (errores.size() == 0) {
 					System.out.println(generador);
 				}

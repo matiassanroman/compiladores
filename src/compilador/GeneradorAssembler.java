@@ -3,6 +3,9 @@ package compilador;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
 /*  Para las operaciones entre datos de tipo entero se deberá generar código que utilice los registros del
@@ -102,6 +105,22 @@ public class GeneradorAssembler {
 		return var;
 	}
 	
+	public GeneradorAssembler(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo) {
+		this.assembler = "";
+		this.conversor = new Conversor();
+		this.pila = new Stack<String>();
+		this.estados  = new ArrayList<Character>(Arrays.asList('L','L','L','L'));
+		this.registros32Bits     = new ArrayList<String>(Arrays.asList("EAX","EBX","ECX","EDX"));
+		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
+		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
+		this.registros8BitAaltos = new ArrayList<String>(Arrays.asList( "AH", "BH", "CH", "DH")); 
+		
+		this.generarData(tablaSimbolo);
+		System.out.println(this.data);
+	}
+	
+	
+	
 	private void generarInvocacion(String etiqueta, String destino) {
 		String nombreProc = etiqueta.replace("PROC ","");
 		String paraCode = plantillaEtiquetaProcedimiento.replace("ETIQUETA", nombreProc);
@@ -121,22 +140,48 @@ public class GeneradorAssembler {
 		this.data = this.data + paraData;
 	}
 	
-	public GeneradorAssembler() {
-		this.assembler = "";
-		this.conversor = new Conversor();
-		this.pila = new Stack<String>();
-		this.estados  = new ArrayList<Character>(Arrays.asList('L','L','L','L'));
-		this.registros32Bits     = new ArrayList<String>(Arrays.asList("EAX","EBX","ECX","EDX"));
-		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
-		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
-		this.registros8BitAaltos = new ArrayList<String>(Arrays.asList( "AH", "BH", "CH", "DH")); 
-	}
 	
-	public void generarData(HashMap<String, Integer> tablaSibolos){
+	
+	public void generarData(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo){
 		// volcar toda la tabla de simbolos 
 		// a la variable data que luego se agregara a la salida final
 		// revisar formato
-	}
+		
+		Set<String> keys = tablaSimbolo.keySet();
+	    Iterator<String> itr = keys.iterator();
+	    String str;
+	    
+	    while (itr.hasNext()) { 
+	       str = itr.next();
+	       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
+    	   for(int i=0; i<aux.size(); i++) {
+    		   if (aux.get(i).getTipo().equals("Proc")) { 
+    			   this.data = this.data + "_" +aux.get(i).getAmbito() + " DW  ?" + saltoDeLinea;
+    		   } 
+    		   else if(aux.get(i).getUso().equals("ID")) {
+				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
+					   this.data = this.data + "_" +aux.get(i).getAmbito() + " DW  ?" + saltoDeLinea;
+			   		if(aux.get(i).getTipoParametro().equals("FLOAT"))
+			   			this.data = this.data + "_" +aux.get(i).getAmbito() + " DD  ?" + saltoDeLinea;
+    		   }
+    		   else if(aux.get(i).getUso().equals("CTE")) {
+				   if(aux.get(i).getTipo().equals("int"))
+					   this.data = this.data + "_" + aux.get(i).getValor() + " DW " + aux.get(i).getValor() + saltoDeLinea;
+				   if(aux.get(i).getTipo().equals("float"))
+					   this.data = this.data + "_" + aux.get(i).getValor() + " DD " + aux.get(i).getValor() + saltoDeLinea;
+    		   }
+    		   else if(aux.get(i).getUso().equals("CADENA")) {
+    				   this.data = this.data + "_" + aux.get(i).getValor() + " DB " + aux.get(i).getValor() + " , 0" + saltoDeLinea;			   
+    		   }	   
+    		   else if(aux.get(i).getUso().equals("AUX")) {
+				   if(aux.get(i).getTipo().equals("int"))
+					   this.data = this.data + "@" + aux.get(i).getValor() + " DW " + aux.get(i).getValor() + saltoDeLinea;
+				   if(aux.get(i).getTipo().equals("float"))
+					   this.data = this.data + "@" + aux.get(i).getValor() + " DD " + aux.get(i).getValor() + saltoDeLinea;
+    		   }
+    	   } 
+	    }		
+}
 	
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
@@ -204,6 +249,47 @@ public class GeneradorAssembler {
 		assembler = assembler + main;
 		assembler = assembler + finMainAssembler;
 		return assembler;
+	}	
+	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
+		ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
+	    boolean p = true;
+	    
+	    for(int i=0; i<l.size(); i++) {
+	    	//Es una declaracion de ID
+	    	if(l.get(i).isDeclarada()) 
+	    		aux.add(l.get(i));	    
+	    	//Es una CTE de NA o NS
+	    	if(l.get(i).getUso().equals("CTE") && (l.get(i).getTipo().equals("NA_PROC")) || (l.get(i).getTipo().equals("NS_PROC")))
+	    		aux.add(l.get(i));
+	    }
+	    
+	    for(int i=0; i<l.size(); i++) {
+	    	if(p) {
+	    		if(l.get(i).getUso().equals("CTE") && !l.get(i).getTipo().equals("NA_PROC") && !l.get(i).getTipo().equals("NS_PROC")) {
+	    			p = false;
+	    			aux.add(l.get(i));
+	    		}
+	    		else if(l.get(i).getUso().equals("CADENA")){
+	    			p = false;
+	    			aux.add(l.get(i));
+	    		}
+	    	}
+	    	else{
+	    		boolean r = true;
+	    		for(int j=0; j<aux.size(); j++) {
+	    			if(aux.get(j).getUso().equals("CTE") && !aux.get(j).getTipo().equals("NA_PROC") && !aux.get(j).getTipo().equals("NS_PROC")) {
+	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    					r = false;
+	    			}
+	    			else if(aux.get(j).getUso().equals("CADENA")){
+	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    					r = false;
+		    		}
+	    		}
+	    		if(r)
+	    			aux.add(l.get(i));
+	    	}		
+	    }
+	    return aux;
 	}
-
 }
