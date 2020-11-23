@@ -16,6 +16,7 @@ import java.util.Set;
 %%
 programa : bloquePrograma
 {
+	polaca.mostrarParametrosFormales();
 	mostrarMensaje("Reconoce bien el programa");
 	System.out.println(polaca.toString());
 }
@@ -103,11 +104,12 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
 	PolacaInversa.subirNivelProc();
 	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
-	polaca.agregarParametro(val_peek(12).sval+" "+val_peek(11).sval);
-	polaca.agregarParametro(val_peek(8).sval);
+	polaca.agregarParametro($1.sval+" "+$2.sval);
+	polaca.agregarParametro($5.sval);
+	
 	Par proc = new Par($1.sval+" "+$2.sval);
 	polaca.agregarPaso(proc);
-	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con 1 parametro en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($9.sval, $13.sval)){
 		setearProc($2.sval, "1", $9.sval, $13.sval);
 		//setearAmbito($2.sval);
@@ -127,9 +129,15 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
+	PolacaInversa.subirNivelProc();
+	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+	polaca.agregarParametro($1.sval+" "+$2.sval);
+	polaca.agregarParametro($5.sval);
+	polaca.agregarParametro($8.sval);
+
 	Par proc = new Par($1.sval+" "+$2.sval);
 	polaca.agregarPaso(proc);
-	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con 2 parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($12.sval, $16.sval)){
 		setearProc($2.sval, "2", $12.sval, $16.sval);
 		//setearAmbito($2.sval);
@@ -150,9 +158,16 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
+	PolacaInversa.subirNivelProc();
+	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+	polaca.agregarParametro($1.sval+" "+$2.sval);
+	polaca.agregarParametro($5.sval);
+	polaca.agregarParametro($8.sval);
+	polaca.agregarParametro($11.sval);
+
 	Par proc = new Par($1.sval+" "+$2.sval);
 	polaca.agregarPaso(proc);
-	//mostrarMensaje("Procedimiento con parametros en linea nro: "+compilador.Compilador.nroLinea);
+	//mostrarMensaje("Procedimiento con 3 parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($15.sval, $19.sval)){
 		setearProc($2.sval, "3", $15.sval, $19.sval);
 		//setearAmbito($2.sval);
@@ -181,7 +196,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 bloqueProc : '{' bloque '}'
 {
 	PolacaInversa.bajarNivelProc();
-	int posProc = polaca.inicioProc();
+	polaca.borrarProcYParametros();
+	//int posProc = polaca.inicioProc();
 }
 		   ;
 
@@ -225,6 +241,7 @@ sentenciaEjecutable : asignacion
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
 	polaca.agregarPaso(call);
+
 	//mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
@@ -249,10 +266,12 @@ sentenciaEjecutable : asignacion
 			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
-
 }
 					| identificador '(' identificador ')' ';'
 {
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
+	
 	Par nomProc = new Par($1.sval); 
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
@@ -292,6 +311,9 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ',' identificador ')' ';'
 {
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));	
+
 	Par nomProc = new Par($1.sval); 
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
@@ -336,6 +358,9 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
 {
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval, $7.sval));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
+	
 	Par nomProc = new Par($1.sval); 
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);

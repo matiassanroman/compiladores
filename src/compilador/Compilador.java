@@ -223,10 +223,15 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				GeneradorAssembler ga = new GeneradorAssembler(tablaSimbolo);
 				
 				//CrearSalida.crearTxtSalida(c);
 				
+				GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo);
+				if (errores.size() == 0) {
+					System.out.println(generador);
+				}
+					
+					
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
 			}
