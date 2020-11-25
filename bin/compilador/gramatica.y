@@ -824,6 +824,10 @@ public void yyerror(String error){
 		errores.add(error);
 }
 
+public PolacaInversa getPolaca(){
+  return this.polaca;
+}
+
 public ArrayList<String> getErrores(){
   return this.errores;
 }

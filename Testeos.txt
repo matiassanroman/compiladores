@@ -1,23 +1,5 @@
-INTEGER z;
-z=20_i;
 
-PROC a() NA=2_i, NS=2_i { 
-	z = 44_i;
-	PROC b() NA=1_i, NS=2_i {
-		FLOAT id1;
-		id1 = 2_i;
-		PROC cc() NA=1_i, NS=2_i {
-			FLOAT id1;
-			id1 = 90_i;
-		}
-		id1= 77_i;
-	}
-	b();
-	PROC c() NA=1_i, NS=2_i {
-		IF(i == i)
-			OUT("hola");
-		END_IF
-	}
-}
+INTEGER x,y,z;
 
-z= -21_i;
+OUT("hola -
+chau");

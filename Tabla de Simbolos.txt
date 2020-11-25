@@ -2,23 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
-<<<<<<< HEAD
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
-Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true
-=======
-Clave: 15	 Value: 15	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 15:Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: hola	 Value: hola	 Uso: ID	 TipoDeUso: Var	 Ambito: hola:Main	 Declarada: true	 tipoVar: INTEGER
-Clave: 2.0E30	 Value: 2.0E30	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2.0E30:Main	 Declarada: false	 tipoCTE: FLOAT
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2:Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: 10	 Value: 10	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 10:Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: final	 Value: final	 Uso: ID	 TipoDeUso: Var	 Ambito: final:Main	 Declarada: true	 tipoVar: INTEGER
->>>>>>> a1b9318a1d4edc0f13f8d78e0706ea3bdf82bf4b
+Clave: "hola -chau"	 Value: "hola -chau"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "hola -chau":Main
+Clave: x	 Value: x	 Uso: ID	 TipoDeUso: Var	 Ambito: x:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: z	 Value: z	 Uso: ID	 TipoDeUso: Var	 Ambito: z:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: y	 Value: y	 Uso: ID	 TipoDeUso: Var	 Ambito: y:Main	 Declarada: true	 tipoVar: INTEGER
