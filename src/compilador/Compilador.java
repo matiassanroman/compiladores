@@ -209,7 +209,7 @@ public class Compilador {
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
 		ArrayList<String> reconocidos = new ArrayList<String>();	
-		PolacaInversa polaca;
+
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
@@ -219,7 +219,6 @@ public class Compilador {
 				p.yyparse(); 
 				errores = p.getErrores();
 				reconocidos = p.getReconocidos();
-				polaca = p.getPolaca();
 				for (int i=0; i<errores.size(); i++)
 					System.out.println(errores.get(i));		
 				for (int i=0; i<reconocidos.size(); i++)
@@ -228,9 +227,15 @@ public class Compilador {
 				
 				CrearSalida.crearTxtSalida(c);
 				
-				GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
+				//GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 				if (errores.size() == 0) {
-					System.out.println(generador);
+					PolacaInversa polaca = Parser.polaca;
+					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
+					generador.generarAssembler(polaca);
+					System.out.println(generador.toString());
+					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("EAX","regio1", "regio2", "+"));
+					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("ECX","regio1", "regio2", "+"));
+					System.out.println(generador.toString());
 				}
 					
 					

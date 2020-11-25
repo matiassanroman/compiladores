@@ -1,8 +1,0 @@
-/*  Resultados de la compilacion  */
-
-/*  Tabla de Simbolos  */
-
-Clave: "hola -chau"	 Value: "hola -chau"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "hola -chau":Main
-Clave: x	 Value: x	 Uso: ID	 TipoDeUso: Var	 Ambito: x:Main	 Declarada: true	 tipoVar: INTEGER
-Clave: z	 Value: z	 Uso: ID	 TipoDeUso: Var	 Ambito: z:Main	 Declarada: true	 tipoVar: INTEGER
-Clave: y	 Value: y	 Uso: ID	 TipoDeUso: Var	 Ambito: y:Main	 Declarada: true	 tipoVar: INTEGER

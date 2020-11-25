@@ -1,5 +1,0 @@
-
-INTEGER x,y,z;
-
-OUT("hola -
-chau");
