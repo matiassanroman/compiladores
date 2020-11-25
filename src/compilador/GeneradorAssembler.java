@@ -472,4 +472,15 @@ public class GeneradorAssembler {
 		return testo;
 	}
 	
+	public String toString(){
+		this.generarData();
+		assembler = assembler + encabezado;
+		assembler = assembler + data;
+		assembler = assembler + code;
+		assembler = assembler + inicioMainAssembler;
+		assembler = assembler + main;
+		assembler = assembler + finMainAssembler;
+		return assembler;
+	}
+	
 }

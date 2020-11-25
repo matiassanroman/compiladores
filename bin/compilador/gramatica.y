@@ -19,7 +19,7 @@ programa : bloquePrograma
 {
 	polaca.mostrarParametrosFormales();
 	mostrarMensaje("Reconoce bien el programa");
-	System.out.println(polaca.toString());
+	//System.out.println(polaca.toString());
 }
 		 | error
 {
@@ -82,12 +82,14 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
-	Par proc = new Par($1.sval+" "+$2.sval);
-	polaca.agregarPaso(proc);
 	//mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($7.sval, $11.sval)){
 		setearProc($2.sval, "0", $7.sval, $11.sval);
 		//setearAmbito($2.sval);
+		PolacaInversa.subirNivelProc();
+		//Par proc = new Par($1.sval+" "+$2.sval);
+		Par proc =  new Par($1.sval+" "+ compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarPaso(proc);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($7.sval,$11.sval);
 		if(sePuedeUsar($2.sval) == 2){
@@ -103,17 +105,21 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 				 | PROC identificador '(' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	PolacaInversa.subirNivelProc();
-	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
-	polaca.agregarParametro($1.sval+" "+$2.sval);
-	polaca.agregarParametro($5.sval);
 	
-	Par proc = new Par($1.sval+" "+$2.sval);
-	polaca.agregarPaso(proc);
 	//mostrarMensaje("Procedimiento con 1 parametro en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($9.sval, $13.sval)){
 		setearProc($2.sval, "1", $9.sval, $13.sval);
 		//setearAmbito($2.sval);
+		PolacaInversa.subirNivelProc();
+		polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+		//polaca.agregarParametro($1.sval+" "+$2.sval);
+		//polaca.agregarParametro($5.sval);
+		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
+		
+		//Par proc = new Par($1.sval+" "+$2.sval);
+		Par proc =  new Par($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarPaso(proc);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($9.sval,$13.sval);
 		if(sePuedeUsar($2.sval) == 2){
@@ -130,18 +136,23 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	PolacaInversa.subirNivelProc();
-	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
-	polaca.agregarParametro($1.sval+" "+$2.sval);
-	polaca.agregarParametro($5.sval);
-	polaca.agregarParametro($8.sval);
 
-	Par proc = new Par($1.sval+" "+$2.sval);
-	polaca.agregarPaso(proc);
 	//mostrarMensaje("Procedimiento con 2 parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($12.sval, $16.sval)){
 		setearProc($2.sval, "2", $12.sval, $16.sval);
 		//setearAmbito($2.sval);
+		PolacaInversa.subirNivelProc();
+		polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+		//polaca.agregarParametro($1.sval+" "+$2.sval);
+		//polaca.agregarParametro($5.sval);
+		//polaca.agregarParametro($8.sval);
+		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
+
+		//Par proc = new Par($1.sval+" "+$2.sval);
+		Par proc =  new Par($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarPaso(proc);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" +  $2.sval;
 		setearAmbitoNaNs($12.sval,$16.sval);
 		if(sePuedeUsar($2.sval) == 2){
@@ -159,19 +170,25 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 }
 			     | PROC identificador '(' tipo identificador ',' tipo identificador ',' tipo identificador ')' NA '=' CTE ',' NS '=' CTE
 {
-	PolacaInversa.subirNivelProc();
-	polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
-	polaca.agregarParametro($1.sval+" "+$2.sval);
-	polaca.agregarParametro($5.sval);
-	polaca.agregarParametro($8.sval);
-	polaca.agregarParametro($11.sval);
-
-	Par proc = new Par($1.sval+" "+$2.sval);
-	polaca.agregarPaso(proc);
+	
 	//mostrarMensaje("Procedimiento con 3 parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($15.sval, $19.sval)){
 		setearProc($2.sval, "3", $15.sval, $19.sval);
 		//setearAmbito($2.sval);
+		PolacaInversa.subirNivelProc();
+		polaca.agregarParametro(Integer.toString(PolacaInversa.nivelProc));
+		//polaca.agregarParametro($1.sval+" "+$2.sval);
+		//polaca.agregarParametro($5.sval);
+		//polaca.agregarParametro($8.sval);
+		//polaca.agregarParametro($11.sval);
+		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($11.sval).get(compilador.Compilador.tablaSimbolo.get($11.sval).size()-1).getAmbito());
+
+		//Par proc = new Par($1.sval+" "+$2.sval);
+		Par proc =  new Par($1.sval +" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
+		polaca.agregarPaso(proc);
 		compilador.Compilador.ambito = compilador.Compilador.ambito + ":" + $2.sval;
 		setearAmbitoNaNs($15.sval,$19.sval);
 		if(sePuedeUsar($2.sval) == 2){
@@ -238,7 +255,8 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' ')' ';'
 {
-	Par nomProc = new Par($1.sval); 
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
 	polaca.agregarPaso(call);
@@ -273,7 +291,8 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
-	Par nomProc = new Par($1.sval); 
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
 	polaca.agregarPaso(call);
@@ -315,7 +334,8 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));	
 
-	Par nomProc = new Par($1.sval); 
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
 	polaca.agregarPaso(call);
@@ -362,7 +382,8 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval, $7.sval));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
-	Par nomProc = new Par($1.sval); 
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par call = new Par("CALL");
 	polaca.agregarPaso(nomProc);
 	polaca.agregarPaso(call);
@@ -422,6 +443,12 @@ sentenciaEjecutable : asignacion
 		polaca.completarPolaca(PolacaInversa.getRetrocesosIT());
 	polaca.agregarLabel();
 }
+
+					| identificador cuerpoIf
+{
+	yyerror("Error: las palabras reservadas van en mayuscula, en linea nro: "+ compilador.Compilador.nroLinea);
+}
+
 					| cicloFor
 {
 	//mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);
@@ -466,7 +493,8 @@ inicioFor : identificador '=' constante
 		yyerror("CTE de: " + $1.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 
 	polaca.agregarVariableControl($1.sval);
-	Par id = new Par($1.sval);
+	//Par id = new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	polaca.agregarPaso(id);
 	Par asig = new Par($2.sval);
 	polaca.agregarPaso(asig);
@@ -477,7 +505,8 @@ inicioFor : identificador '=' constante
 
 condicion : identificador comparador asignacion
 {
-	Par id = new Par($1.sval);
+	//Par id = new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
@@ -505,8 +534,10 @@ condicion : identificador comparador asignacion
 		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 
-	Par id1 = new Par($1.sval);
-	Par id2 = new Par($3.sval);
+	//Par id1 = new Par($1.sval);
+	//Par id2 = new Par($3.sval);
+	Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id1);
 	polaca.agregarPaso(id2);
@@ -517,7 +548,8 @@ condicion : identificador comparador asignacion
 	if(!verficarCTEEnteras($3.sval))
 		yyerror("CTE de la comparacion debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 
-	Par id = new Par($1.sval);
+	//Par id = new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
@@ -638,7 +670,8 @@ asignacion : identificador '=' expresion ';'
 		//mostrarMensaje($1.sval + " No esta declarada.");
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-	Par id =  new Par($1.sval);
+	//Par id =  new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par asig = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(asig);
@@ -689,7 +722,8 @@ factor : constante
 		//mostrarMensaje($1.sval + " No esta declarada.");
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-    Par id =  new Par($1.sval);
+    //Par id =  new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	polaca.agregarPaso(id);
 	
 } 
@@ -865,7 +899,7 @@ void comprobarRango(String sval, boolean negativo){
 				*/
 				//compilador.Compilador.tablaSimbolo.put(s.getValor(),s);
 				//compilador.Compilador.tablaSimbolo.get(auxx).add(s);
-				mostrarMensaje("CTE FLOAT negativa esta dentro del rango");
+				//mostrarMensaje("CTE FLOAT negativa esta dentro del rango");
 			}
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
@@ -887,7 +921,7 @@ void comprobarRango(String sval, boolean negativo){
 				
 				//compilador.Compilador.tablaSimbolo.put(s.getValor(),s);
 				//compilador.Compilador.tablaSimbolo.get(sval).add(s);
-				mostrarMensaje("CTE ENTERA negativa esta dentro del rango");
+				//mostrarMensaje("CTE ENTERA negativa esta dentro del rango");
 			}
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(sval);
@@ -902,8 +936,9 @@ void comprobarRango(String sval, boolean negativo){
 		// ES FLOAT Y POSTIVO???
 		if (sval.contains("f") || sval.contains(".")){
 			flotante = Double.parseDouble(sval.replace('f', 'E'));
-			if ( AS10_Verificar_Rango_Float.estaEnRango(sval) )
-			mostrarMensaje("CTE FLOAT postiva esta dentro del rango");
+			if ( AS10_Verificar_Rango_Float.estaEnRango(sval) ){
+				//mostrarMensaje("CTE FLOAT postiva esta dentro del rango");
+			}
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(AS10_Verificar_Rango_Float.normalizar(flotante));
 				compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).remove(compilador.Compilador.tablaSimbolo.get(AS10_Verificar_Rango_Float.normalizar(flotante)).size()-1);
@@ -913,8 +948,9 @@ void comprobarRango(String sval, boolean negativo){
 		}
 		// ES ENTERA Y POSITIVA
 		else{
-			if ( AS9_Verificar_Rango_Constante.estaEnRango(sval) )
-			mostrarMensaje("CTE ENTERA postiva esta dentro del rango");
+			if ( AS9_Verificar_Rango_Constante.estaEnRango(sval) ){
+				//mostrarMensaje("CTE ENTERA postiva esta dentro del rango");
+			}
 			else {
 				//compilador.Compilador.tablaSimbolo.remove(sval);
 				sval = sval.toString().substring(0, sval.length()-2);
@@ -1275,6 +1311,7 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasajeParametro("COPIA VALOR");
 	}
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

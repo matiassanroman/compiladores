@@ -1,0 +1,11 @@
+
+FLOAT id1;
+
+PROC b() NA=1_i, NS=1_i {
+		FLOAT id1;
+		id1 = 2_i;
+		PROC cc() NA=0_i, NS=2_i {
+			id1 = 90_i;
+		}
+		id1= 77_i;
+}

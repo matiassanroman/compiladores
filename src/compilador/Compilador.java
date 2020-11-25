@@ -224,17 +224,12 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				
-				CrearSalida.crearTxtSalida(c);
-				
-				//GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 				if (errores.size() == 0) {
+					CrearSalida.crearTxtSalida(c);
 					PolacaInversa polaca = Parser.polaca;
+					System.out.println(polaca.toString());
 					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					System.out.println(generador.toString());
-					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("EAX","regio1", "regio2", "+"));
-					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("ECX","regio1", "regio2", "+"));
 					System.out.println(generador.toString());
 				}
 					

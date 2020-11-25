@@ -1,0 +1,16 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Proc	 Ambito: b:Main	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 1
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:b:cc	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2:Main:b	 Declarada: false	 tipoCTE: INTEGER
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2:Main:b:cc	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1:Main:b	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1:Main:b	 Declarada: false	 tipoCTE: INTEGER
+Clave: id1	 Value: id1	 Uso: ID	 TipoDeUso: Var	 Ambito: id1:Main	 Declarada: true	 tipoVar: FLOAT
+Clave: id1	 Value: id1	 Uso: ID	 TipoDeUso: Var	 Ambito: id1:Main:b	 Declarada: true	 tipoVar: FLOAT
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0:Main:b:cc	 Declarada: false	 tipoCTE: INTEGER
+Clave: 77	 Value: 77	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 77:Main:b	 Declarada: false	 tipoCTE: INTEGER
+Clave: 90	 Value: 90	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 90:Main:b:cc	 Declarada: false	 tipoCTE: INTEGER
+Clave: cc	 Value: cc	 Uso: ID	 TipoDeUso: Proc	 Ambito: cc:Main:b	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 2
