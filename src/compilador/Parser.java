@@ -486,7 +486,7 @@ ArrayList<String> errores = new ArrayList<String>();
 Token t;
 int lineaActual;
 ArrayList<String> reconocidos = new ArrayList<String>();
-PolacaInversa polaca = new PolacaInversa();
+static PolacaInversa polaca = new PolacaInversa();
 
 public Parser(Compilador c, ArrayList<String> errores)
 {
@@ -697,6 +697,97 @@ boolean nameManglingNs(String sval) {
 	}
 	return false;
 }
+
+String ambiente(String sval){
+	//0 se puede usar
+	//1 no esta al alcance.
+	//2 esta redeclarada
+	
+	//Tomo el ambito de la id (asignacion)
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
+	//Esta en la tabla de simbolos?
+	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
+		//Es una variable?
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var")){
+			//No esta declarada?
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Veo si es un id que esta dentro del Proc para evaluar el NS
+				if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + ":Main")){
+					if(nameManglingNs(sval))
+						return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+				}
+				//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Compruebo que el id no sea proc y que el ambito sea Main
+					if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + ":Main")) {
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
+							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+					}
+				}
+				//No existe una id declarada al alcance.
+				return null;	
+			}
+			//Si esta declarada ver que no este Redeclarada.
+			if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+				return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+			}else{
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size()-1; i++){
+					if(ambitoId.equals(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito())){
+						return null;
+					}
+				}
+			}
+			return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+		//Es un Proc?
+		}
+		else{
+			//Veo si el id de Proc no esta declarado para buscar si existe en el ambito
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+				//Recorro la lista de id de proc
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+					//Busco que esos id esten declarados
+					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+						String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+						String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
+						//Pregunto si tienen el mismo ambito
+						if(ambitoSinNombreLlamador.equals(ambitoSinNombreLlamado)) {
+							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+						}
+						//No se admite recursion
+						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\:");
+						if(sval.equals(recurAux[recurAux.length-1])){
+							//mostrarMensaje("No se permite recursion.");
+							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido. Error en linea: " + compilador.Compilador.nroLinea);
+						}
+						//Esta al alcance?
+						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();							
+						}
+					}
+				}
+				return null;
+			}	
+			else {
+				//Si esta declarada ver que no este Redeclarada
+				if(compilador.Compilador.tablaSimbolo.get(sval).size() == 1){
+						return compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito();
+				}else{
+					for(int j=0; j<compilador.Compilador.tablaSimbolo.get(sval).size()-1; j++){
+						if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(compilador.Compilador.tablaSimbolo.get(sval).get(j).getAmbito())){
+							return null;
+						}
+					}
+				}
+				return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();	
+			}			
+		}
+	}
+	//Si no esta en la tabla de simbolos no existe ninguna declaracion.
+	return null;
+
+}
+
 
 int sePuedeUsar(String sval){
 	//0 se puede usar
@@ -1878,8 +1969,9 @@ case 68:
 		/*mostrarMensaje($1.sval + " No esta declarada.");*/
 		yyerror(val_peek(0).sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-    Par id =  new Par(val_peek(0).sval);
+    Par id =  new Par(ambiente(val_peek(0).sval));
 	polaca.agregarPaso(id);
+	//System.out.println("ACA ESTA EL AMBIENTE DE LA VARIABLE     "+ambiente(val_peek(0).sval));
 }
 break;
 case 69:

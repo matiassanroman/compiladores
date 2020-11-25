@@ -690,6 +690,7 @@ factor : constante
 	}
     Par id =  new Par($1.sval);
 	polaca.agregarPaso(id);
+	
 } 
 	   ;
 

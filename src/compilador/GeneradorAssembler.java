@@ -28,6 +28,7 @@ public class GeneradorAssembler {
 	private String assembler;
 	private Conversor conversor;
 	private ArrayList<Character> estados;
+	private Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
 	
 	private ArrayList<String> registros32Bits;
 	private ArrayList<String> registros16Bits;
@@ -39,10 +40,6 @@ public class GeneradorAssembler {
 	private String PROC = "PROC";
 	
 	private Stack<String> pila;
-	
-	private String data = "";
-	private String code = "";
-	private String main = "";
 	
 	public static int numeroVar = 1;
 	public static String varAux = "@aux";
@@ -60,8 +57,11 @@ public class GeneradorAssembler {
 			"includelib \\masm32\\lib\\user32.lib\r\n" +
 			".data\r\n" + 
 			"mensaje db \"Mensaje por pantalla\", 0" + saltoDeLinea;
-	
+	private String data = "";
+	private String code = ".code" + saltoDeLinea;
 	public static String inicioMainAssembler = "main:" + saltoDeLinea;
+	private String main = "";
+	
 	
 	public static String finMainAssembler = "invoke ExitProcess, 0" + saltoDeLinea
 										  +	"end main";	
@@ -71,7 +71,7 @@ public class GeneradorAssembler {
 			 						   + "MOV VAR-REG, XX" + saltoDeLinea;
 	
 	public static String plantillaResta = "MOV XX, OP1" + saltoDeLinea 
-			   							+ "ADD XX, OP2" + saltoDeLinea
+			   							+ "SUB XX, OP2" + saltoDeLinea
 			   							+ "MOV VAR-REG, XX" + saltoDeLinea;
 	
 	public static String plantillaMultiplicacion = "MOV XX, OP1" + saltoDeLinea 
@@ -92,7 +92,7 @@ public class GeneradorAssembler {
 	public static String plantillaCompMayorIgual = "";
 	public static String plantillaCompMenorIgual = "";
 	
-	public static String plantillaMostrarPorPantallaCode = "invoke MessageBox, NULL, addr VAR, addr mensaje, MB_OK" + saltoDeLinea; //titulo de la ventana
+	public static String plantillaMostrarPorPantalla = "invoke MessageBox, NULL, addr VAR, addr mensaje, MB_OK" + saltoDeLinea; //titulo de la ventana
 	public static String plantillaMostrarPorPantallaData = "VAR db \"CADENA\", 0" + saltoDeLinea; // texto dentro la ventana de mesaje
 	
 	public static String plantillaEtiquetaProcedimiento = "ETIQUETA:" + saltoDeLinea;
@@ -114,12 +114,8 @@ public class GeneradorAssembler {
 		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
 		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
 		this.registros8BitAaltos = new ArrayList<String>(Arrays.asList( "AH", "BH", "CH", "DH")); 
-		
-		this.generarData(tablaSimbolo);
-		System.out.println(this.data);
+		this.tablaSimbolo = tablaSimbolo;
 	}
-	
-	
 	
 	private void generarInvocacion(String etiqueta, String destino) {
 		String nombreProc = etiqueta.replace("PROC ","");
@@ -127,27 +123,46 @@ public class GeneradorAssembler {
 		destino = destino + paraCode;
 	}
 	
-	private void generarCall(String nombreProc, String destino){
+	private String generarCall(String nombreProc, String destino){
 		String invocacion = plantillaCall.replace("F", "nombreProc");
 		destino = destino + invocacion;
+		return destino;
 	}
 	
-	private void generarMensajePorPantalla(String cadenaAMostrar, String destino){
-		String codigo = plantillaMostrarPorPantallaCode.replace("VAR", cadenaAMostrar);
-		String paraData = plantillaMostrarPorPantallaData.replace("VAR", cadenaAMostrar);
-		paraData = paraData.replace("CADENA", cadenaAMostrar);
-		destino = destino + codigo;
-		this.data = this.data + paraData;
+	private String generarMensajePorPantalla(String cadenaAMostrar, String destino){
+		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
+		cadenaAMostrar = "_"+cadenaAMostrar;
+		cadenaAMostrar = cadenaAMostrar.replace(" ", "_");
+		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
+		destino = destino + codigo;	
+		return destino;
 	}
 	
+	public String generarIstruccionesVariableAux(String reg, String operando1, String operando2, String operando) {
+		String auxAux = generarVarAux();
+		String testo  = "";
+		if (operando.equals("+"))
+			testo = plantillaSuma;
+		if (operando.equals("-"))
+			testo = plantillaResta;
+		if (operando.equals("/"))
+			testo = plantillaDivision;
+		if (operando.equals("*"))
+			testo = plantillaMultiplicacion;
+		testo = testo.replace("VAR-REG", auxAux);
+		testo = testo.replace("XX", reg);
+		testo = testo.replace("OP1", operando1);
+		testo = testo.replace("OP2", operando2);
+		data= data.concat(auxAux + " dd " + "?" + saltoDeLinea);
+		return testo;
+	}
 	
-	
-	public void generarData(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo){
+	public void generarData(){
 		// volcar toda la tabla de simbolos 
 		// a la variable data que luego se agregara a la salida final
 		// revisar formato
 		
-		Set<String> keys = tablaSimbolo.keySet();
+		Set<String> keys = this.tablaSimbolo.keySet();
 	    Iterator<String> itr = keys.iterator();
 	    String str;
 	    
@@ -156,32 +171,37 @@ public class GeneradorAssembler {
 	       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
     	   for(int i=0; i<aux.size(); i++) {
     		   if (aux.get(i).getTipo().equals("Proc")) { 
-    			   this.data = this.data + "_" +aux.get(i).getAmbito() + " DW  ?" + saltoDeLinea;
+    			   this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
     		   } 
     		   else if(aux.get(i).getUso().equals("ID")) {
 				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
-					   this.data = this.data + "_" +aux.get(i).getAmbito() + " DW  ?" + saltoDeLinea;
+					   this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
 			   		if(aux.get(i).getTipoParametro().equals("FLOAT"))
-			   			this.data = this.data + "_" +aux.get(i).getAmbito() + " DD  ?" + saltoDeLinea;
+			   			this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dd ?" + saltoDeLinea;
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int"))
-					   this.data = this.data + "_" + aux.get(i).getValor() + " DW " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "_" + aux.get(i).getValor() + " DD " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dd " + aux.get(i).getValor() + saltoDeLinea;
     		   }
     		   else if(aux.get(i).getUso().equals("CADENA")) {
-    				   this.data = this.data + "_" + aux.get(i).getValor() + " DB " + aux.get(i).getValor() + " , 0" + saltoDeLinea;			   
+    			   	   String cadenipi = aux.get(i).getValor();
+    			   	   String cadenipi2 = cadenipi;
+    			   	   cadenipi = cadenipi.replaceAll("\"", "");
+    			   	   cadenipi = cadenipi.replaceAll(" ", "_");
+    			   	   this.data = this.data + "_" + cadenipi + " db " + cadenipi2 + ", 0" + saltoDeLinea;
+    				   //this.data = this.data + "_" + aux.get(i).getValor() + " DB " + aux.get(i).getValor() + " , 0" + saltoDeLinea;			   
     		   }	   
     		   else if(aux.get(i).getUso().equals("AUX")) {
 				   if(aux.get(i).getTipo().equals("int"))
-					   this.data = this.data + "@" + aux.get(i).getValor() + " DW " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "@" + aux.get(i).getValor() + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "@" + aux.get(i).getValor() + " DD " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "@" + aux.get(i).getValor() + " dd " + aux.get(i).getValor() + saltoDeLinea;
     		   }
     	   } 
 	    }		
-}
+	}
 	
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
@@ -193,26 +213,24 @@ public class GeneradorAssembler {
 			if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 				if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 						String cadena = pila.pop();
-						generarMensajePorPantalla(cadena, this.main);
+						main = generarMensajePorPantalla(cadena, main);
 				}
 				if (elemento.equals("CALL")){              // Si es CALL generar llamado
 					String nProc = pila.pop();
-					generarCall(nProc, this.main);
+					main = generarCall(nProc, main);
+				}
+				if (operadoresBinarios.contains(elemento)) {
+					if (elemento.equals("=")) {
+						String operando1 = pila.pop();
+						String operando2 = pila.pop();	
+					}	
 				}
 			}
 			// codigo para el resto de las operaciones
 			///////////////
 			
-			
-			
-			
-			
-			
-			
-			
-			
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				generarInvocacion(elemento, this.main);
+				generarInvocacion(elemento, this.main);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -221,7 +239,6 @@ public class GeneradorAssembler {
 					if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 								String cadena = pila.pop();
-								generarMensajePorPantalla(cadena, this.code);
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
@@ -235,21 +252,9 @@ public class GeneradorAssembler {
 				if (listaPolaca.get(i).getValor() == "RET")           // cuendo detecto RET lo agrego al code para cerar el procedimiento 
 					this.code = this.code + "ret" + saltoDeLinea;
 			}
-				
-				
-
 		}
 	}
 
-	public String toString(){
-		assembler = assembler + encabezado;
-		assembler = assembler + data;
-		assembler = assembler + code;
-		assembler = assembler + inicioMainAssembler;
-		assembler = assembler + main;
-		assembler = assembler + finMainAssembler;
-		return assembler;
-	}	
 	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
 		ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
 	    boolean p = true;
@@ -292,4 +297,15 @@ public class GeneradorAssembler {
 	    }
 	    return aux;
 	}
+	
+	public String toString(){
+		this.generarData();
+		assembler = assembler + encabezado;
+		assembler = assembler + data;
+		assembler = assembler + code;
+		assembler = assembler + inicioMainAssembler;
+		assembler = assembler + main;
+		assembler = assembler + finMainAssembler;
+		return assembler;
+	}	
 }

@@ -1,25 +1,6 @@
-<<<<<<< HEAD
-INTEGER a,b,c;
-IF (a<b=1_i;){
-	a = a + 1_i;
-}
-ELSE{
-	a = b;
-}
+INTEGER a,b,d,f;
+IF (a == b){
+		FOR(i = 1_i ; i < 5_i; UP 1_i){
+			d=f;
+		}}
 END_IF
-=======
-INTEGER z;
-z=20_i;
-
-PROC a() NA=2_i, NS=2_i { 
-	z = 44_i;
-	PROC b() NA=1_i, NS=2_i {
-		FLOAT id1;
-		id1 = 2_i;
-	}
-	b();
-	PROC c() NA=1_i, NS=2_i {
-		FLOAT id1;
-	}
-}
->>>>>>> a1b9318a1d4edc0f13f8d78e0706ea3bdf82bf4b

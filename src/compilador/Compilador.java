@@ -228,7 +228,12 @@ public class Compilador {
 				
 				GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo);
 				if (errores.size() == 0) {
-					System.out.println(generador);
+					PolacaInversa polaca = Parser.polaca;
+					generador.generarAssembler(polaca);
+					System.out.println(generador.toString());
+					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("EAX","regio1", "regio2", "+"));
+					System.out.println("VARaux:     \r\n"+generador.generarIstruccionesVariableAux("ECX","regio1", "regio2", "+"));
+					System.out.println(generador.toString());
 				}
 					
 					
