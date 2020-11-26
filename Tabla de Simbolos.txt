@@ -2,10 +2,11 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b:Main	 Declarada: true	 tipoVar: INTEGER
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b:Main	 Declarada: true	 tipoVar: FLOAT
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a:Main	 Declarada: true	 tipoVar: FLOAT
 Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1:Main:ano	 Declarada: false	 tipoCTE: INTEGER
 Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1:Main:ano	 Declarada: false	 tipoCTE: INTEGER
 Clave: ano	 Value: ano	 Uso: ID	 TipoDeUso: Proc	 Ambito: ano:Main	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 1
-Clave: f	 Value: f	 Uso: ID	 TipoDeUso: Var	 Ambito: f:Main	 Declarada: true	 tipoVar: INTEGER
-Clave: d	 Value: d	 Uso: ID	 TipoDeUso: Var	 Ambito: d:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: f	 Value: f	 Uso: ID	 TipoDeUso: Var	 Ambito: f:Main	 Declarada: true	 tipoVar: FLOAT
+Clave: d	 Value: d	 Uso: ID	 TipoDeUso: Var	 Ambito: d:Main	 Declarada: true	 tipoVar: FLOAT
+Clave: c	 Value: c	 Uso: ID	 TipoDeUso: Var	 Ambito: c:Main	 Declarada: true	 tipoVar: FLOAT

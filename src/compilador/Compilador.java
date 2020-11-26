@@ -224,15 +224,18 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				System.out.println("HJGGHGH: " + errores.size());
+				//System.out.println("HJGGHGH: " + errores.size());
 				if (errores.size() == 0) {
 					CrearSalida.crearTxtSalida(c);
 					PolacaInversa polaca = Parser.polaca;
 					System.out.println(polaca.toString());
 					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					System.out.println(generador.toString());    
-					System.out.println(generador.generarEtiqueta("L45"));
+					//System.out.println(generador.toString());    
+					//System.out.println(generador.generarEtiqueta("L45"));
+					//System.out.println(generador.generarInstruccionesFLOAT("EAX","AX","/",1));
+					//System.out.println(generador.generarInstruccionesFLOAT("EAX","AX","*",2));
+					System.out.println(generador.toString());
 				}
 					
 					

@@ -1,6 +1,8 @@
-INTEGER a,b,d,f;
+FLOAT a,b,d,f,c;
 PROC ano()NA=1_i,NS=1_i{
 	a=b;
 }
 
 ano();
+
+a = b + c;
