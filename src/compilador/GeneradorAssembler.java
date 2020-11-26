@@ -647,7 +647,7 @@ public class GeneradorAssembler {
 		return testo;
 	}
 	
-	public String generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
+	public void generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
 		String formato = plantillaOperacionFloat;
 		// ESTABLECER OPERACION
 		/*= "OpPila REG1" + saltoDeLinea      Agrega REG a la pila de coprocesador
@@ -693,7 +693,6 @@ public class GeneradorAssembler {
 		String variableAAgregar = plantillaAgregarVarFLOAT; 
 		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);
 		this.data = this.data + variableAAgregar;
-		return formato;
 	}
 	
 	

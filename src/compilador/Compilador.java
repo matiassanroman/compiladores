@@ -233,8 +233,8 @@ public class Compilador {
 					generador.generarAssembler(polaca);
 					//System.out.println(generador.toString());    
 					//System.out.println(generador.generarEtiqueta("L45"));
-					//System.out.println(generador.generarInstruccionesFLOAT("EAX","AX","/",1));
-					//System.out.println(generador.generarInstruccionesFLOAT("EAX","AX","*",2));
+					//generador.generarInstruccionesFLOAT("EAX","AX","/",1);
+					//generador.generarInstruccionesFLOAT("EAX","AX","*",2);
 					System.out.println(generador.toString());
 				}
 					
