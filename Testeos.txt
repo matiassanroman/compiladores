@@ -1,6 +1,6 @@
 INTEGER a,b,d,f;
-IF (a == b){
-		FOR(i = 1_i ; i < 5_i; UP 1_i){
-			d=f;
-		}}
-END_IF
+PROC ano()NA=1_i,NS=1_i{
+	a=b;
+}
+
+ano();

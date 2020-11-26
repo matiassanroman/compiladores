@@ -46,6 +46,9 @@ public class GeneradorAssembler {
 	
 	public static String saltoDeLinea = "\r\n";
 	
+	/////////////////////////////////////////////////////////////
+	/////////// ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER //////////
+	
 	public static String encabezado = 
 			".386\r\n" + 
 			".model flat, stdcall\r\n" + 
@@ -61,11 +64,14 @@ public class GeneradorAssembler {
 	private String code = ".code" + saltoDeLinea;
 	public static String inicioMainAssembler = "main:" + saltoDeLinea;
 	private String main = "";
+	public static String finMainAssembler = "fin: invoke ExitProcess, 0" + saltoDeLinea
+										  +	"end main" + saltoDeLinea;	
 	
+	/////////// FIN ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER //////////
+	/////////////////////////////////////////////////////////////////
 	
-	public static String finMainAssembler = "invoke ExitProcess, 0" + saltoDeLinea
-										  +	"end main";	
-	
+	/////////////////////////////////////////////////////////////////
+	///////////////// PLANTILLAS DE OPERACIONES /////////////////////
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
 			 						   + "ADD XX, OP2" + saltoDeLinea
 			 						   + "MOV VAR-REG, XX" + saltoDeLinea;
@@ -85,20 +91,29 @@ public class GeneradorAssembler {
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea
 											 + "MOV VAR-REG, XX" + saltoDeLinea;
 	
-	public static String plantillaCompIgual = "";
-	public static String plantillaCompDistinto = "";
-	public static String plantillaCompMayor = "";
-	public static String plantillaCompMenor = "";
-	public static String plantillaCompMayorIgual = "";
-	public static String plantillaCompMenorIgual = "";
+	
+	public static String plantillaCompIgual =          "JNE Llabel" + saltoDeLinea;
+	public static String plantillaCompDistinto =       "JE Llabel"  + saltoDeLinea;
+	public static String plantillaCompMayor =          "JLE Llabel" + saltoDeLinea;
+	public static String plantillaCompMenor =          "JGE Llabel" + saltoDeLinea;
+	public static String plantillaCompMayorIgual =     "JL Llabel"  + saltoDeLinea;
+	public static String plantillaCompMenorIgual =     "JG Llabel"  + saltoDeLinea;
+	public static String plantillaSaltoIncondicional = "JMP Llabel" + saltoDeLinea;
+	public static String plantillaComparacion = "CMP RA, RB" + saltoDeLinea;
 	
 	public static String plantillaMostrarPorPantalla = "invoke MessageBox, NULL, addr VAR, addr mensaje, MB_OK" + saltoDeLinea; //titulo de la ventana
 	public static String plantillaMostrarPorPantallaData = "VAR db \"CADENA\", 0" + saltoDeLinea; // texto dentro la ventana de mesaje
 	
-	public static String plantillaEtiquetaProcedimiento = "ETIQUETA:" + saltoDeLinea;
+	public static String plantillaEtiqueta = "ETIQUETA:" + saltoDeLinea;
 	public static String plantillaCall = "call F" + saltoDeLinea;
-	public static String plantillaAgregarVar = "";
-
+	public static String plantillaAgregarVarINTEGER = "VAR + \" dw \" + \"?\"" + saltoDeLinea;
+	public static String plantillaAgregarVarFLOAT   = "VAR + \" dd \" + \"?\"" + saltoDeLinea;
+	
+	public static String saltoPorOverflow = "JO fin" + saltoDeLinea;
+	
+	////////////////// FIN PLANTILLAS DE OPERACIONES ////////////////
+	/////////////////////////////////////////////////////////////////
+	
 	private String generarVarAux() {
 		String var = varAux + Integer.toString(numeroVar) ;
 		numeroVar += 1;
@@ -117,16 +132,15 @@ public class GeneradorAssembler {
 		this.tablaSimbolo = tablaSimbolo;
 	}
 	
-	private void generarInvocacion(String etiqueta, String destino) {
+	private String generarInvocacion(String etiqueta) {
 		String nombreProc = etiqueta.replace("PROC ","");
-		String paraCode = plantillaEtiquetaProcedimiento.replace("ETIQUETA", nombreProc);
-		destino = destino + paraCode;
+		String paraCode = plantillaCall.replace("ETIQUETA", nombreProc);
+		return paraCode;
 	}
 	
-	private String generarCall(String nombreProc, String destino){
-		String invocacion = plantillaCall.replace("F", "nombreProc");
-		destino = destino + invocacion;
-		return destino;
+	private String generarCall(String nombreProc){
+		String invocacion = plantillaCall.replace("F", nombreProc);
+		return invocacion;
 	}
 	
 	private String generarMensajePorPantalla(String cadenaAMostrar, String destino){
@@ -153,8 +167,41 @@ public class GeneradorAssembler {
 		testo = testo.replace("XX", reg);
 		testo = testo.replace("OP1", operando1);
 		testo = testo.replace("OP2", operando2);
-		data= data.concat(auxAux + " dd " + "?" + saltoDeLinea);
+		data= data.concat(plantillaAgregarVarFLOAT.replace("VAR", auxAux));
 		return testo;
+	}
+	
+	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
+		String bestial;
+		bestial = plantillaComparacion;
+		if (salto.equals("BF")) {
+			if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
+			else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
+				else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
+					else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
+						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
+							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
+		}
+		else if (salto.equals("BI"))
+			bestial = bestial + plantillaSaltoIncondicional;
+		bestial = bestial.replace("RA", regComp1);
+		bestial = bestial.replace("RB", regComp2);
+		bestial = bestial.replace("label", pos);
+		return bestial;
+	}
+	
+	public String generarEtiqueta(String label){
+		String abominacion = plantillaEtiqueta;
+		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
+		return abominacion;
+	}
+	
+	public String generarAsignacion(String reg, String izquierdo, String derecho){
+		String omunculo = plantillaAsignacion;
+		omunculo = omunculo.replace("XX", reg);
+		omunculo = omunculo.replace("OP1", derecho);
+		omunculo = omunculo.replace("VAR-REG", izquierdo);
+		return omunculo;
 	}
 	
 	public void generarData(){
@@ -217,7 +264,7 @@ public class GeneradorAssembler {
 				}
 				if (elemento.equals("CALL")){              // Si es CALL generar llamado
 					String nProc = pila.pop();
-					main = generarCall(nProc, main);
+					this.main = this.main + generarCall(nProc);
 				}
 				if (operadoresBinarios.contains(elemento)) {
 					if (elemento.equals("=")) {
@@ -230,7 +277,7 @@ public class GeneradorAssembler {
 			///////////////
 			
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				generarInvocacion(elemento, this.main);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarEtiqueta(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -242,7 +289,7 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
-							generarCall(nProc, this.code);
+							this.code = this.code + generarCall(nProc);
 						}
 					}
 					//generar codigo para todos los tipos de instrucciones para dentro de ese procedimiento
