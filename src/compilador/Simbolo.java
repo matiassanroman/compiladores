@@ -35,7 +35,7 @@ public class Simbolo {
 	}
 	
 	public String ambitoSinNombre() {
-		String [] arreglo = getAmbito().split("\\:");
+		String [] arreglo = getAmbito().split("\\@");
 		String auxSinNombre = "";
 		boolean primero = true;
 		for(int z=1; z<arreglo.length; z++) {
@@ -44,7 +44,7 @@ public class Simbolo {
 				auxSinNombre = arreglo[z];
 			}
 			else
-				auxSinNombre = auxSinNombre + ":" + arreglo[z];
+				auxSinNombre = auxSinNombre + "@" + arreglo[z];
 		}
 		return auxSinNombre;
 	}

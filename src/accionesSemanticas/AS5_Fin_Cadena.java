@@ -35,7 +35,7 @@ public class AS5_Fin_Cadena extends AccionSemantica{
 			
 			s.setUso("CADENA");
 			//Ambito Main
-			String aux2 = s.getValor() + ":" + "Main";
+			String aux2 = s.getValor() + "@" + "Main";
 			s.setAmbito(aux2,true);
 			return tablaToken.get("CADENA");
 		}

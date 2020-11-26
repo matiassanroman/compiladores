@@ -55,26 +55,32 @@ public class Registros {
 			reg_EDX = polaca;
 		}
 	}
-	public String getPrimerRegistroLibre(String tipo) {
+	
+	public String getPrimerRegistroLibre(String tipo, String operador) {
 		if (tipo.equals("FLOAT")) {
-			if (reg_EAX == 0)
-				return "EAX";
+			if (operador.equals("*") || operador.equals("/")) {
+				if (reg_EAX == 0)
+					return "EAX";
+				if (reg_EDX == 0)
+					return "EDX";	
+			}	
 			if (reg_EBX == 0)
 				return "EBX";
 			if (reg_ECX == 0)
 				return "ECX";
-			if (reg_EDX == 0)
-				return "EDX";		
+				
 			
-		}else if (tipo.equals("INTEGER")) {			
-			if (reg_EAX == 0)
-				return "AX";		
+		}else if (tipo.equals("INTEGER")) {	
+			if(operador.equals("*") || operador.equals("/")) {
+				if (reg_EAX == 0)
+					return "AX";
+				if (reg_EDX == 0)
+					return "DX";	
+			}
 			if (reg_EBX == 0)
 				return "BX";
 			if (reg_ECX == 0)
 				return "CX";
-			if (reg_EDX == 0)
-				return "DX";	
 		}
 		return "";
 	
@@ -111,6 +117,5 @@ public class Registros {
 		
 		}
 		return true;
-	}
-	
+	}	
 }

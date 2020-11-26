@@ -1,5 +1,5 @@
 
-FLOAT i;
-FLOAT f;
+INTEGER i;
+INTEGER f;
 
-f = 15.15f-30 + i;
+f = i;

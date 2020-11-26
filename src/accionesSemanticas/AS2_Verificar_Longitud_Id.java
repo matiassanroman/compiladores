@@ -42,7 +42,7 @@ public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 		s.setUso("ID");
 		s.setTipo("Var");
 		//Ambito Main
-		String aux2 = s.getValor() + ":" + "Main";
+		String aux2 = s.getValor() + "@" + "Main";
 		s.setAmbito(aux2,true);
 		return tablaToken.get("ID");
 		

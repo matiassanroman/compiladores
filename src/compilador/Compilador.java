@@ -224,14 +224,14 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				System.out.println("HJGGHGH: " + errores.size());
 				if (errores.size() == 0) {
 					CrearSalida.crearTxtSalida(c);
 					PolacaInversa polaca = Parser.polaca;
 					System.out.println(polaca.toString());
 					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					System.out.println(generador.toString());
+					//System.out.println(generador.toString());
+					CrearAssembler.crearTxtSalida(generador.toString());
 				}
 					
 					

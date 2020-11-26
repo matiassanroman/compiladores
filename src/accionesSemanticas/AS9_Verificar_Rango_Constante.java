@@ -40,7 +40,7 @@ public class AS9_Verificar_Rango_Constante extends AccionSemantica{
 			
 			s.setUso("CTE");
 			//Ambito Main
-			String aux = s.getValor() + ":" + "Main";
+			String aux = s.getValor() + "@" + "Main";
 			s.setAmbito(aux,true);
 			return tablaToken.get("CTE");
 		}
