@@ -2,16 +2,10 @@
 
 /*  Tabla de Simbolos  */
 
-<<<<<<< HEAD
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: true
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
-Clave: b	 Value: b	 Uso: ID	 Ambito: b:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: true
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: a	 Value: a	 Uso: ID	 Ambito: a:Main	 Tipo: Var	 Declarada: false
-Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
-Clave: 1	 Value: 1	 Uso: CTE	 Ambito: 1:Main	 Tipo: int	 Declarada: false
-Clave: c	 Value: c	 Uso: ID	 Ambito: c:Main	 Tipo: Var	 Declarada: true
-
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1:Main:ano	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1:Main:ano	 Declarada: false	 tipoCTE: INTEGER
+Clave: ano	 Value: ano	 Uso: ID	 TipoDeUso: Proc	 Ambito: ano:Main	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 1
+Clave: f	 Value: f	 Uso: ID	 TipoDeUso: Var	 Ambito: f:Main	 Declarada: true	 tipoVar: INTEGER
+Clave: d	 Value: d	 Uso: ID	 TipoDeUso: Var	 Ambito: d:Main	 Declarada: true	 tipoVar: INTEGER

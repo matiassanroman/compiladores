@@ -27,13 +27,17 @@ public class GeneradorAssembler {
 	
 	private String assembler;
 	private Conversor conversor;
-	private ArrayList<Character> estados;
 	private Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
 	
+	//No va mas esto
+	private ArrayList<String> estados;
 	private ArrayList<String> registros32Bits;
 	private ArrayList<String> registros16Bits;
 	private ArrayList<String> registros8BitsBajos;
 	private ArrayList<String> registros8BitAaltos;
+	//No va mas esto
+	
+	Registros registro = new Registros();
 	
 	private ArrayList<String> operadoresBinarios = new ArrayList<String>(Arrays.asList("+","-","*","/","<","<=",">",">=","==","!=","="));
 	private ArrayList<String> operadoresUnarios = new ArrayList<String>(Arrays.asList("OUT","BF","BI","CALL"));
@@ -73,6 +77,7 @@ public class GeneradorAssembler {
 	/////////////////////////////////////////////////////////////////
 	///////////////// PLANTILLAS DE OPERACIONES /////////////////////
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
+
 			 						   + "ADD XX, OP2" + saltoDeLinea
 			 						   + "MOV VAR-REG, XX" + saltoDeLinea;
 	
@@ -113,18 +118,19 @@ public class GeneradorAssembler {
 	
 	////////////////// FIN PLANTILLAS DE OPERACIONES ////////////////
 	/////////////////////////////////////////////////////////////////
-	
 	private String generarVarAux() {
 		String var = varAux + Integer.toString(numeroVar) ;
 		numeroVar += 1;
 		return var;
 	}
 	
-	public GeneradorAssembler(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo) {
+	public GeneradorAssembler(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo, PolacaInversa polaca) {
 		this.assembler = "";
 		this.conversor = new Conversor();
 		this.pila = new Stack<String>();
-		this.estados  = new ArrayList<Character>(Arrays.asList('L','L','L','L'));
+		
+		//No va mas esto
+		this.estados  = new ArrayList<String>(Arrays.asList("L","L","L","L"));
 		this.registros32Bits     = new ArrayList<String>(Arrays.asList("EAX","EBX","ECX","EDX"));
 		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
 		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
@@ -152,25 +158,7 @@ public class GeneradorAssembler {
 		return destino;
 	}
 	
-	public String generarIstruccionesVariableAux(String reg, String operando1, String operando2, String operando) {
-		String auxAux = generarVarAux();
-		String testo  = "";
-		if (operando.equals("+"))
-			testo = plantillaSuma;
-		if (operando.equals("-"))
-			testo = plantillaResta;
-		if (operando.equals("/"))
-			testo = plantillaDivision;
-		if (operando.equals("*"))
-			testo = plantillaMultiplicacion;
-		testo = testo.replace("VAR-REG", auxAux);
-		testo = testo.replace("XX", reg);
-		testo = testo.replace("OP1", operando1);
-		testo = testo.replace("OP2", operando2);
-		data= data.concat(plantillaAgregarVarFLOAT.replace("VAR", auxAux));
-		return testo;
-	}
-	
+
 	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
 		String bestial;
 		bestial = plantillaComparacion;
@@ -253,6 +241,7 @@ public class GeneradorAssembler {
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
 		ArrayList<Par> listaPolaca = polaca.getPolaca();
+		
 		for (int i = 0; i < listaPolaca.size(); i++) {
 			String elemento = listaPolaca.get(i).getValor();
 			if ( !this.operadoresUnarios.contains(elemento) && !this.operadoresBinarios.contains(elemento) && !elemento.contains(PROC) )  // Si son ids o ctes las apilo
@@ -273,8 +262,18 @@ public class GeneradorAssembler {
 					}	
 				}
 			}
-			// codigo para el resto de las operaciones
-			///////////////
+			if (operadoresBinarios.contains(elemento)) {
+				if (elemento.equals("+")) {
+//					this.getCodSuma();
+				}
+				if (elemento.equals("=")) {
+					this.getCodAsignacion();
+				}
+			}
+			
+			
+			
+
 			
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
 				this.code = this.code + generarEtiqueta(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
@@ -345,6 +344,276 @@ public class GeneradorAssembler {
 	    return aux;
 	}
 	
+//	private void getCodSuma() {
+//		
+//		// x + y => ope1 = x ; ope2 = y
+//		String operando2 = pila.pop();
+//		String operando1 = pila.pop();
+//		
+//		String codigo = "";
+//		
+//		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
+//			//SEGUIMIENTO DE REGISTROS - INTEGER - (2 VARIABLES O CTES)
+//			//SITUACION 1
+//			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+//				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER"), 1);
+//				codigo = plantillaSuma;
+//				codigo = codigo.replace("MOV VAR-REG, XX", "");
+//				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+//				codigo = codigo.replace("OP1", operando1);
+//				codigo = codigo.replace("OP2", operando2);
+//				pila.push(registro.getRegistro(1, "INTEGER"));
+//				this.main = this.main + codigo;
+//			}
+//			//VARIABLES AUXILIARES - FLOAT - LOS DOS OPERANDOS
+//			//SITUACION 2
+//			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+//				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+//				String reg = registro.getRegistro(1, "FLOAT");
+//				this.main = this.main + generarIstruccionesVariableAux(reg, operando1, operando2, "+");
+//				registro.ocuparRegistro(reg, 0);
+//			}
+//			//SINO CONVERTIR
+//			else {
+//				//OPERANDO 1 FLOAT Y OPERANDO 2 INTEGER
+//				//SITUACION 3
+//				if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+//					codigo = "FILD OP1" + saltoDeLinea +
+//							 "FIADD OP1" + saltoDeLinea;
+//					codigo = codigo.replace("OP1", "_"+operando2);
+//					registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+//					String reg = registro.getRegistro(1, "FLOAT");
+//					this.main = this.main + generarIstruccionesVariableAux(reg, operando1, operando2, "+");
+//					registro.ocuparRegistro(reg, 0);
+//				}
+//				//OPERANDO 1 INTEGER Y OPERANDO 2 FLOAT
+//				//SITUACION 4
+//				else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+//					
+//				}
+//			}
+//		}
+//		//(OPERANDO 1 ES UN REGISTRO)
+//		//SITUACION 5
+//		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null &&
+//			(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) ) {
+//				codigo = "ADD XX, OP2" + saltoDeLinea;
+//				codigo = codigo.replace("XX", operando1);
+//				codigo = codigo.replace("OP2", operando2);
+//				pila.push(operando1);
+//				this.main = this.main + codigo;
+//		}
+//		//VARIABLES AUXILIARES - FLOAT - OPERANDO 1: AUX OPERANDO 2: FLOAT
+//		//SITUACION 6
+//		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null &&	
+//		(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) ) {
+//				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+//				String reg = registro.getRegistro(1, "FLOAT");
+//				this.main = this.main + generarIstruccionesVariableAux(reg, operando1, operando2, "+");
+//				registro.ocuparRegistro(reg, 0);
+//		}
+//		//SINO CONVERTIR
+//		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null) {
+//			//OPERANDO 1 AUX Y OPERANDO 2 INTEGER
+//			//SITUACION 7
+//			if(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+//				
+//			}
+//			//OPERANDO 1 REG Y OPERANDO 2 FLOAT
+//			//SITUACION 8
+//			else if(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+//				
+//			}
+//		}
+//		//(2 REGISTROS) - (DEPENDE DEL REGISTRO QUE MUESTRE HAY QUE CONVERTIR O NO)
+//		//SITUACION 9
+//		else if( (this.getSimbolo(operando1) == null && this.getSimbolo(operando2) == null) &&
+//			(registroInt(operando1) && registroInt(operando2)) ) {
+//				codigo = "ADD XX, OP2" + saltoDeLinea;
+//				codigo = codigo.replace("XX", operando1);
+//				codigo = codigo.replace("OP2", operando2);
+//				pila.push(registro.getRegistro(1, "INTEGER"));
+//				registro.ocuparRegistro(operando2, 0);
+//				this.main = this.main + codigo;
+//			}
+//			//SINO CONVERTIR
+//			else {
+//				//OPERANDO 1 AUX Y OPERANDO 2 REG
+//				//SITUACION 10
+//				if(registroFloat(operando1) && registroInt(operando2)) {
+//					
+//				}
+//				//OPERANDO 1 REG Y OPERANDO 2 AUX
+//				//SITUACION 11
+//				if(registroInt(operando1) && registroFloat(operando2)) {
+//					
+//				}
+//			}
+//		}
+//		else if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) == null) {
+//			//(OPERANDO 2 ES UN REGISTRO)
+//			//SITUACION 12
+//			if(registroInt(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
+//				codigo = "ADD XX, OP2" + saltoDeLinea;
+//				codigo = codigo.replace("XX", operando2);
+//				codigo = codigo.replace("OP2", operando1);
+//				pila.push(operando2);
+//				this.main = this.main + codigo;
+//			}
+//			//VARIABLES AUXILIARES - FLOAT - OPERANDO 2: AUX
+//			//SITUACION 13
+//			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroFloat(operando2)) {
+//				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+//				String reg = registro.getRegistro(1, "FLOAT");
+//				this.main = this.main + generarIstruccionesVariableAux(reg, operando1, operando2, "+");
+//				registro.ocuparRegistro(reg, 0);
+//			}
+//			//SINO CONVERTIR
+//			else {
+//				//OPERANDO 1 VAR/CTE(INT) Y OPERANDO 2 AUX
+//				//SITUACION 14
+//				if(registroFloat(operando1) && registroInt(operando2)) {
+//					
+//				}
+//				//OPERANDO 1 VAR/CTE(FLOAT) Y OPERANDO 2 REG
+//				//SITUACION 15
+//				else if(registroInt(operando1) && registroFloat(operando2)) {
+//				}
+//			}
+//		}		
+//	}
+
+
+	private void getCodAsignacion(){
+		
+		// x = y => ope1 = x ; ope2 = y
+		String operando2 = pila.pop();
+		String operando1 = pila.pop();
+		System.out.println("ENTRO 1: " + operando1);
+		String codigo = "";
+		
+		//I(OPERANDO 2) = J (OPERANDO 1)
+		
+		//SITACION 1
+		// OPERANDO 1 Y OPERANDO 2 SON INTEGER - 1 ES REG
+		if( (this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null) && 
+		 (registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) ) {
+			codigo = plantillaAsignacion;
+			codigo = codigo.replace("MOV VAR-REG, XX", "");
+			codigo = codigo.replace("XX", operando2);
+			codigo = codigo.replace("OP1", operando1);
+			registro.ocuparRegistro(operando1, 0);
+			this.main = this.main + codigo;
+		}
+		//SITUACION 2
+		//OPERANDO 1 Y OPERANDO 2 SON INTEGER - 2 VAR/CTE
+		else if( (this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) && 
+			(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) ) {
+			registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER"), 1);
+			codigo = plantillaAsignacion;
+			codigo = codigo.replace("MOV VAR-REG, XX", "");
+			codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+			codigo = codigo.replace("OP1", operando2);
+			codigo = codigo + plantillaAsignacion;
+			codigo = codigo.replace("MOV VAR-REG, XX", "");
+			codigo = codigo.replace("OP1", registro.getRegistro(1, "INTEGER"));
+			codigo = codigo.replace("XX", operando1);
+			registro.ocuparRegistro(registro.getRegistro(1, "INTEGER"), 0);
+			this.main = this.main + codigo;
+		}	
+		//SITUACION 3
+		//OPERANDO 1 Y OPERANDO 2 SON FLOAT
+		else if( (this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) &&
+			(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) ) {
+			registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+			String reg = registro.getRegistro(1, "FLOAT");
+			this.main = this.main + generarAsignacion(reg, operando2, operando1);
+			registro.ocuparRegistro(reg, 0);
+		}
+		//SITUACION 4
+		// OPERANDO 2 SEA INTEGER Y OPERANDO 1 FLOAT - ERROR
+		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
+		}
+		//SITUACION 4
+		// OPERANDO 2 SEA INTEGER Y OPERANDO 1 FLOAT - ERROR
+		else if(this.getSimbolo(operando2) == null && registroInt(operando2)) {
+				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
+		}
+		//SITUACION 5
+		// OPERANDO 2 SEA FLOAT Y OPERANDO 1 INTEGER - CONVERSION
+		else {
+			registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT"), 1);
+			String reg = registro.getRegistro(1, "FLOAT");
+			codigo = "FILD OP1" + saltoDeLinea +
+					 "FSTP OP2" + saltoDeLinea;
+			codigo = codigo.replace("OP1", "_"+operando1);
+			codigo = codigo.replace("OP2", "_"+operando2);
+			this.main = this.main + codigo ;
+			registro.ocuparRegistro(reg, 0);
+		}
+	}
+	
+	void errorDeEjecucion(String mensaje) {
+		System.out.println(mensaje);
+	}
+	
+	//Me devuelve el Simbolo para poder saber el tipo (INTEGER - FLOAT) y el uso (CTE - ID).
+	private Simbolo getSimbolo(String elemento) {
+		 
+		String [] aux = elemento.split("\\:");
+		
+		if(compilador.Compilador.tablaSimbolo.get(aux[0]) != null) {
+			for(int i=0; i<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); i++)
+				if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getUso().equals("CTE")){
+					return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+				}
+				else if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getAmbito().equals(elemento)){
+					return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+				}				
+		}
+		return null;		
+	}
+	
+	
+	private boolean registroInt(String op1) {
+		if(op1.equals("AX") || op1.equals("BX") || op1.equals("CX") || op1.equals("DX")) 
+			return true;
+		else return false;
+	}
+	
+	private boolean registroFloat(String op1) {
+		if(op1.contains("@aux")) 
+			return true;
+		else 
+			return false;
+	}
+
+
+	public String generarIstruccionesVariableAux(String reg, String operando1, String operando2, String operando) {
+		String auxAux = generarVarAux();
+		String testo  = "";
+		if (operando.equals("+"))
+			testo = plantillaSuma;
+		if (operando.equals("-"))
+			testo = plantillaResta;
+		if (operando.equals("/"))
+			testo = plantillaDivision;
+		if (operando.equals("*"))
+			testo = plantillaMultiplicacion;
+		else
+			return testo;
+		testo = testo.replace("VAR-REG", auxAux);
+		testo = testo.replace("XX", reg);
+		testo = testo.replace("OP1", operando1);
+		testo = testo.replace("OP2", operando2);
+		data= data.concat(auxAux + " dd " + "?" + saltoDeLinea);
+		System.out.println("AUXXXXX: " + auxAux);
+		pila.push(auxAux);
+		return testo;
+	}
+	
+
 	public String toString(){
 		this.generarData();
 		assembler = assembler + encabezado;
@@ -354,5 +623,6 @@ public class GeneradorAssembler {
 		assembler = assembler + main;
 		assembler = assembler + finMainAssembler;
 		return assembler;
-	}	
+	}
+	
 }

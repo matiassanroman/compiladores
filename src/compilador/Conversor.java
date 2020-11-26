@@ -22,6 +22,7 @@ public class Conversor {
 //	           INTEGER    FLOAT 	
 /*INTEGER*/  {"INTEGER", "FLOAT"},
 /*FLOAT*/    {  "FLOAT", "FLOAT"}};
+
 	
 	private boolean[][] habilitacionOperacion = {
 // Forma de lectura: posicion (x,y) indica si es posible operar entre el tipo de fila y el tipo de la columna
@@ -41,12 +42,13 @@ private boolean[][] habilitacionAsignacion = {
 /*INTEGER*/  {    true,  false},
 /*  FLOAT*/  {    true,   true}};
 
+
 	// Metodo privado que mapea el tipo dado a su possion en las matrices
 	private int mapear(String tipo) {
 		return this.mapeo.indexOf(tipo);
 	}
 	
-	// Retorna si en compatible operar entre dos tipos dados
+	// Retorna si es compatible operar entre dos tipos dados
 	public boolean esCompatibleOperarEntre(String tipoIzq, String tipoDer) {
 		int fila    = mapear(tipoIzq);
 		int columna = mapear(tipoDer);

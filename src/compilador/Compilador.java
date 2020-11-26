@@ -89,7 +89,7 @@ public class Compilador {
 				   				   /* 13 */   {as9_verificar_rango_cte, as9_verificar_rango_cte	 , as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte 	, as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as1_agregar_buffer    , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	,as12_error}, /* 13 */
 				   				    /* 14 */  {as10_verificar_float	  , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float     , as1_agregar_buffer     , as10_verificar_float   , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float     , as10_verificar_float   , as10_verificar_float     , as10_verificar_float     , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	 	, as10_verificar_float	   , as10_verificar_float     , as10_verificar_float  , as1_agregar_buffer     , as1_agregar_buffer     , as10_verificar_float   , as10_verificar_float		,as12_error}, /* 14 */
 				   				    /* 15 */  {as10_verificar_float	      	  , as10_verificar_float	         	 , as10_verificar_float           , as10_verificar_float           , as10_verificar_float   	    , as10_verificar_float   		 , as10_verificar_float	      , as10_verificar_float         , as10_verificar_float         , as1_agregar_buffer     , as10_verificar_float	        , as10_verificar_float           , as10_verificar_float           , as10_verificar_float         , as1_agregar_buffer       , as10_verificar_float     		 	 , as10_verificar_float 			, as10_verificar_float     	   , as10_verificar_float   		, as10_verificar_float    	 , as10_verificar_float	 		, as10_verificar_float	       , as10_verificar_float               , as10_verificar_float   	      , as10_verificar_float         , as10_verificar_float    	    , as10_verificar_float		 , as10_verificar_float				,as12_error}, /* 15 */
-				   				    /* 16 */  {as10_verificar_float	  , as10_verificar_float	 , as11_no_accion     		, as10_verificar_float     , as1_agregar_buffer   	, as11_no_accion   		 , as11_no_accion	      , as11_no_accion         , as11_no_accion    		, as11_no_accion         , as11_no_accion	        , as11_no_accion           , as11_no_accion           , as11_no_accion         , as11_no_accion     	  , as11_no_accion           , as11_no_accion 	        , as10_verificar_float     , as11_no_accion   , as11_no_accion   , as11_no_accion	 	, as11_no_accion	   , as11_no_accion     , as11_no_accion  , as11_no_accion   , as11_no_accion   , as11_no_accion   , as11_no_accion		,as12_error}, /* 16 */
+				   				    /* 16 */  {as10_verificar_float	  , as10_verificar_float	 , as11_no_accion     		, as10_verificar_float     , as1_agregar_buffer   	, as11_no_accion   		 , as11_no_accion	      , as11_no_accion         , as11_no_accion    		, as10_verificar_float   , as11_no_accion	        , as11_no_accion           , as10_verificar_float     , as10_verificar_float   , as10_verificar_float     , as10_verificar_float     , as10_verificar_float      , as10_verificar_float     , as11_no_accion   , as11_no_accion   , as11_no_accion	 	, as11_no_accion	   , as11_no_accion     , as11_no_accion  , as11_no_accion   , as11_no_accion   , as11_no_accion   , as11_no_accion		,as12_error}, /* 16 */
 				   				    /* 17 */  {as9_verificar_rango_cte, as9_verificar_rango_cte	 , as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte 	, as9_verificar_rango_cte  , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	, as9_verificar_rango_cte  , as9_verificar_rango_cte  , as9_verificar_rango_cte        , as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte, as9_verificar_rango_cte	,as12_error}, /* 17 */
 				   				    /* 18 */  {as10_verificar_float   , as10_verificar_float	 , as10_verificar_float     , as10_verificar_float	   , as1_agregar_buffer		, as10_verificar_float	 , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float	    , as10_verificar_float     , as10_verificar_float	  , as10_verificar_float   , as10_verificar_float  	  , as10_verificar_float  	 , as10_verificar_float 	, as10_verificar_float     , as10_verificar_float	, as10_verificar_float 	 , as10_verificar_float	 	, as10_verificar_float	   , as10_verificar_float  	  , as10_verificar_float  , as10_verificar_float   , as10_verificar_float   , as10_verificar_float   , as10_verificar_float		,as12_error}, /* 18 */
 				   				    /* 19 */  {as10_verificar_float   , as10_verificar_float	 , as10_verificar_float           	, as10_verificar_float	   , as1_agregar_buffer		, as10_verificar_float        	 , as10_verificar_float	  		  , as10_verificar_float   		   , as10_verificar_float				, as10_verificar_float	 		 , as10_verificar_float				, as10_verificar_float     		   , as10_verificar_float 	  		  , as10_verificar_float   		   , as10_verificar_float     		  , as10_verificar_float  	 		 , as10_verificar_float 	  	 		, as10_verificar_float     		   , as10_verificar_float				, as10_verificar_float   			 , as10_verificar_float	 			, as10_verificar_float	  		   , as10_verificar_float  	  		  , as10_verificar_float  		  , as10_verificar_float   		   , as1_agregar_buffer	    , as10_verificar_float   			 , as10_verificar_float				,as12_error}, /* 19 */
@@ -208,7 +208,8 @@ public class Compilador {
 		
 		Compilador c = new Compilador();
 		ArrayList<String> errores = new ArrayList<String>();
-		ArrayList<String> reconocidos = new ArrayList<String>();		
+		ArrayList<String> reconocidos = new ArrayList<String>();	
+
 		// Obtengo la ruta del archivo de los argumentos de programa
 		if(args.length > 0) {
 			try {
@@ -223,14 +224,14 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
-				
-				//CrearSalida.crearTxtSalida(c);
-				
-				GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo);
+				System.out.println("HJGGHGH: " + errores.size());
 				if (errores.size() == 0) {
+					CrearSalida.crearTxtSalida(c);
 					PolacaInversa polaca = Parser.polaca;
+					System.out.println(polaca.toString());
+					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					System.out.println(generador.toString());
+					System.out.println(generador.toString());    
 					System.out.println(generador.generarEtiqueta("L45"));
 				}
 					
