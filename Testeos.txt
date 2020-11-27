@@ -1,5 +1,15 @@
+FLOAT a,b,d,f,c;
+PROC ano()NA=1_i,NS=1_i{
+	a=b;
+}
 
+<<<<<<< HEAD
 INTEGER i;
 INTEGER f;
 
 f = i;
+=======
+ano();
+
+a = b + c;
+>>>>>>> 2e36f26be0afae20eafb63df71c7a8984738088f

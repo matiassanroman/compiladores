@@ -19,27 +19,29 @@ public class Conversor {
 	
 	private String[][] compatibilidades= {
 // Forma de lectura: tipo fila 'operacion' tipo columna da como resultado el tipo de casilla (x,y)
-//	           INTEGER    FLOAT    	
+//	           INTEGER    FLOAT 	
 /*INTEGER*/  {"INTEGER", "FLOAT"},
-/*FLOAT*/    {  "FLOAT", "FLOAT"}  };
+/*FLOAT*/    {  "FLOAT", "FLOAT"}};
+
 	
 	private boolean[][] habilitacionOperacion = {
 // Forma de lectura: posicion (x,y) indica si es posible operar entre el tipo de fila y el tipo de la columna
 //		       INTEGER    FLOAT   	
-/*INTEGER*/  {    true,    true },
-/*  FLOAT*/  {    true,    true } };
+/*INTEGER*/  {    true,    true},
+/*  FLOAT*/  {    true,    true}};
 	
 	private String[][] asignaciones = {
 // Forma de lectura: Al tipo fila, cuando se le asigna el tipo columna da como resultado el tipo de casilla (x,y)
-//			   INTEGER    FLOAT    	
+//			   INTEGER    FLOAT    CADENA	
 /*INTEGER*/  {"INTEGER",     "X"},
-/*FLOAT*/    {  "FLOAT", "FLOAT"} };
+/*FLOAT*/    {  "FLOAT", "FLOAT"}};
 				
 private boolean[][] habilitacionAsignacion = {
 // Forma de lectura: posicion (x,y) indica si es posible operar entre el tipo de fila y el tipo de la columna
-//		       INTEGER   FLOAT   	
-/*INTEGER*/  {  true,  false },
-/*  FLOAT*/  {  true,  true  }  };
+//		       INTEGER   FLOAT   
+/*INTEGER*/  {    true,  false},
+/*  FLOAT*/  {    true,   true}};
+
 
 	// Metodo privado que mapea el tipo dado a su possion en las matrices
 	private int mapear(String tipo) {

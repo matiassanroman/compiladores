@@ -224,6 +224,7 @@ public class Compilador {
 				for (int i=0; i<reconocidos.size(); i++)
 					System.out.println("Reconocidos: " + reconocidos.get(i));
 		
+
 				if (errores.size() == 0) {
 					CrearSalida.crearTxtSalida(c);
 					PolacaInversa polaca = Parser.polaca;

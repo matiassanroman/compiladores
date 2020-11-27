@@ -50,6 +50,9 @@ public class GeneradorAssembler {
 	
 	public static String saltoDeLinea = "\r\n";
 	
+	///////////////////////////////////////////////////////////////////////////////
+	/////////// ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER ///////////////////////////
+	
 	public static String encabezado = 
 			".386\r\n" + 
 			".model flat, stdcall\r\n" + 
@@ -65,16 +68,37 @@ public class GeneradorAssembler {
 	private String code = ".code" + saltoDeLinea;
 	public static String inicioMainAssembler = "main:" + saltoDeLinea;
 	private String main = "";
-	
-	
 	public static String finMainAssembler = "fin: invoke ExitProcess, 0" + saltoDeLinea
-										  +	"end main";	
+										  +	"end main" + saltoDeLinea;	
 	
+	/////////// FIN ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER ////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////// PLANTILLAS DE OPERACIONES ENTRE INTEGER /////////////////////
 	public static String plantillaOperacion = "MOV XX, OP1" + saltoDeLinea 
-											  + "OP XX, OP2" + saltoDeLinea;
+			  + "OP XX, OP2" + saltoDeLinea;
 
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 
+	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
+
+			 						   + "ADD XX, OP2" + saltoDeLinea
+			 						   + "MOV VAR-REG, XX" + saltoDeLinea;
+	
+	public static String plantillaResta = "MOV XX, OP1" + saltoDeLinea 
+			   							+ "SUB XX, OP2" + saltoDeLinea
+			   							+ "MOV VAR-REG, XX" + saltoDeLinea;
+	
+	public static String plantillaMultiplicacion = "MOV XX, OP1" + saltoDeLinea 
+												 + "MUL XX, OP2" + saltoDeLinea
+												 + "MOV VAR-REG, XX" + saltoDeLinea;
+	
+	public static String plantillaDivision = "MOV XX, OP1" + saltoDeLinea 
+			 							   + "DIV XX, OP2" + saltoDeLinea
+			 							   + "MOV VAR-REG, XX" + saltoDeLinea;
+	
 	public static String plantillaCompIgual =          "JNE Llabel" + saltoDeLinea;
 	public static String plantillaCompDistinto =       "JE Llabel"  + saltoDeLinea;
 	public static String plantillaCompMayor =          "JLE Llabel" + saltoDeLinea;
@@ -89,11 +113,49 @@ public class GeneradorAssembler {
 	
 	public static String plantillaEtiqueta = "ETIQUETA:" + saltoDeLinea;
 	public static String plantillaCall = "call F" + saltoDeLinea;
-	public static String plantillaAgregarVarINTEGER = "VAR + \" dw \" + \"?\"" + saltoDeLinea;
-	public static String plantillaAgregarVarFLOAT   = "VAR + \" dd \" + \"?\"" + saltoDeLinea;
+	public static String plantillaAgregarVarINTEGER = "VAR dw ?" + saltoDeLinea;
+	public static String plantillaAgregarVarFLOAT   = "VAR dd ?" + saltoDeLinea;
 	
 	public static String saltoPorOverflow = "JO fin" + saltoDeLinea;
-
+	
+	////////////////// FIN PLANTILLAS DE OPERACIONES PARA INTEGER//////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	
+	///////////////////////////////////////////////////////////////////////////////
+	//////////////////FIN PLANTILLAS DE OPERACIONES PARA FLOAT/////////////////////
+	
+	// FLD para FLOAT de entrada --- FILD para un INTEGER de entrada ----- se copian a la pila del coprocesador
+	// FISTP saca el tope de la pila del coprocesador y lo pasa aun registro, pasa a ser entero
+	// FSTP saca el tope de la pila del coprocesador y lo guarda como real 
+	// operaciones del Co-procesador matematico
+	//
+	//  FLOAT               INTEGER
+ 	//
+	//	FLD mem				FILD mem   cargar a la pila
+	//	FSTP mem			FISTP mem  sacar de la pila
+	//
+	//  FADD mem			FIADD mem
+	//  FSUB mem			FISUB mem
+	//  FMUL mem			FIMUL mem
+	//  FDIV mem			FIDIV mem
+	//
+	//  FCOMP mem			FICOMP mem
+	public static String plantillaOperacionFloat = "OpPila REG1" + saltoDeLinea        // Agrega REG a la pila de coprocesador
+												 + "OpArit REG2" + saltoDeLinea       // Realiza la operacion entre el tope de de l apila de coprocesador y REG
+												 + "FSTP resul" + saltoDeLinea;
+	
+	public static String CompIgualFLOAT =          "JNE Llabel" + saltoDeLinea;
+	public static String CompDistintoFLOAT =       "JE Llabel"  + saltoDeLinea;
+	public static String CompMayorFLOAT =          "JBE Llabel" + saltoDeLinea;
+	public static String CompMenorFLOAT =          "JAE Llabel" + saltoDeLinea;
+	public static String CompMayorIgualFLOAT =     "JB Llabel"  + saltoDeLinea;
+	public static String CompMenorIgualFLAOT =     "JA Llabel"  + saltoDeLinea;
+	public static String SaltoIncondicionalFLOAT = "JMP Llabel" + saltoDeLinea;
+	public static String ComparacionFLOAT = "CMP RA, RB" + saltoDeLinea;
+	
+	//////////////////FIN PLANTILLAS DE OPERACIONES PARA FLOAT/////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	
 	private String generarVarAux() {
 		String var = varAux + Integer.toString(numeroVar) ;
 		numeroVar += 1;
@@ -114,16 +176,15 @@ public class GeneradorAssembler {
 		this.tablaSimbolo = tablaSimbolo;
 	}
 	
-	private void generarInvocacion(String etiqueta, String destino) {
+	private String generarInvocacion(String etiqueta) {
 		String nombreProc = etiqueta.replace("PROC ","");
-		String paraCode = plantillaEtiqueta.replace("ETIQUETA", nombreProc);
-		destino = destino + paraCode;
+		String paraCode = plantillaCall.replace("ETIQUETA", nombreProc);
+		return paraCode;
 	}
 	
-	private String generarCall(String nombreProc, String destino){
-		String invocacion = plantillaCall.replace("F", "nombreProc");
-		destino = destino + invocacion;
-		return destino;
+	private String generarCall(String nombreProc){
+		String invocacion = plantillaCall.replace("F", nombreProc);
+		return invocacion;
 	}
 	
 	private String generarMensajePorPantalla(String cadenaAMostrar, String destino){
@@ -133,6 +194,39 @@ public class GeneradorAssembler {
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
 		destino = destino + codigo;	
 		return destino;
+	}
+
+	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
+		String bestial;
+		bestial = plantillaComparacion;
+		if (salto.equals("BF")) {
+			if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
+			else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
+				else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
+					else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
+						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
+							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
+		}
+		else if (salto.equals("BI"))
+			bestial = bestial + plantillaSaltoIncondicional;
+		bestial = bestial.replace("RA", regComp1);
+		bestial = bestial.replace("RB", regComp2);
+		bestial = bestial.replace("label", pos);
+		return bestial;
+	}
+	
+	public String generarEtiqueta(String label){
+		String abominacion = plantillaEtiqueta;
+		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
+		return abominacion;
+	}
+	
+	public String generarAsignacion(String reg, String izquierdo, String derecho){
+		String omunculo = plantillaAsignacion;
+		omunculo = omunculo.replace("XX", reg);
+		omunculo = omunculo.replace("OP1", derecho);
+		omunculo = omunculo.replace("VAR-REG", izquierdo);
+		return omunculo;
 	}
 	
 	public void generarData(){
@@ -196,16 +290,8 @@ public class GeneradorAssembler {
 				}
 				if (elemento.equals("CALL")){              // Si es CALL generar llamado
 					String nProc = pila.pop();
-					main = generarCall(nProc, main);
+					this.main = this.main + generarCall(nProc);
 				}
-				/*
-				if (operadoresBinarios.contains(elemento)) {
-					if (elemento.equals("=")) {
-						String operando1 = pila.pop();
-						String operando2 = pila.pop();	
-					}	
-				}
-				*/
 			}
 			if (operadoresBinarios.contains(elemento)) {
 				if (elemento.equals("+") || elemento.equals("-") || elemento.equals("*") || elemento.equals("/")) {
@@ -216,7 +302,7 @@ public class GeneradorAssembler {
 				}
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				generarInvocacion(elemento, this.main);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarEtiqueta(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -228,7 +314,7 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
-							generarCall(nProc, this.code);
+							this.code = this.code + generarCall(nProc);
 						}
 					}
 					//generar codigo para todos los tipos de instrucciones para dentro de ese procedimiento
@@ -692,38 +778,104 @@ public class GeneradorAssembler {
 		else 
 			return false;
 	}
+
+	public String generarIstruccionesVariableAux(String reg, String operando1, String operando2, String operando) {
+		String auxAux = generarVarAux();
+		String testo  = "";
+		if (operando.equals("+"))
+			testo = plantillaSuma;
+		if (operando.equals("-"))
+			testo = plantillaResta;
+		if (operando.equals("/"))
+			testo = plantillaDivision;
+		if (operando.equals("*"))
+			testo = plantillaMultiplicacion;
+		else
+			return testo;
+		testo = testo.replace("VAR-REG", auxAux);
+		testo = testo.replace("XX", reg);
+		testo = testo.replace("OP1", operando1);
+		testo = testo.replace("OP2", operando2);
+		data= data.concat(auxAux + " dd " + "?" + saltoDeLinea);
+		System.out.println("AUXXXXX: " + auxAux);
+		pila.push(auxAux);
+		return testo;
+	}
 	
-	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
-		String bestial;
-		bestial = plantillaComparacion;
-		if (salto.equals("BF")) {
-			if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
-			else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
-				else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
-					else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
-						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
-							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
+	public void generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
+		String formato = plantillaOperacionFloat;
+		// ESTABLECER OPERACION
+		// NINGUNO SE TIENE QUE CONVERTIR
+		if (conv==0) {
+			// REEMPLAZO DE LA OPERACION DE LA PILA
+			formato = formato.replace("OpPila", "FLD");
+			// REEMPLAZO DE APERACION ARITMETICA
+			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FADD"); }
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); }
+			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
+
 		}
-		else if (salto.equals("BI"))
-			bestial = bestial + plantillaSaltoIncondicional;
-		bestial = bestial.replace("RA", regComp1);
-		bestial = bestial.replace("RB", regComp2);
-		bestial = bestial.replace("label", pos);
-		return bestial;
+		// SE TIENE QUE CONVERTIR OPRENDO2
+		else if (conv==1) {
+			// REEMPLAZO DE LA OPERACION DE LA PILA
+			formato = formato.replace("OpPila", "FILD");
+			// REEMPLAZO DE APERACION ARITMETICA
+			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FADD"); }
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); }
+			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
+		}
+		else if (conv==2) {
+			// REEMPLAZO DE LA OPERACION DE LA PILA
+			formato = formato.replace("OpPila", "FLD");
+			// REEMPLAZO DE APERACION ARITMETICA
+			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FIADD"); }
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FIDIV"); }
+			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
+		}
+		// REEMPLAZO DE REGISTROS
+		formato = formato.replace("REG1", operando1);
+		formato = formato.replace("REG2", operando2);
+		String auxiliar = generarVarAux();
+		formato = formato.replace("resul", auxiliar);
+		// AGREGAR INSTRUCCION AL MAIN
+		this.main = this.main + formato;
+		// AGREGAR VAIRABLE AL DATA
+		String variableAAgregar = plantillaAgregarVarFLOAT; 
+		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);
+		this.data = this.data + variableAAgregar;
 	}
 	
-	public String generarEtiqueta(String label){
-		String abominacion = plantillaEtiqueta;
-		abominacion = abominacion.replace("ETIQUETA", label);
-		return abominacion;
-	}
 	
-	public String generarAsignacion(String reg, String izquierdo, String derecho){
-		String omunculo = plantillaAsignacion;
-		omunculo = omunculo.replace("XX", reg);
-		omunculo = omunculo.replace("OP1", derecho);
-		omunculo = omunculo.replace("VAR-REG", izquierdo);
-		return omunculo;
+	public String generarCodigoParaFlotantes(String operando1, String operando2, String operacion, String registro, int operandoAConvertir) {
+		// Generacion cuando NO hay que convertir
+		if (operandoAConvertir==0) {
+			if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",0); }
+			if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",0); }
+			if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",0); }
+			if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",0); }
+		}
+		// Generacion cuando SI hay que convertir
+		else {
+			// operando1 operacion operando2
+			// Si se necesita convertir el operando1
+			if (operandoAConvertir==1) {
+				if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",1); }
+				if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",1); }
+				if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",1); }
+				if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",1); }
+			}
+			// Si se necesita convertir el operando2
+			else if (operandoAConvertir==2) {
+				if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",2); }
+				if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",2); }
+				if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",2); }
+				if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",2); }
+			}
+		}
+		return null;
 	}
 	
 	public String toString(){
