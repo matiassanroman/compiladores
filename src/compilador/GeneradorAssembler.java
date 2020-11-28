@@ -2,7 +2,6 @@ package compilador;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
@@ -26,16 +25,7 @@ public class GeneradorAssembler {
 	// guardar el assembler
 	
 	private String assembler;
-	private Conversor conversor;
 	private Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
-	
-	//No va mas esto
-	private ArrayList<String> estados;
-	private ArrayList<String> registros32Bits;
-	private ArrayList<String> registros16Bits;
-	private ArrayList<String> registros8BitsBajos;
-	private ArrayList<String> registros8BitAaltos;
-	//No va mas esto
 	
 	Registros registro = new Registros();
 	
@@ -81,6 +71,7 @@ public class GeneradorAssembler {
 			  + "OP XX, OP2" + saltoDeLinea;
 
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
+	public static String extender16a32Bits   = "CWDE" + saltoDeLinea;
 
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
 
@@ -118,6 +109,9 @@ public class GeneradorAssembler {
 	
 	public static String saltoPorOverflow = "JO fin" + saltoDeLinea;
 	
+	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
+								                 + "compa op2" + saltoDeLinea;
+	
 	////////////////// FIN PLANTILLAS DE OPERACIONES PARA INTEGER//////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	
@@ -149,9 +143,11 @@ public class GeneradorAssembler {
 	public static String CompMayorFLOAT =          "JBE Llabel" + saltoDeLinea;
 	public static String CompMenorFLOAT =          "JAE Llabel" + saltoDeLinea;
 	public static String CompMayorIgualFLOAT =     "JB Llabel"  + saltoDeLinea;
-	public static String CompMenorIgualFLAOT =     "JA Llabel"  + saltoDeLinea;
-	public static String SaltoIncondicionalFLOAT = "JMP Llabel" + saltoDeLinea;
-	public static String ComparacionFLOAT = "CMP RA, RB" + saltoDeLinea;
+	public static String CompMenorIgualFLOAT =     "JA Llabel"  + saltoDeLinea;
+	
+	public static String plantillaComparacionFloat = "FSTSW aux"   + saltoDeLinea
+									 			   + "MOV AX, aux" + saltoDeLinea
+									 			   + "SAHF"        + saltoDeLinea;
 	
 	//////////////////FIN PLANTILLAS DE OPERACIONES PARA FLOAT/////////////////////
 	///////////////////////////////////////////////////////////////////////////////
@@ -164,22 +160,8 @@ public class GeneradorAssembler {
 	
 	public GeneradorAssembler(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo, PolacaInversa polaca) {
 		this.assembler = "";
-		this.conversor = new Conversor();
-		this.pila = new Stack<String>();
-		
-		//No va mas esto
-		this.estados  = new ArrayList<String>(Arrays.asList("L","L","L","L"));
-		this.registros32Bits     = new ArrayList<String>(Arrays.asList("EAX","EBX","ECX","EDX"));
-		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
-		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
-		this.registros8BitAaltos = new ArrayList<String>(Arrays.asList( "AH", "BH", "CH", "DH")); 
+		this.pila = new Stack<String>(); 
 		this.tablaSimbolo = tablaSimbolo;
-	}
-	
-	private String generarInvocacion(String etiqueta) {
-		String nombreProc = etiqueta.replace("PROC ","");
-		String paraCode = plantillaCall.replace("ETIQUETA", nombreProc);
-		return paraCode;
 	}
 	
 	private String generarCall(String nombreProc){
@@ -187,48 +169,40 @@ public class GeneradorAssembler {
 		return invocacion;
 	}
 	
-	private String generarMensajePorPantalla(String cadenaAMostrar, String destino){
+	private String generarMensajePorPantalla(String cadenaAMostrar){
 		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
 		cadenaAMostrar = "_"+cadenaAMostrar;
 		cadenaAMostrar = cadenaAMostrar.replace(" ", "_");
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
-		destino = destino + codigo;	
-		return destino;
+		return codigo; 
 	}
 
-	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
+	public String generarSaltosInteger(String comp, String regComp1, String regComp2){
 		String bestial;
 		bestial = plantillaComparacion;
-		if (salto.equals("BF")) {
-			if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
-			else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
-				else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
-					else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
-						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
-							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
-		}
-		else if (salto.equals("BI"))
-			bestial = bestial + plantillaSaltoIncondicional;
+		if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
+		else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
+			else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
+				else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
+					else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
+						else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
 		bestial = bestial.replace("RA", regComp1);
 		bestial = bestial.replace("RB", regComp2);
+		return bestial;
+	}
+	
+	public String generarBI(String pos) {
+		String bestial = plantillaSaltoIncondicional;
 		bestial = bestial.replace("label", pos);
 		return bestial;
 	}
 	
-	public String generarEtiqueta(String label){
+	public String generarInvocacion(String label){
 		String abominacion = plantillaEtiqueta;
 		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
 		return abominacion;
 	}
-	
-	public String generarAsignacion(String reg, String izquierdo, String derecho){
-		String omunculo = plantillaAsignacion;
-		omunculo = omunculo.replace("XX", reg);
-		omunculo = omunculo.replace("OP1", derecho);
-		omunculo = omunculo.replace("VAR-REG", izquierdo);
-		return omunculo;
-	}
-	
+		
 	public void generarData(){
 		// volcar toda la tabla de simbolos 
 		// a la variable data que luego se agregara a la salida final
@@ -275,6 +249,9 @@ public class GeneradorAssembler {
 	    }		
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////// METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////////	
+	
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
 		ArrayList<Par> listaPolaca = polaca.getPolaca();
@@ -286,11 +263,15 @@ public class GeneradorAssembler {
 			if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 				if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 						String cadena = pila.pop();
-						main = generarMensajePorPantalla(cadena, main);
+						this.main = this.main + generarMensajePorPantalla(cadena);
 				}
 				if (elemento.equals("CALL")){              // Si es CALL generar llamado
 					String nProc = pila.pop();
 					this.main = this.main + generarCall(nProc);
+				}
+				if (elemento.equals("BI")) {
+					String salto = pila.pop();
+					this.main = this.main + generarBI(salto);
 				}
 			}
 			if (operadoresBinarios.contains(elemento)) {
@@ -300,9 +281,22 @@ public class GeneradorAssembler {
 				if (elemento.equals("=")) {
 					this.getCodAsignacion();
 				}
+				if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
+					String operando1 = pila.pop();  // Ver el assembler si es el op1
+					String operando2 = pila.pop();  // Ver el assembler si es el op2
+					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
+					i++; String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
+					// generar comparacion
+					//this.main = this.main + generarComparacion(salto, elem, caso, reg1, reg2)
+					// generar salto
+					this.main  =this.main + generarCall(salto);
+				}
+			}
+			if (elemento.contains("L")) {
+				this.main = this.main + generarInvocacion(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				this.code = this.code + generarEtiqueta(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -311,6 +305,7 @@ public class GeneradorAssembler {
 					if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 								String cadena = pila.pop();
+								this.code = this.code + generarMensajePorPantalla(cadena);
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
@@ -335,8 +330,9 @@ public class GeneradorAssembler {
 		}
 	}
 
-	
-	
+	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 	private void generarAritmetica(String operador) {
 		
 		// OPERANDO1 + OPERANDO2;
@@ -1271,31 +1267,6 @@ public class GeneradorAssembler {
 	}
 	
 	
-	/*
-	public String generarIstruccionesVariableAux(String reg, String operando1, String operando2, String operando) {
-		String auxAux = generarVarAux();
-		String testo  = "";
-		if (operando.equals("+"))
-			testo = plantillaSuma;
-		if (operando.equals("-"))
-			testo = plantillaResta;
-		if (operando.equals("/"))
-			testo = plantillaDivision;
-		if (operando.equals("*"))
-			testo = plantillaMultiplicacion;
-		else
-			return testo;
-		testo = testo.replace("VAR-REG", auxAux);
-		testo = testo.replace("XX", reg);
-		testo = testo.replace("OP1", operando1);
-		testo = testo.replace("OP2", operando2);
-		data= data.concat(auxAux + " dd " + "?" + saltoDeLinea);
-		System.out.println("AUXXXXX: " + auxAux);
-		pila.push(auxAux);
-		return testo;
-	}
-	*/
-	
 	public void generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
 		String formato = plantillaOperacionFloat;
 		// ESTABLECER OPERACION
@@ -1371,8 +1342,7 @@ public class GeneradorAssembler {
 		}
 		return null;
 	}
-	
-	
+		
 	//UTILIDADES
 	
 	//Me devuelve el Simbolo para poder saber el tipo (INTEGER - FLOAT) y el uso (CTE - ID).
@@ -1450,6 +1420,96 @@ public class GeneradorAssembler {
 
 	void errorDeEjecucion(String mensaje) {
 		System.out.println(mensaje);
+	}
+	
+	public String generarAsignacion(String operando1, String operando2, int caso) {
+		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
+		//ublic static String extender16a32Bits   = "CWDE" + saltoDeLinea;
+		String ardiente;
+		if (caso == 0) {
+			// GENERACION DE COGIDO
+			String linea1 = plantillaAsignacion;
+			String linea2 = plantillaAsignacion;
+			String aux = generarVarAux();
+			// REEMPLAZOD DE VARIABLES
+			linea1 = linea1.replace("XX", aux); linea1 = linea1.replace("OP1", operando2);
+			linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
+			// AGREGAR VARIABLE
+			String variableData = plantillaAgregarVarFLOAT;
+			variableData = variableData.replace("VAR", aux);
+			this.data = this.data + variableData;
+			// AGREGAR CODIGO
+			ardiente = linea1 + linea2;
+			return ardiente;
+		}
+		if (caso ==1) {
+			// GENERACION DE CODIGO
+			String linea1 = plantillaAsignacion;
+			String linea2 = extender16a32Bits;
+			String linea3 = plantillaAsignacion;
+			// REEMPLAZO DE VARIABLES
+			linea1 = linea1.replace("XX", "AX"); linea1 = linea1.replace("OP1", operando2);
+			linea3 = linea3.replace("XX", operando1); linea3 = linea3.replace("OP1", "EAX");
+			// AGREGAR CODIGO
+			ardiente = linea1 + linea2 + linea3;
+			return ardiente;
+		}
+		return null;
+	}	
+	
+	public String generarComparacion(String salto, String comparacion, int caso, String reg1, String reg2) {
+		// FLOAT comp FLOAT
+		if (caso==0) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// INTEGER comp FLOAT
+		if (caso==1) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// FLOAT comp INTEGER
+		if (caso==2) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// INTEGER comp INTEGER
+		if (caso==3) { return generarSaltosInteger(comparacion, reg1, reg2); }
+		return null;
+	}
+	
+	public String generarCodigoComparacion(String salto, String comparacion, int caso, String reg1, String reg2) {
+		String auxiliar = generarVarAux();
+		String codigo = plantillaCargaCompFLOAT + plantillaComparacionFloat;
+		// FLOAT comp FLOAT
+		if (caso==0) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FLD");
+			codigo = codigo.replace("compa", "FCOMP");
+		}
+		// INTEGER comp FLOAT
+		if (caso==1) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FILD");
+			codigo = codigo.replace("compa", "FCOMP");
+		}
+		// FLOAT comp INTEGER
+		if (caso==2) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FLD");
+			codigo = codigo.replace("compa", "FICOMP");
+		}
+		// ESTABLECER SALTO
+		String lineaSalto = "";
+		if (comparacion.equals("<"))  { lineaSalto = CompMenorFLOAT; }
+		if (comparacion.equals("<=")) { lineaSalto = CompMenorIgualFLOAT; }
+		if (comparacion.equals(">"))  { lineaSalto = CompMayorFLOAT; }
+		if (comparacion.equals(">=")) { lineaSalto = CompMayorIgualFLOAT; }
+		if (comparacion.equals("==")) { lineaSalto = CompIgualFLOAT; }
+		if (comparacion.equals("!=")) { lineaSalto = CompDistintoFLOAT; }
+		codigo = codigo + lineaSalto;
+		codigo = codigo.replace("label", salto);
+		// REEMPLASO DE VARIABLE AUXILIAR Y OPERANDOS
+		codigo = codigo.replaceAll("aux", auxiliar);
+		codigo = codigo.replace("op1", reg1);
+		codigo = codigo.replace("op2", reg2);
+		// AGREGAR VARIABLE AL .data
+		String variableData = plantillaAgregarVarFLOAT;
+		variableData = variableData.replace("VAR", auxiliar);
+		this.data = this.data + variableData;
+		// RETORNA CODIGO QUE POSTERIORMENTE SE AGREGARA A .main, O A .code
+		return codigo;
 	}
 	
 	public String toString(){

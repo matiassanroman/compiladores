@@ -1,8 +1,0 @@
-
-INTEGER s;
-PROC a (INTEGER s) NA=2_i, NS=2_i{
-	INTEGER a;
-}
-
-
-a(s);
