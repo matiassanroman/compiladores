@@ -282,12 +282,13 @@ public class GeneradorAssembler {
 					this.getCodAsignacion();
 				}
 				if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
-					String operando1 = pila.pop();  // Ver el assembler si es el op1
-					String operando2 = pila.pop();  // Ver el assembler si es el op2
+					String operando2 = pila.pop();  // Ver el assembler si es el op1
+					String operando1 = pila.pop();  // Ver el assembler si es el op2
 					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
-					i++; String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
+					i++; 
+					//String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
 					// generar comparacion
-					//this.main = this.main + generarComparacion(salto, elem, caso, reg1, reg2)
+					generarComparadores(salto, elemento, operando1, operando2);
 					// generar salto
 					this.main  =this.main + generarCall(salto);
 				}
@@ -318,6 +319,17 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("=")) {
 							this.getCodAsignacionProc();
+						}
+						if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
+							String operando2 = pila.pop();  // Ver el assembler si es el op1
+							String operando1 = pila.pop();  // Ver el assembler si es el op2
+							i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
+							i++; 
+							//String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
+							// generar comparacion
+							generarComparadoresProc(salto, elemento, operando1, operando2);
+							// generar salto
+							this.code  =this.code + generarCall(salto);
 						}
 					}
 					//generar codigo para todos los tipos de instrucciones para dentro de ese procedimiento
@@ -970,8 +982,7 @@ public class GeneradorAssembler {
 				this.main = this.main + codigo;
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroFloat(operando2) ) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && registroFloat(operando1) ) {
@@ -979,8 +990,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 AUX(FLOAT) Y OPERANDO 1 VAR(INTEGER)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && registroInt(operando1) ) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
@@ -1000,8 +1010,7 @@ public class GeneradorAssembler {
 				this.main = this.main + codigo;
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
@@ -1009,8 +1018,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(registroFloat(operando2) && registroInt(operando1)) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
@@ -1019,12 +1027,10 @@ public class GeneradorAssembler {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
 			}
 			else if(registroFloat(operando1) && registroFloat(operando2)) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 0);
 			}
 			else if(registroInt(operando1) && registroFloat(operando2)) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
@@ -1033,12 +1039,10 @@ public class GeneradorAssembler {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroFloat(operando2)) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 0);
 			}
 			else if(registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.main = this.main + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 	}
@@ -1066,8 +1070,7 @@ public class GeneradorAssembler {
 				this.code = this.code + codigo;
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroFloat(operando2) ) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && registroFloat(operando1) ) {
@@ -1075,8 +1078,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 AUX(FLOAT) Y OPERANDO 1 VAR(INTEGER)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && registroInt(operando1) ) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
@@ -1096,8 +1098,7 @@ public class GeneradorAssembler {
 				this.code = this.code + codigo;
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
@@ -1105,8 +1106,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(registroFloat(operando2) && registroInt(operando1)) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
@@ -1115,12 +1115,10 @@ public class GeneradorAssembler {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
 			}
 			else if(registroFloat(operando1) && registroFloat(operando2)) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 0);
 			}
 			else if(registroInt(operando1) && registroFloat(operando2)) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
@@ -1129,143 +1127,149 @@ public class GeneradorAssembler {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroFloat(operando2)) {
-				int convertir = 0;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 0);
 			}
 			else if(registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
-				int convertir = 1;
-				//FUNCION ARIEL CONVERTIR
+				this.code = this.code + generarAsignacion(operando1, operando2, 1);
 			}
 		}
 	}
 	
-	
-	private void generarComparadores(String operador) {
-		
-		// OPERANDO1 + OPERANDO2;
-		//PILLA: OPERANDO1 OPERANDO2 (TOPE)
-		String operando2 = pila.pop();
-		String operando1 = pila.pop();
+	private void generarComparadores(String salto, String comparacion, String operando1, String operando2) {
 		
 		//SON DOS NUMEROS O CTE
 		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				generarCodigoParaIntegerComparador(operando1, operando2, operador);
+				this.main = this.main + generarComparacion(salto, comparacion, 3, operando1, operando2);
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int contador = 0;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 0, operando1, operando2);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 2, operando1, operando2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 1, operando1, operando2);
 			}
 		}
 		//SON UN NUMERO/CTE Y UN REG/AUX
 		else if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) == null) {
 			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.registroInt(operando2)) {
-				generarCodigoParaIntegerComparador(operando1, operando2, operador);
+				this.main = this.main + generarComparacion(salto, comparacion, 3, operando1, operando2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int contador = 0;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 0, operando1, operando2);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 2, operando1, operando2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 1, operando1, operando2);
 			}
 		}
 		//SON UN REG/AUX Y UN NUMERO/CTE
 		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null) {
 			if(this.registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				generarCodigoParaIntegerComparador(operando1, operando2, operador);
+				this.main = this.main + generarComparacion(salto, comparacion, 3, operando1, operando2);
 			}
 			else if(this.registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int contador = 0;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 0, operando1, operando2);
 			}
 			//COVERSION
 			else if(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 2, operando1, operando2);
 			}
 			else if( registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 1, operando1, operando2);
 			}
 		}
 		//SON DOS REG/AUX
 		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) == null) {
 			if(this.registroInt(operando1) && this.registroInt(operando2)) {
-				generarCodigoParaIntegerComparador(operando1, operando2, operador);
+				this.main = this.main + generarComparacion(salto, comparacion, 3, operando1, operando2);
 			}
 			else if(this.registroFloat(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int contador = 0;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 0, operando1, operando2);
 			}
 			//COVERSION
 			else if(this.registroFloat(operando1) && this.registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 2, operando1, operando2);
 			}
 			else if(this.registroInt(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + "FUNCION ARIEEEEEEEEL";
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarComparacion(salto, comparacion, 1, operando1, operando2);
 			}
 		}
 	}
 	
-	//FUNCIO ARIEL 
-	void generarCodigoParaIntegerComparador(String operando1, String operando2, String operador){
+	private void generarComparadoresProc(String salto, String comparacion, String operando1, String operando2) {
 		
+		//SON DOS NUMEROS O CTE
+		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
+			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 3, operando1, operando2);
+			}
+			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 0, operando1, operando2);
+			}
+			//COVERSION
+			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 2, operando1, operando2);
+			}
+			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 1, operando1, operando2);
+			}
+		}
+		//SON UN NUMERO/CTE Y UN REG/AUX
+		else if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) == null) {
+			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.registroInt(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 3, operando1, operando2);
+			}
+			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.registroFloat(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 0, operando1, operando2);
+			}
+			//COVERSION
+			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 2, operando1, operando2);
+			}
+			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 1, operando1, operando2);
+			}
+		}
+		//SON UN REG/AUX Y UN NUMERO/CTE
+		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) != null) {
+			if(this.registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 3, operando1, operando2);
+			}
+			else if(this.registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 0, operando1, operando2);
+			}
+			//COVERSION
+			else if(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 2, operando1, operando2);
+			}
+			else if( registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
+				this.code = this.code + generarComparacion(salto, comparacion, 1, operando1, operando2);
+			}
+		}
+		//SON DOS REG/AUX
+		else if(this.getSimbolo(operando1) == null && this.getSimbolo(operando2) == null) {
+			if(this.registroInt(operando1) && this.registroInt(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 3, operando1, operando2);
+			}
+			else if(this.registroFloat(operando1) && this.registroFloat(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 0, operando1, operando2);
+			}
+			//COVERSION
+			else if(this.registroFloat(operando1) && this.registroInt(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 2, operando1, operando2);
+			}
+			else if(this.registroInt(operando1) && this.registroFloat(operando2)) {
+				this.code = this.code + generarComparacion(salto, comparacion, 1, operando1, operando2);
+			}
+		}
 	}
-	
 	
 	public void generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
 		String formato = plantillaOperacionFloat;
@@ -1343,85 +1347,6 @@ public class GeneradorAssembler {
 		return null;
 	}
 		
-	//UTILIDADES
-	
-	//Me devuelve el Simbolo para poder saber el tipo (INTEGER - FLOAT) y el uso (CTE - ID).
-	private Simbolo getSimbolo(String elemento) {
-			
-			String [] aux = elemento.split("\\@");
-			
-			if(compilador.Compilador.tablaSimbolo.get(aux[0]) != null) {
-				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); i++)
-					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getUso().equals("CTE")){
-						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
-					}
-					else if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getAmbito().equals(elemento)){
-						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
-					}				
-			}
-			return null;		
-		}
-	
-	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
-		ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
-	    boolean p = true;
-	    
-	    for(int i=0; i<l.size(); i++) {
-	    	//Es una declaracion de ID
-	    	if(l.get(i).isDeclarada()) 
-	    		aux.add(l.get(i));	    
-	    	//Es una CTE de NA o NS
-	    	if(l.get(i).getUso().equals("CTE") && (l.get(i).getTipo().equals("NA_PROC")) || (l.get(i).getTipo().equals("NS_PROC")))
-	    		aux.add(l.get(i));
-	    }
-	    
-	    for(int i=0; i<l.size(); i++) {
-	    	if(p) {
-	    		if(l.get(i).getUso().equals("CTE") && !l.get(i).getTipo().equals("NA_PROC") && !l.get(i).getTipo().equals("NS_PROC")) {
-	    			p = false;
-	    			aux.add(l.get(i));
-	    		}
-	    		else if(l.get(i).getUso().equals("CADENA")){
-	    			p = false;
-	    			aux.add(l.get(i));
-	    		}
-	    	}
-	    	else{
-	    		boolean r = true;
-	    		for(int j=0; j<aux.size(); j++) {
-	    			if(aux.get(j).getUso().equals("CTE") && !aux.get(j).getTipo().equals("NA_PROC") && !aux.get(j).getTipo().equals("NS_PROC")) {
-	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
-	    					r = false;
-	    			}
-	    			else if(aux.get(j).getUso().equals("CADENA")){
-	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
-	    					r = false;
-		    		}
-	    		}
-	    		if(r)
-	    			aux.add(l.get(i));
-	    	}		
-	    }
-	    return aux;
-	}
-	
-	private boolean registroInt(String op1) {
-		if(op1.equals("AX") || op1.equals("BX") || op1.equals("CX") || op1.equals("DX")) 
-			return true;
-		else return false;
-	}
-	
-	private boolean registroFloat(String op1) {
-		if(op1.contains("@aux")) 
-			return true;
-		else 
-			return false;
-	}
-
-	void errorDeEjecucion(String mensaje) {
-		System.out.println(mensaje);
-	}
-	
 	public String generarAsignacion(String operando1, String operando2, int caso) {
 		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 		//ublic static String extender16a32Bits   = "CWDE" + saltoDeLinea;
@@ -1510,6 +1435,84 @@ public class GeneradorAssembler {
 		this.data = this.data + variableData;
 		// RETORNA CODIGO QUE POSTERIORMENTE SE AGREGARA A .main, O A .code
 		return codigo;
+	}
+	
+	//UTILIDADES
+	//Me devuelve el Simbolo para poder saber el tipo (INTEGER - FLOAT) y el uso (CTE - ID).
+	private Simbolo getSimbolo(String elemento) {
+			
+			String [] aux = elemento.split("\\@");
+			
+			if(compilador.Compilador.tablaSimbolo.get(aux[0]) != null) {
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); i++)
+					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getUso().equals("CTE")){
+						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+					}
+					else if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getAmbito().equals(elemento)){
+						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+					}				
+			}
+			return null;		
+		}
+	
+	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
+		ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
+	    boolean p = true;
+	    
+	    for(int i=0; i<l.size(); i++) {
+	    	//Es una declaracion de ID
+	    	if(l.get(i).isDeclarada()) 
+	    		aux.add(l.get(i));	    
+	    	//Es una CTE de NA o NS
+	    	if(l.get(i).getUso().equals("CTE") && (l.get(i).getTipo().equals("NA_PROC")) || (l.get(i).getTipo().equals("NS_PROC")))
+	    		aux.add(l.get(i));
+	    }
+	    
+	    for(int i=0; i<l.size(); i++) {
+	    	if(p) {
+	    		if(l.get(i).getUso().equals("CTE") && !l.get(i).getTipo().equals("NA_PROC") && !l.get(i).getTipo().equals("NS_PROC")) {
+	    			p = false;
+	    			aux.add(l.get(i));
+	    		}
+	    		else if(l.get(i).getUso().equals("CADENA")){
+	    			p = false;
+	    			aux.add(l.get(i));
+	    		}
+	    	}
+	    	else{
+	    		boolean r = true;
+	    		for(int j=0; j<aux.size(); j++) {
+	    			if(aux.get(j).getUso().equals("CTE") && !aux.get(j).getTipo().equals("NA_PROC") && !aux.get(j).getTipo().equals("NS_PROC")) {
+	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    					r = false;
+	    			}
+	    			else if(aux.get(j).getUso().equals("CADENA")){
+	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    					r = false;
+		    		}
+	    		}
+	    		if(r)
+	    			aux.add(l.get(i));
+	    	}		
+	    }
+	    return aux;
+	}
+	
+	private boolean registroInt(String op1) {
+		if(op1.equals("AX") || op1.equals("BX") || op1.equals("CX") || op1.equals("DX")) 
+			return true;
+		else return false;
+	}
+	
+	private boolean registroFloat(String op1) {
+		if(op1.contains("@aux")) 
+			return true;
+		else 
+			return false;
+	}
+
+	void errorDeEjecucion(String mensaje) {
+		System.out.println(mensaje);
 	}
 	
 	public String toString(){
