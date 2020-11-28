@@ -71,6 +71,7 @@ public class GeneradorAssembler {
 			  + "OP XX, OP2" + saltoDeLinea;
 
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
+	public static String extender16a32Bits   = "CWDE" + saltoDeLinea;
 
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
 
@@ -108,6 +109,9 @@ public class GeneradorAssembler {
 	
 	public static String saltoPorOverflow = "JO fin" + saltoDeLinea;
 	
+	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
+								                 + "compa op2" + saltoDeLinea;
+	
 	////////////////// FIN PLANTILLAS DE OPERACIONES PARA INTEGER//////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	
@@ -139,9 +143,11 @@ public class GeneradorAssembler {
 	public static String CompMayorFLOAT =          "JBE Llabel" + saltoDeLinea;
 	public static String CompMenorFLOAT =          "JAE Llabel" + saltoDeLinea;
 	public static String CompMayorIgualFLOAT =     "JB Llabel"  + saltoDeLinea;
-	public static String CompMenorIgualFLAOT =     "JA Llabel"  + saltoDeLinea;
-	public static String SaltoIncondicionalFLOAT = "JMP Llabel" + saltoDeLinea;
-	public static String ComparacionFLOAT = "CMP RA, RB" + saltoDeLinea;
+	public static String CompMenorIgualFLOAT =     "JA Llabel"  + saltoDeLinea;
+	
+	public static String plantillaComparacionFloat = "FSTSW aux"   + saltoDeLinea
+									 			   + "MOV AX, aux" + saltoDeLinea
+									 			   + "SAHF"        + saltoDeLinea;
 	
 	//////////////////FIN PLANTILLAS DE OPERACIONES PARA FLOAT/////////////////////
 	///////////////////////////////////////////////////////////////////////////////
@@ -171,17 +177,15 @@ public class GeneradorAssembler {
 		return codigo; 
 	}
 
-	public String generarSaltosString(String comp, String pos, String salto, String regComp1, String regComp2){
+	public String generarSaltosInteger(String comp, String regComp1, String regComp2){
 		String bestial;
 		bestial = plantillaComparacion;
-		if (salto.equals("BF")) {
-			if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
-			else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
-				else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
-					else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
-						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
-							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
-		}
+		if (comp.equals("<"))  bestial = bestial + plantillaCompMenor;
+		else if (comp.equals(">"))  bestial = bestial + plantillaCompMayor;
+			else if (comp.equals("<=")) bestial = bestial + plantillaCompMenorIgual;
+				else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
+					else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
+						else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
 		bestial = bestial.replace("RA", regComp1);
 		bestial = bestial.replace("RB", regComp2);
 		return bestial;
@@ -198,15 +202,7 @@ public class GeneradorAssembler {
 		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
 		return abominacion;
 	}
-	
-	public String generarAsignacion(String reg, String izquierdo, String derecho){
-		String omunculo = plantillaAsignacion;
-		omunculo = omunculo.replace("XX", reg);
-		omunculo = omunculo.replace("OP1", derecho);
-		omunculo = omunculo.replace("VAR-REG", izquierdo);
-		return omunculo;
-	}
-	
+		
 	public void generarData(){
 		// volcar toda la tabla de simbolos 
 		// a la variable data que luego se agregara a la salida final
@@ -253,6 +249,9 @@ public class GeneradorAssembler {
 	    }		
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////// METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////////	
+	
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
 		ArrayList<Par> listaPolaca = polaca.getPolaca();
@@ -283,8 +282,14 @@ public class GeneradorAssembler {
 					this.getCodAsignacion();
 				}
 				if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
-					//String posicion = pila.pop();
-					//String posicion = pila.pop();
+					String operando1 = pila.pop();  // Ver el assembler si es el op1
+					String operando2 = pila.pop();  // Ver el assembler si es el op2
+					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
+					i++; String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
+					// generar comparacion
+					//this.main = this.main + generarComparacion(salto, elem, caso, reg1, reg2)
+					// generar salto
+					this.main  =this.main + generarCall(salto);
 				}
 			}
 			if (elemento.contains("L")) {
@@ -317,6 +322,9 @@ public class GeneradorAssembler {
 		}
 	}
 
+	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
 		ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
 	    boolean p = true;
@@ -1298,6 +1306,96 @@ public class GeneradorAssembler {
 			}
 		}
 		return null;
+	}
+	
+	public String generarAsignacion(String operando1, String operando2, int caso) {
+		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
+		//ublic static String extender16a32Bits   = "CWDE" + saltoDeLinea;
+		String ardiente;
+		if (caso == 0) {
+			// GENERACION DE COGIDO
+			String linea1 = plantillaAsignacion;
+			String linea2 = plantillaAsignacion;
+			String aux = generarVarAux();
+			// REEMPLAZOD DE VARIABLES
+			linea1 = linea1.replace("XX", aux); linea1 = linea1.replace("OP1", operando2);
+			linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
+			// AGREGAR VARIABLE
+			String variableData = plantillaAgregarVarFLOAT;
+			variableData = variableData.replace("VAR", aux);
+			this.data = this.data + variableData;
+			// AGREGAR CODIGO
+			ardiente = linea1 + linea2;
+			return ardiente;
+		}
+		if (caso ==1) {
+			// GENERACION DE CODIGO
+			String linea1 = plantillaAsignacion;
+			String linea2 = extender16a32Bits;
+			String linea3 = plantillaAsignacion;
+			// REEMPLAZO DE VARIABLES
+			linea1 = linea1.replace("XX", "AX"); linea1 = linea1.replace("OP1", operando2);
+			linea3 = linea3.replace("XX", operando1); linea3 = linea3.replace("OP1", "EAX");
+			// AGREGAR CODIGO
+			ardiente = linea1 + linea2 + linea3;
+			return ardiente;
+		}
+		return null;
+	}	
+	
+	public String generarComparacion(String salto, String comparacion, int caso, String reg1, String reg2) {
+		// FLOAT comp FLOAT
+		if (caso==0) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// INTEGER comp FLOAT
+		if (caso==1) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// FLOAT comp INTEGER
+		if (caso==2) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		// INTEGER comp INTEGER
+		if (caso==3) { return generarSaltosInteger(comparacion, reg1, reg2); }
+		return null;
+	}
+	
+	public String generarCodigoComparacion(String salto, String comparacion, int caso, String reg1, String reg2) {
+		String auxiliar = generarVarAux();
+		String codigo = plantillaCargaCompFLOAT + plantillaComparacionFloat;
+		// FLOAT comp FLOAT
+		if (caso==0) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FLD");
+			codigo = codigo.replace("compa", "FCOMP");
+		}
+		// INTEGER comp FLOAT
+		if (caso==1) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FILD");
+			codigo = codigo.replace("compa", "FCOMP");
+		}
+		// FLOAT comp INTEGER
+		if (caso==2) {
+			// REEMPLAZO DE OPERACION DE CARGA Y COMPARACION
+			codigo = codigo.replace("carga", "FLD");
+			codigo = codigo.replace("compa", "FICOMP");
+		}
+		// ESTABLECER SALTO
+		String lineaSalto = "";
+		if (comparacion.equals("<"))  { lineaSalto = CompMenorFLOAT; }
+		if (comparacion.equals("<=")) { lineaSalto = CompMenorIgualFLOAT; }
+		if (comparacion.equals(">"))  { lineaSalto = CompMayorFLOAT; }
+		if (comparacion.equals(">=")) { lineaSalto = CompMayorIgualFLOAT; }
+		if (comparacion.equals("==")) { lineaSalto = CompIgualFLOAT; }
+		if (comparacion.equals("!=")) { lineaSalto = CompDistintoFLOAT; }
+		codigo = codigo + lineaSalto;
+		codigo = codigo.replace("label", salto);
+		// REEMPLASO DE VARIABLE AUXILIAR Y OPERANDOS
+		codigo = codigo.replaceAll("aux", auxiliar);
+		codigo = codigo.replace("op1", reg1);
+		codigo = codigo.replace("op2", reg2);
+		// AGREGAR VARIABLE AL .data
+		String variableData = plantillaAgregarVarFLOAT;
+		variableData = variableData.replace("VAR", auxiliar);
+		this.data = this.data + variableData;
+		// RETORNA CODIGO QUE POSTERIORMENTE SE AGREGARA A .main, O A .code
+		return codigo;
 	}
 	
 	public String toString(){

@@ -231,7 +231,7 @@ public class Compilador {
 					System.out.println(polaca.toString());
 					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					//System.out.println(generador.toString());
+					System.out.println(generador.generarAsignacion("vag","teg",1));
 					CrearAssembler.crearTxtSalida(generador.toString());
 				}
 					
