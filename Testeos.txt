@@ -1,15 +1,13 @@
-FLOAT a,b,d,f,c;
-PROC ano()NA=1_i,NS=1_i{
-	a=b;
-}
+INTEGER a,b;
 
-<<<<<<< HEAD
-INTEGER i;
-INTEGER f;
+%%IF(a== b =10_i;){
+%%	a = a + b;	
+%%}
+%%ELSE{
+%%	a=b;
+%%}
+%%END_IF
 
-f = i;
-=======
-ano();
-
-a = b + c;
->>>>>>> 2e36f26be0afae20eafb63df71c7a8984738088f
+FOR(i = 1_i ; i < 5_i; UP 1_i){
+	a =b;
+} 

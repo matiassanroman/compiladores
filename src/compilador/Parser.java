@@ -1629,11 +1629,12 @@ case 35:
 	polaca.agregarPasoIncompleto();
 	Par pasoBI = new Par("BI");
 	polaca.agregarPaso(pasoBI);
-	polaca.agregarLabel();
+	//polaca.agregarLabel();
 	polaca.completarFOR();
 	polaca.borrarInicioFOR();
 	polaca.borrarPasoIncompleto();
 	polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());
+	polaca.agregarLabel();
 }
 break;
 case 36:

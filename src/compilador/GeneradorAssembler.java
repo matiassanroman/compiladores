@@ -2,7 +2,6 @@ package compilador;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
@@ -26,16 +25,7 @@ public class GeneradorAssembler {
 	// guardar el assembler
 	
 	private String assembler;
-	private Conversor conversor;
 	private Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
-	
-	//No va mas esto
-	private ArrayList<String> estados;
-	private ArrayList<String> registros32Bits;
-	private ArrayList<String> registros16Bits;
-	private ArrayList<String> registros8BitsBajos;
-	private ArrayList<String> registros8BitAaltos;
-	//No va mas esto
 	
 	Registros registro = new Registros();
 	
@@ -164,22 +154,8 @@ public class GeneradorAssembler {
 	
 	public GeneradorAssembler(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo, PolacaInversa polaca) {
 		this.assembler = "";
-		this.conversor = new Conversor();
-		this.pila = new Stack<String>();
-		
-		//No va mas esto
-		this.estados  = new ArrayList<String>(Arrays.asList("L","L","L","L"));
-		this.registros32Bits     = new ArrayList<String>(Arrays.asList("EAX","EBX","ECX","EDX"));
-		this.registros16Bits     = new ArrayList<String>(Arrays.asList( "AX", "BX", "CX", "DX"));
-		this.registros8BitsBajos = new ArrayList<String>(Arrays.asList( "AL", "BL", "CL", "DL"));
-		this.registros8BitAaltos = new ArrayList<String>(Arrays.asList( "AH", "BH", "CH", "DH")); 
+		this.pila = new Stack<String>(); 
 		this.tablaSimbolo = tablaSimbolo;
-	}
-	
-	private String generarInvocacion(String etiqueta) {
-		String nombreProc = etiqueta.replace("PROC ","");
-		String paraCode = plantillaCall.replace("ETIQUETA", nombreProc);
-		return paraCode;
 	}
 	
 	private String generarCall(String nombreProc){
@@ -187,16 +163,15 @@ public class GeneradorAssembler {
 		return invocacion;
 	}
 	
-	private String generarMensajePorPantalla(String cadenaAMostrar, String destino){
+	private String generarMensajePorPantalla(String cadenaAMostrar){
 		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
 		cadenaAMostrar = "_"+cadenaAMostrar;
 		cadenaAMostrar = cadenaAMostrar.replace(" ", "_");
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
-		destino = destino + codigo;	
-		return destino;
+		return codigo; 
 	}
 
-	public String generarSaltos(String comp, String pos, String salto, String regComp1, String regComp2){
+	public String generarSaltosString(String comp, String pos, String salto, String regComp1, String regComp2){
 		String bestial;
 		bestial = plantillaComparacion;
 		if (salto.equals("BF")) {
@@ -207,15 +182,18 @@ public class GeneradorAssembler {
 						else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
 							else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
 		}
-		else if (salto.equals("BI"))
-			bestial = bestial + plantillaSaltoIncondicional;
 		bestial = bestial.replace("RA", regComp1);
 		bestial = bestial.replace("RB", regComp2);
+		return bestial;
+	}
+	
+	public String generarBI(String pos) {
+		String bestial = plantillaSaltoIncondicional;
 		bestial = bestial.replace("label", pos);
 		return bestial;
 	}
 	
-	public String generarEtiqueta(String label){
+	public String generarInvocacion(String label){
 		String abominacion = plantillaEtiqueta;
 		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
 		return abominacion;
@@ -286,11 +264,15 @@ public class GeneradorAssembler {
 			if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 				if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 						String cadena = pila.pop();
-						main = generarMensajePorPantalla(cadena, main);
+						this.main = this.main + generarMensajePorPantalla(cadena);
 				}
 				if (elemento.equals("CALL")){              // Si es CALL generar llamado
 					String nProc = pila.pop();
 					this.main = this.main + generarCall(nProc);
+				}
+				if (elemento.equals("BI")) {
+					String salto = pila.pop();
+					this.main = this.main + generarBI(salto);
 				}
 			}
 			if (operadoresBinarios.contains(elemento)) {
@@ -300,9 +282,16 @@ public class GeneradorAssembler {
 				if (elemento.equals("=")) {
 					this.getCodAsignacion();
 				}
+				if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
+					//String posicion = pila.pop();
+					//String posicion = pila.pop();
+				}
+			}
+			if (elemento.contains("L")) {
+				this.main = this.main + generarInvocacion(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				this.code = this.code + generarEtiqueta(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -311,6 +300,7 @@ public class GeneradorAssembler {
 					if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 								String cadena = pila.pop();
+								this.code = this.code + generarMensajePorPantalla(cadena);
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
