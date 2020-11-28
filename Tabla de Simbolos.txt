@@ -2,6 +2,7 @@
 
 /*  Tabla de Simbolos  */
 
+
 Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b@Main	 Declarada: true	 tipoVar: INTEGER
 Clave: 5	 Value: 5	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 5@Main	 Declarada: false	 tipoCTE: INTEGER
 Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER

@@ -8,11 +8,21 @@ includelib \masm32\lib\kernel32.lib
 includelib \masm32\lib\user32.lib
 .data
 mensaje db "Mensaje por pantalla", 0
+<<<<<<< HEAD
 _b@Main dw ?
 _a@Main dw ?
 _10 dw 10
+=======
+_a@Main dw ?
+_a@Main@a dw ?
+_s@Main dw ?
+_s@Main@a dw ?
+>>>>>>> 3b2ca1e984a90da2d27b13b9b2623fd7c2c6eafc
 .code
+a@Main:
+ret
 main:
+<<<<<<< HEAD
 MOV BX, b@Main
 MOV 10, BX
 MOV BX, a@Main
@@ -25,5 +35,8 @@ L14:
 MOV BX, a@Main
 MOV b@Main, BX
 L18:
+=======
+call a@Main
+>>>>>>> 3b2ca1e984a90da2d27b13b9b2623fd7c2c6eafc
 fin: invoke ExitProcess, 0
 end main

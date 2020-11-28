@@ -1,3 +1,4 @@
+
 INTEGER a,b;
 
 %%IF(a== b =10_i;){
@@ -7,7 +8,3 @@ INTEGER a,b;
 %%	a=b;
 %%}
 %%END_IF
-
-FOR(i = 1_i ; i < 5_i; UP 1_i){
-	a =b;
-} 
