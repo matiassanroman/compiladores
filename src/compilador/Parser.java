@@ -480,7 +480,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE",
 };
 
-//#line 830 "gramatica.y"
+//#line 832 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -984,14 +984,12 @@ String getAmbitoVerdaderoVerdadero(String sval) {
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
 		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + "@Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
-			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
 			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
 			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
 				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\@");
 				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
 				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
-					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
 					//Compruebo que el ambito del id del Proc este contenido
 					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
 					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
@@ -999,9 +997,8 @@ String getAmbitoVerdaderoVerdadero(String sval) {
 						//Compruebo que el NS sea >= que la cantidad de anidamientos
 						String [] id = ambitoSinNombreVar.split("\\@"); 
 						String [] proc = ambitoSinNombreProc.split("\\@"); 
-						//System.out.println("TAMANO: " + (id.length - proc.length));
 						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
-							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+							return compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito();
 						}
 							
 					}
@@ -1024,7 +1021,8 @@ String getAmbitoVerdadero(String sval){
 		if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
 			//Veo si es un id que esta dentro del Proc para evaluar el NS
 			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + "@Main")){
-				return getAmbitoVerdaderoVerdadero(sval);
+				if(!getAmbitoVerdaderoVerdadero(sval).equals(""))
+					return getAmbitoVerdaderoVerdadero(sval);
 			}
 			//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
 			for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
@@ -1044,7 +1042,7 @@ String getAmbitoVerdadero(String sval){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 976 "Parser.java"
+//#line 974 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1925,69 +1923,70 @@ case 60:
 		yyerror(val_peek(3).sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	/*Par id =  new Par($1.sval);*/
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).getAmbito());
+	/*Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+	Par id =  new Par(getAmbitoVerdadero(val_peek(3).sval));
 	Par asig = new Par(val_peek(2).sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(asig);
 }
 break;
 case 61:
-//#line 685 "gramatica.y"
+//#line 686 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 62:
-//#line 689 "gramatica.y"
+//#line 690 "gramatica.y"
 {
 	yyerror("Error: asignacion mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 63:
-//#line 695 "gramatica.y"
+//#line 696 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 64:
-//#line 700 "gramatica.y"
+//#line 701 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 65:
-//#line 705 "gramatica.y"
+//#line 706 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 710 "gramatica.y"
+//#line 711 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 67:
-//#line 715 "gramatica.y"
+//#line 716 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 68:
-//#line 720 "gramatica.y"
+//#line 721 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 725 "gramatica.y"
+//#line 726 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 728 "gramatica.y"
+//#line 729 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	if(sePuedeUsar(val_peek(0).sval) == 1){
@@ -1995,74 +1994,75 @@ case 70:
 		yyerror(val_peek(0).sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
     /*Par id =  new Par($1.sval);*/
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito());
+	/*Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+	Par id =  new Par(getAmbitoVerdadero(val_peek(0).sval));
 	polaca.agregarPaso(id);
 	
 }
 break;
 case 71:
-//#line 742 "gramatica.y"
+//#line 744 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 745 "gramatica.y"
+//#line 747 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 748 "gramatica.y"
+//#line 750 "gramatica.y"
 {
 }
 break;
 case 74:
-//#line 751 "gramatica.y"
+//#line 753 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 754 "gramatica.y"
+//#line 756 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 757 "gramatica.y"
+//#line 759 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 760 "gramatica.y"
+//#line 762 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 78:
-//#line 766 "gramatica.y"
+//#line 768 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 769 "gramatica.y"
+//#line 771 "gramatica.y"
 {
 }
 break;
 case 80:
-//#line 774 "gramatica.y"
+//#line 776 "gramatica.y"
 {
 }
 break;
 case 81:
-//#line 779 "gramatica.y"
+//#line 781 "gramatica.y"
 {
 }
 break;
 case 82:
-//#line 782 "gramatica.y"
+//#line 784 "gramatica.y"
 {
 }
 break;
 case 83:
-//#line 786 "gramatica.y"
+//#line 788 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -2080,13 +2080,13 @@ case 83:
 }
 break;
 case 84:
-//#line 802 "gramatica.y"
+//#line 804 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 85:
-//#line 808 "gramatica.y"
+//#line 810 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);

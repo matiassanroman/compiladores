@@ -8,23 +8,15 @@ includelib \masm32\lib\kernel32.lib
 includelib \masm32\lib\user32.lib
 .data
 mensaje db "Mensaje por pantalla", 0
-_b@Main@a dw ?
-_a@Main dw ?
-_a@Main@a dw ?
-_i@Main dw ?
-_ii@Main@a dw ?
-_z@Main@a@b dw ?
+i@Main dw ?
+_34 dw 34
+_22 dw 22
 .code
-b@Main@a:
-MOV BX, ii@Main@a
-MOV z@Main@a@b, BX
-call a@Main
-ret
-a@Main:
-ret
 main:
-MOV BX, ii@Main@a
+MOV BX, 22
+ADD BX, 34
+CMP 22, 34
+JO fin
 MOV i@Main, BX
-call a@Main
 fin: invoke ExitProcess, 0
 end main

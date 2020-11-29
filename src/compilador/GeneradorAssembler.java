@@ -218,13 +218,13 @@ public class GeneradorAssembler {
 	       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
     	   for(int i=0; i<aux.size(); i++) {
     		   if (aux.get(i).getTipo().equals("Proc")) { 
-    			   this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
+    			   this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
     		   } 
     		   else if(aux.get(i).getUso().equals("ID")) {
 				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
-					   this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
+					   this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
 			   		if(aux.get(i).getTipoParametro().equals("FLOAT"))
-			   			this.data = this.data + "_" +aux.get(i).getAmbito().replaceAll(":", "@") + " dd ?" + saltoDeLinea;
+			   			this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dd ?" + saltoDeLinea;
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int"))
@@ -237,7 +237,7 @@ public class GeneradorAssembler {
     			   	   String cadenipi2 = cadenipi;
     			   	   cadenipi = cadenipi.replaceAll("\"", "");
     			   	   cadenipi = cadenipi.replaceAll(" ", "_");
-    			   	   this.data = this.data + "_" + cadenipi + " db " + cadenipi2 + ", 0" + saltoDeLinea;
+    			   	   this.data = this.data + cadenipi + " db " + cadenipi2 + ", 0" + saltoDeLinea;
     				   //this.data = this.data + "_" + aux.get(i).getValor() + " DB " + aux.get(i).getValor() + " , 0" + saltoDeLinea;			   
     		   }	   
     		   else if(aux.get(i).getUso().equals("AUX")) {

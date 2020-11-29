@@ -676,7 +676,8 @@ asignacion : identificador '=' expresion ';'
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	//Par id =  new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	Par asig = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(asig);
@@ -732,7 +733,8 @@ factor : constante
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
     //Par id =  new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	polaca.agregarPaso(id);
 	
 } 
@@ -1330,14 +1332,12 @@ String getAmbitoVerdaderoVerdadero(String sval) {
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
 		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + "@Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
-			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
 			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
 			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
 				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\@");
 				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
 				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
-					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
 					//Compruebo que el ambito del id del Proc este contenido
 					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
 					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
@@ -1345,9 +1345,8 @@ String getAmbitoVerdaderoVerdadero(String sval) {
 						//Compruebo que el NS sea >= que la cantidad de anidamientos
 						String [] id = ambitoSinNombreVar.split("\\@"); 
 						String [] proc = ambitoSinNombreProc.split("\\@"); 
-						//System.out.println("TAMANO: " + (id.length - proc.length));
 						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
-							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+							return compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito();
 						}
 							
 					}
@@ -1370,7 +1369,8 @@ String getAmbitoVerdadero(String sval){
 		if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
 			//Veo si es un id que esta dentro del Proc para evaluar el NS
 			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + "@Main")){
-				return getAmbitoVerdaderoVerdadero(sval);
+				if(!getAmbitoVerdaderoVerdadero(sval).equals(""))
+					return getAmbitoVerdaderoVerdadero(sval);
 			}
 			//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
 			for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
