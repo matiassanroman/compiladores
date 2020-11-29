@@ -377,26 +377,14 @@ public class GeneradorAssembler {
 				generarCodigoParaInteger(operando1, operando2, operador);
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON UN NUMERO/CTE Y UN REG/AUX
@@ -405,26 +393,14 @@ public class GeneradorAssembler {
 				generarCodigoParaInteger(operando1, operando2, operador);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON UN REG/AUX Y UN NUMERO/CTE
@@ -433,26 +409,14 @@ public class GeneradorAssembler {
 				generarCodigoParaInteger(operando1, operando2, operador);
 			}
 			else if(this.registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if( registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON DOS REG/AUX
@@ -461,26 +425,14 @@ public class GeneradorAssembler {
 				generarCodigoParaInteger(operando1, operando2, operador);
 			}
 			else if(this.registroFloat(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.registroFloat(operando1) && this.registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.registroInt(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 	}
@@ -690,26 +642,14 @@ public class GeneradorAssembler {
 				generarCodigoParaIntegerProc(operando1, operando2, operador);
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON UN NUMERO/CTE Y UN REG/AUX
@@ -718,26 +658,14 @@ public class GeneradorAssembler {
 				generarCodigoParaIntegerProc(operando1, operando2, operador);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON UN REG/AUX Y UN NUMERO/CTE
@@ -746,26 +674,14 @@ public class GeneradorAssembler {
 				generarCodigoParaIntegerProc(operando1, operando2, operador);
 			}
 			else if(this.registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(registroFloat(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if( registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 		//SON DOS REG/AUX
@@ -774,26 +690,14 @@ public class GeneradorAssembler {
 				generarCodigoParaIntegerProc(operando1, operando2, operador);
 			}
 			else if(this.registroFloat(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 0;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION
 			else if(this.registroFloat(operando1) && this.registroInt(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 2;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 2);
 			}
 			else if(this.registroInt(operando1) && this.registroFloat(operando2)) {
-				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",operador), 1);
-				String reg = registro.getRegistro(1, "FLOAT");
-				int convertir = 1;
-				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, reg, convertir);
-				registro.ocuparRegistro(reg, 0);
+				this.code = this.code + generarCodigoParaFlotantes(operando1, operando2, operador, 1);
 			}
 		}
 	}
@@ -1408,7 +1312,7 @@ public class GeneradorAssembler {
 	}
 	
 	
-	public String generarCodigoParaFlotantes(String operando1, String operando2, String operacion, String registro, int operandoAConvertir) {
+	public String generarCodigoParaFlotantes(String operando1, String operando2, String operacion, int operandoAConvertir) {
 		// Generacion cuando NO hay que convertir
 		if (operandoAConvertir==0) {
 			if (operacion.equals("+")) { return generarInstruccionesFLOAT(operando1, operando2, "+",0); }
