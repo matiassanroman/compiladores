@@ -1,5 +1,5 @@
 
-INTEGER i;
+FLOAT i;
 
 
-i = 22_i + 34_i;
+i = 32.5f+2+32.5f+2;

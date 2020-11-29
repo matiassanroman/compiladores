@@ -2,6 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: INTEGER
-Clave: 34	 Value: 34	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 34@Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: 22	 Value: 22	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 22@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: 3.250E+3	 Value: 3.250E+3	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 3.250E+3@Main	 Declarada: false	 tipoCTE: FLOAT

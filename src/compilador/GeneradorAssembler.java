@@ -119,6 +119,8 @@ public class GeneradorAssembler {
 	public static String plantillaAgregarVarFLOAT   = "VAR dt ?" + saltoDeLinea;
 	
 	public static String saltoPorOverflow = "JA overflow" + saltoDeLinea;
+	public static String saltoDivCero = "JZ divcero" + saltoDeLinea;
+	public static String cargar0ALaPila = "FLDZ" + saltoDeLinea;
 
 	
 	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
@@ -1211,31 +1213,15 @@ public class GeneradorAssembler {
 		String cargar = plantillaCargaCompFLOAT;
 		String comparativa = plantillaComparacionFloat;
 		String saltito = saltoPorOverflow;
-		String variableAAgregar = plantillaAgregarVarFLOAT; 
-		String variableAAgregar2 = plantillaAgregarVarFLOAT; 
+		String saltito0 = saltoDivCero;
+		String variableAAgregar = plantillaAgregarVarFLOAT;
+		String variableAAgregar2 = plantillaAgregarVarFLOAT;
+		String compSimple = "cmp opio" + saltoDeLinea;
+		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
-		String auxiliar2 = generarVarAux();
-		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);
-//		public static String plantillaOperacionFloat = "OpPila REG1" + saltoDeLinea        // Agrega REG a la pila de coprocesador
-//													 + "OpArit REG2" + saltoDeLinea       // Realiza la operacion entre el tope de de l apila de coprocesador y REG
-//				 									 + "FSTP resul"  + saltoDeLinea;
-//		
-//		public static String CompIgualFLOAT =          "JNE Llabel" + saltoDeLinea;
-//		public static String CompDistintoFLOAT =       "JE Llabel"  + saltoDeLinea;
-//		public static String CompMayorFLOAT =          "JBE Llabel" + saltoDeLinea;
-//		public static String CompMenorFLOAT =          "JAE Llabel" + saltoDeLinea;
-//		public static String CompMayorIgualFLOAT =     "JB Llabel"  + saltoDeLinea;
-//		public static String CompMenorIgualFLOAT =     "JA Llabel"  + saltoDeLinea;
-//		
-//		public static String plantillaComparacionFloat = "FSTSW aux"   + saltoDeLinea
-//										 			   + "MOV AX, aux" + saltoDeLinea
-//										 			   + "SAHF"        + saltoDeLinea;
-//		
-//		public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
-//                									 + "compa op2" + saltoDeLinea;
-	
-		// ESTABLECER OPERACION
 		
+		String auxiliar2 = generarVarAux();
+		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
@@ -1251,11 +1237,14 @@ public class GeneradorAssembler {
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
-			
+			if (operacionARIT.equals("/")) { 
+				formato = formato.replace("OpArit", "FDIV"); 
+				formato = ceroALaPila + compSimple + comparativa + saltito0 + formato;
+				formato = formato.replace("cmp", "FCOMP");
+				formato = formato.replace("opio", operando2);
+				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
-
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 
 		}
@@ -1274,11 +1263,14 @@ public class GeneradorAssembler {
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
-			
+			if (operacionARIT.equals("/")) { 
+				formato = formato.replace("OpArit", "FDIV"); 
+				formato = ceroALaPila + compSimple + comparativa + saltito0 + formato;
+				formato = formato.replace("cmp", "FCOMP");
+				formato = formato.replace("opio", operando2);
+				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
-			
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 		}
 		// SE TIENE QUE CONVERTIR OPRENDO2 (FLOAT-INTEGER)
@@ -1296,11 +1288,15 @@ public class GeneradorAssembler {
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FIDIV"); 
+			if (operacionARIT.equals("/")) { 
+				formato = formato.replace("OpArit", "FIDIV"); 
+				formato = ceroALaPila + compSimple + comparativa + saltito0 + formato;
+				formato = formato.replace("cmp", "FICOMP");
+				formato = formato.replace("opio", operando2);
+				formato = formato.replace(" aux", " "+ auxiliar2);
 			
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
-			
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
 		}
 		// REEMPLAZO DE REGISTROS
@@ -1309,8 +1305,11 @@ public class GeneradorAssembler {
 		formato = formato.replace("resul", auxiliar);
 		formato = formato.replace("op1", auxiliar);  
 		// AGREGAR VAIRABLE AL DATA
-		variableAAgregar2 = variableAAgregar.replace("VAR", auxiliar2);
+		
 		this.data = this.data + variableAAgregar;
+		this.data = this.data + variableAAgregar2;
+		pila.push(auxiliar);
+		System.out.println("VARSOVIA QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar);
 		return formato;
 	}
 	
@@ -1377,6 +1376,7 @@ public class GeneradorAssembler {
 			linea3 = linea3.replace("XX", operando1); linea3 = linea3.replace("OP1", "EAX");
 			// AGREGAR CODIGO
 			ardiente = linea1 + linea2 + linea3;
+			
 			return ardiente;
 		}
 		return null;
