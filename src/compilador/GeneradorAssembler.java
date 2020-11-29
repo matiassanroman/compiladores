@@ -54,12 +54,21 @@ public class GeneradorAssembler {
 			"includelib \\masm32\\lib\\kernel32.lib\r\n" + 
 			"includelib \\masm32\\lib\\user32.lib\r\n" +
 			".data\r\n" + 
-			"mensaje db \"Mensaje por pantalla\", 0" + saltoDeLinea;
+			"mensaje db \"Mensaje por pantalla\", 0" + saltoDeLinea +
+			"errorOverflowSuma db \"Ha ocurrido overflow al sumar, programa terminado inesperadamente\", 0" + saltoDeLinea +
+			"errorDivisionCero db \"Se intenta dividir por cero, programa terminado por su seguridad\", 0" + saltoDeLinea;
 	private String data = "";
-	private String code = ".code" + saltoDeLinea;
+	private String code = ".code" + saltoDeLinea
+						+ "overflow:" + saltoDeLinea
+						+ "invoke MessageBox, NULL, addr errorOverflowSuma, addr mensaje, MB_OK " + saltoDeLinea
+						+ "call fin" + saltoDeLinea
+						+ "divcero:" + saltoDeLinea
+						+ "invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK " + saltoDeLinea
+						+ "call fin" + saltoDeLinea;
 	public static String inicioMainAssembler = "main:" + saltoDeLinea;
 	private String main = "";
-	public static String finMainAssembler = "fin: invoke ExitProcess, 0" + saltoDeLinea
+	public static String finMainAssembler = 
+										   "fin: invoke ExitProcess, 0" + saltoDeLinea
 										  +	"end main" + saltoDeLinea;	
 	
 	/////////// FIN ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER ////////////////////////
@@ -108,7 +117,7 @@ public class GeneradorAssembler {
 	public static String plantillaAgregarVarINTEGER = "VAR dw ?" + saltoDeLinea;
 	public static String plantillaAgregarVarFLOAT   = "VAR dd ?" + saltoDeLinea;
 	
-	public static String saltoPorOverflow = "JO fin" + saltoDeLinea;
+	public static String saltoPorOverflow = "JG overflow" + saltoDeLinea;
 	
 	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
 								                 + "compa op2" + saltoDeLinea;
@@ -354,7 +363,7 @@ public class GeneradorAssembler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	private void generarAritmetica(String operador) {
-		
+		///////////////////////////////////////////////////// revisar este metodo para lo controles del tp4
 		// OPERANDO1 + OPERANDO2;
 		//PILLA: OPERANDO1 OPERANDO2 (TOPE)
 		String operando2 = pila.pop();

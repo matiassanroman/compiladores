@@ -8,23 +8,25 @@ includelib \masm32\lib\kernel32.lib
 includelib \masm32\lib\user32.lib
 .data
 mensaje db "Mensaje por pantalla", 0
-_b@Main@a dw ?
+errorOverflowSuma db "Ha ocurrido overflow al sumar, programa terminado inesperadamente", 0
+errorDivisionCero db "Se intenta dividir por cero, programa terminado por su seguridad", 0
+_32000 dw 32000
+_b@Main dw ?
 _a@Main dw ?
-_a@Main@a dw ?
-_i@Main dw ?
-_ii@Main@a dw ?
-_z@Main@a@b dw ?
+_1000 dw 1000
+_c@Main dw ?
 .code
-b@Main@a:
-MOV BX, ii@Main@a
-MOV z@Main@a@b, BX
-call a@Main
-ret
-a@Main:
-ret
+overflow:
+invoke MessageBox, NULL, addr errorOverflowSuma, addr mensaje, MB_OK 
+call fin
+divcero:
+invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK 
+call fin
 main:
-MOV BX, ii@Main@a
-MOV i@Main, BX
-call a@Main
+MOV BX, 32000
+ADD BX, 1000
+CMP 32000, 1000
+JO fin
+MOV a@Main, BX
 fin: invoke ExitProcess, 0
 end main

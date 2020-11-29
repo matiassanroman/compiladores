@@ -1,15 +1,2 @@
-
-INTEGER i;
-
-PROC a(INTEGER ii) NA=1_i, NS=1_i{
-	INTEGER a;
-	PROC b() NA=0_i, NS=1_i{
-		INTEGER z;
-		a(z);
-		z = a;
-	}
-}
-
-a(i);
-
-i = 22_i + 33_i;
+INTEGER a,b,c;
+a = 32000_i + 1000_i;

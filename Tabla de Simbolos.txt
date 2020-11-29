@@ -2,15 +2,8 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: 33	 Value: 33	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 33@Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: 22	 Value: 22	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 22@Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: INTEGER
-Clave: z	 Value: z	 Uso: ID	 TipoDeUso: Var	 Ambito: z@Main@a@b	 Declarada: true	 tipoVar: INTEGER
-Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Proc	 Ambito: b@Main@a	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 1
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Proc	 Ambito: a@Main	 Declarada: true	 CantParametros: 1	 NA: 1	 NS: 1
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main@a	 Declarada: true	 tipoVar: INTEGER
-Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1@Main@a	 Declarada: false	 tipoCTE: INTEGER
-Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1@Main@a	 Declarada: false	 tipoCTE: INTEGER
-Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1@Main@a@b	 Declarada: false	 tipoCTE: INTEGER
-Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@a@b	 Declarada: false	 tipoCTE: INTEGER
-Clave: ii	 Value: ii	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: ii@Main@a	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: 32000	 Value: 32000	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 32000@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 1000	 Value: 1000	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 1000@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: c	 Value: c	 Uso: ID	 TipoDeUso: Var	 Ambito: c@Main	 Declarada: true	 tipoVar: INTEGER
