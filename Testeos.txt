@@ -1,5 +1,11 @@
+INTEGER a,b,i;
 
-FLOAT i;
+%%IF (a>b)
+%%	a = 2_i;
+%%ELSE
+%%	a = 1_i;
+%%END_IF
 
-
-i = 32.5f+2+32.5f+2;
+FOR(i=1_i; i<5_i; UP 1_i){
+	OUT("hola");
+}
