@@ -25,8 +25,8 @@ call fin
 main:
 MOV BX, 22
 ADD BX, 34
-CMP 22, 34
-JO overflow
+CMP BX, 32767
+JA overflow
 MOV i@Main, BX
 fin: invoke ExitProcess, 0
 end main
