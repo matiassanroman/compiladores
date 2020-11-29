@@ -1,0 +1,7 @@
+/*  Resultados de la compilacion  */
+
+/*  Tabla de Simbolos  */
+
+Clave: 2.210E+3	 Value: 2.210E+3	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2.210E+3@Main	 Declarada: false	 tipoCTE: FLOAT
+Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 3.420E+3	 Value: 3.420E+3	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 3.420E+3@Main	 Declarada: false	 tipoCTE: FLOAT

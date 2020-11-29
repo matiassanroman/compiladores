@@ -1113,7 +1113,7 @@ int sePuedeUsar(String sval){
 						String [] recurAux = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre().split("\\@");
 						if(sval.equals(recurAux[recurAux.length-1])){
 							//mostrarMensaje("No se permite recursion.");
-							yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido. Error en linea: " + compilador.Compilador.nroLinea);
+							//yyerror("El Proc: " + sval + " intenta hacer recursion y no esta permitido. Error en linea: " + compilador.Compilador.nroLinea);
 						}
 						//Esta al alcance?
 						if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){

@@ -117,7 +117,7 @@ public class GeneradorAssembler {
 	public static String plantillaAgregarVarINTEGER = "VAR dw ?" + saltoDeLinea;
 	public static String plantillaAgregarVarFLOAT   = "VAR dd ?" + saltoDeLinea;
 	
-	public static String saltoPorOverflow = "JG overflow" + saltoDeLinea;
+	public static String saltoPorOverflow = "JA overflow" + saltoDeLinea;
 	
 	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
 								                 + "compa op2" + saltoDeLinea;
@@ -227,7 +227,7 @@ public class GeneradorAssembler {
 	       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
     	   for(int i=0; i<aux.size(); i++) {
     		   if (aux.get(i).getTipo().equals("Proc")) { 
-    			   this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
+    			   //this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
     		   } 
     		   else if(aux.get(i).getUso().equals("ID")) {
 				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
@@ -499,8 +499,8 @@ public class GeneradorAssembler {
 				codigo = codigo.replace("OP", "ADD");
 				pila.push(registro.getRegistro(1, "INTEGER"));
 				codigo = codigo + plantillaComparacion;
-				codigo = codigo.replace("RA", operando1);
-				codigo = codigo.replace("RB", operando2);
+				codigo = codigo.replace("RA", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("RB", "32767");
 				codigo = codigo + saltoPorOverflow;
 				this.main = this.main + codigo;
 			}
@@ -629,7 +629,12 @@ public class GeneradorAssembler {
 			//SITUACION 1 - (2 VARIABLES O CTES)
 			if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
-				codigo = plantillaOperacion;
+				codigo = codigo + plantillaComparacion;
+				codigo = codigo + plantillaCompDistinto;
+				codigo = codigo.replace("RA", operando2);
+				codigo = codigo.replace("RB", "0");
+				codigo = codigo.replace("Llabel", "divcero");
+				codigo = codigo + plantillaOperacion;
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("OP1", operando1);
 				codigo = codigo.replace("OP2", operando2);
@@ -668,6 +673,7 @@ public class GeneradorAssembler {
 			}
 		}
 	}
+	
 	
 	private void generarAritmeticaProc(String operador) {
 		
@@ -806,8 +812,8 @@ public class GeneradorAssembler {
 				codigo = codigo.replace("OP", "ADD");
 				pila.push(registro.getRegistro(1, "INTEGER"));
 				codigo = codigo + plantillaComparacion;
-				codigo = codigo.replace("RA", operando1);
-				codigo = codigo.replace("RB", operando2);
+				codigo = codigo.replace("RA", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("RB", "32767");
 				codigo = codigo + saltoPorOverflow;
 				this.code = this.code + codigo;
 			}
@@ -936,7 +942,12 @@ public class GeneradorAssembler {
 			//SITUACION 1 - (2 VARIABLES O CTES)
 			if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
-				codigo = plantillaOperacion;
+				codigo = codigo + plantillaComparacion;
+				codigo = codigo + plantillaCompDistinto;
+				codigo = codigo.replace("RA", operando2);
+				codigo = codigo.replace("RB", "0");
+				codigo = codigo.replace("Llabel", "divcero");
+				codigo = codigo + plantillaOperacion;
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("OP1", operando1);
 				codigo = codigo.replace("OP2", operando2);
@@ -976,7 +987,8 @@ public class GeneradorAssembler {
 		}
 	}
 	
-private void getCodAsignacion(){
+	
+	private void getCodAsignacion(){
 		
 		// x = y => ope1 = x ; ope2 = y
 
