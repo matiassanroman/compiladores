@@ -1,25 +1,11 @@
+INTEGER x;
 
-INTEGER i;
-
-%%PROC a(INTEGER ii) NA=1_i, NS=1_i{
-%%	INTEGER a;
-%%	PROC b() NA=0_i, NS=1_i{
-%%		INTEGER z;
-%%		a(z);
-%%		z = a + i;
-%%	}
-%%}
-
-%%a(i);
-
-%%i = 12_i + 32767_i;
-
-%%PROC b() NA=0_i, NS=1_i{
-%%	INTEGER z;
-%%	z = 0_i + 32767_i;
-%%	b();
-%%}
-
-%%b();
-
-i = 22.1f+2 + 34.2f+2;
+PROC a() NA=2_i, NS=2_i{
+	INTEGER x;
+	PROC b() NA=1_i, NS=0_i{
+		INTEGER x;
+		PROC c() NA=0_i, NS=2_i{
+			x = 20_i;
+		}
+	}
+}
