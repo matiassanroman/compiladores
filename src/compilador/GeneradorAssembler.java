@@ -1334,10 +1334,11 @@ private void getCodAsignacion(){
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
 			
 			}
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
+
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 
 		}
@@ -1356,10 +1357,11 @@ private void getCodAsignacion(){
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
 			
 			}
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
+			
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 		}
 		// SE TIENE QUE CONVERTIR OPRENDO2 (FLOAT-INTEGER)
@@ -1377,10 +1379,11 @@ private void getCodAsignacion(){
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 			}
-			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
 			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FIDIV"); 
 			
 			}
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
+			
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
 		}
 		// REEMPLAZO DE REGISTROS
