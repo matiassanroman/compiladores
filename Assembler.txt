@@ -1,0 +1,30 @@
+.386
+.model flat, stdcall
+option casemap :none
+include \masm32\include\windows.inc
+include \masm32\include\kernel32.inc
+include \masm32\include\user32.inc
+includelib \masm32\lib\kernel32.lib
+includelib \masm32\lib\user32.lib
+.data
+mensaje db "Mensaje por pantalla", 0
+_b@Main@a dw ?
+_a@Main dw ?
+_a@Main@a dw ?
+_i@Main dw ?
+_ii@Main@a dw ?
+_z@Main@a@b dw ?
+.code
+b@Main@a:
+MOV BX, ii@Main@a
+MOV z@Main@a@b, BX
+call a@Main
+ret
+a@Main:
+ret
+main:
+MOV BX, ii@Main@a
+MOV i@Main, BX
+call a@Main
+fin: invoke ExitProcess, 0
+end main

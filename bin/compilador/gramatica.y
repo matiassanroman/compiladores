@@ -17,9 +17,7 @@ import java.util.Arrays;
 %%
 programa : bloquePrograma
 {
-	polaca.mostrarParametrosFormales();
 	mostrarMensaje("Reconoce bien el programa");
-	//System.out.println(polaca.toString());
 }
 		 | error
 {
@@ -115,8 +113,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		//polaca.agregarParametro($1.sval+" "+$2.sval);
 		//polaca.agregarParametro($5.sval);
 		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
-		
+				
 		//Par proc = new Par($1.sval+" "+$2.sval);
 		Par proc =  new Par($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
 		polaca.agregarPaso(proc);
@@ -128,6 +125,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		}
 		verificarNa($9.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
 	}
 	else{
 		//mostrarMensaje("NA o NS no es una CTE ENTERA");
@@ -147,9 +145,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		//polaca.agregarParametro($5.sval);
 		//polaca.agregarParametro($8.sval);
 		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
-
+		
 		//Par proc = new Par($1.sval+" "+$2.sval);
 		Par proc =  new Par($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
 		polaca.agregarPaso(proc);
@@ -162,6 +158,8 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		verificarNa($12.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
 	}
 	else{
 		//mostrarMensaje("NA o NS no es una CTE ENTERA");
@@ -182,10 +180,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		//polaca.agregarParametro($8.sval);
 		//polaca.agregarParametro($11.sval);
 		polaca.agregarParametro($1.sval+" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
-		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($11.sval).get(compilador.Compilador.tablaSimbolo.get($11.sval).size()-1).getAmbito());
-
+		
 		//Par proc = new Par($1.sval+" "+$2.sval);
 		Par proc =  new Par($1.sval +" "+compilador.Compilador.tablaSimbolo.get($2.sval).get(compilador.Compilador.tablaSimbolo.get($2.sval).size()-1).getAmbito());
 		polaca.agregarPaso(proc);
@@ -199,6 +194,9 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 		setearAmbitoyDeclarada($11.sval,$10.sval);
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($8.sval).get(compilador.Compilador.tablaSimbolo.get($8.sval).size()-1).getAmbito());
+		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($11.sval).get(compilador.Compilador.tablaSimbolo.get($11.sval).size()-1).getAmbito());
 	}
 	else{
 		//mostrarMensaje("NA o NS no es una CTE ENTERA");
@@ -288,7 +286,8 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ')' ';'
 {
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval));
+	setearAmbito($3.sval);
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
 	//Par nomProc = new Par($1.sval); 
@@ -331,7 +330,9 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ',' identificador ')' ';'
 {
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval));
+	setearAmbito($3.sval);
+	setearAmbito($5.sval);
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));	
 
 	//Par nomProc = new Par($1.sval); 
@@ -379,7 +380,10 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
 {
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList($3.sval, $5.sval, $7.sval));
+	setearAmbito($3.sval);
+	setearAmbito($5.sval);
+	setearAmbito($7.sval);
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($7.sval).get(compilador.Compilador.tablaSimbolo.get($7.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
 	//Par nomProc = new Par($1.sval); 
@@ -1295,7 +1299,8 @@ void setearAmbito(String sval){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
-		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+		//compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito();
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getUso().equals("CADENA")){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
@@ -1315,6 +1320,69 @@ void setearAmbitoyDeclarada(String sval, String tipo){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setTipoParametro(tipo);
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setPasajeParametro("COPIA VALOR");
 	}
+}
+
+String getAmbitoVerdaderoVerdadero(String sval) {
+	
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
+	//Recorro la lista con todos los id con ese nombre
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
+		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + "@Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
+			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
+			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
+			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
+				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\@");
+				String idProc = arreglo[arreglo.length-1];
+				//Recorro lista de id de Proc
+				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
+					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
+					//Compruebo que el ambito del id del Proc este contenido
+					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
+					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+						//Compruebo que el NS sea >= que la cantidad de anidamientos
+						String [] id = ambitoSinNombreVar.split("\\@"); 
+						String [] proc = ambitoSinNombreProc.split("\\@"); 
+						//System.out.println("TAMANO: " + (id.length - proc.length));
+						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
+							return compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+						}
+							
+					}
+				}
+				return "";
+			}
+		}
+	}
+	return "";
+}
+
+String getAmbitoVerdadero(String sval){
+	
+	//Tomo el ambito de la id (asignacion)
+	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	
+	//Esta en la tabla de simbolos?
+	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
+		//No esta declarada?
+		if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada()){
+			//Veo si es un id que esta dentro del Proc para evaluar el NS
+			if(!compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito().equals(sval + "@Main")){
+				return getAmbitoVerdaderoVerdadero(sval);
+			}
+			//Puede que se de el caso que Los Proc no quieren que sea vea y va a ir al Main a buscar
+			for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+				//Compruebo que el id no sea proc y que el ambito sea Main
+				if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + "@Main")) {
+					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())
+						return compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito();
+				}
+			}	
+		}
+	}
+	return "";
 }
 
 
