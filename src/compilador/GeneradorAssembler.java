@@ -56,7 +56,8 @@ public class GeneradorAssembler {
 			".data\r\n" + 
 			"mensaje db \"Mensaje por pantalla\", 0" + saltoDeLinea +
 			"errorOverflowSuma db \"Ha ocurrido overflow al sumar, programa terminado inesperadamente\", 0" + saltoDeLinea +
-			"errorDivisionCero db \"Se intenta dividir por cero, programa terminado por su seguridad\", 0" + saltoDeLinea;
+			"errorDivisionCero db \"Se intenta dividir por cero, programa terminado por su seguridad\", 0" + saltoDeLinea +
+			"_MAX dt 604462909807314587353087" + saltoDeLinea;
 	private String data = "";
 	private String code = ".code" + saltoDeLinea
 						+ "overflow:" + saltoDeLinea
@@ -115,9 +116,9 @@ public class GeneradorAssembler {
 	public static String plantillaEtiqueta = "ETIQUETA:" + saltoDeLinea;
 	public static String plantillaCall = "call F" + saltoDeLinea;
 	public static String plantillaAgregarVarINTEGER = "VAR dw ?" + saltoDeLinea;
-	public static String plantillaAgregarVarFLOAT   = "VAR dd ?" + saltoDeLinea;
+	public static String plantillaAgregarVarFLOAT   = "VAR dt ?" + saltoDeLinea;
 	
-	public static String saltoPorOverflow = "JG overflow" + saltoDeLinea;
+	public static String saltoPorOverflow = "JO overflow" + saltoDeLinea;
 	
 	public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
 								                 + "compa op2" + saltoDeLinea;
@@ -233,13 +234,13 @@ public class GeneradorAssembler {
 				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
 					   this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
 			   		if(aux.get(i).getTipoParametro().equals("FLOAT"))
-			   			this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dd ?" + saltoDeLinea;
+			   			this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dt ?" + saltoDeLinea;
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int"))
 					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dd " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dt " + aux.get(i).getValor() + saltoDeLinea;
     		   }
     		   else if(aux.get(i).getUso().equals("CADENA")) {
     			   	   String cadenipi = aux.get(i).getValor();
@@ -253,7 +254,7 @@ public class GeneradorAssembler {
 				   if(aux.get(i).getTipo().equals("int"))
 					   this.data = this.data + "@" + aux.get(i).getValor() + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "@" + aux.get(i).getValor() + " dd " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "@" + aux.get(i).getValor() + " dt " + aux.get(i).getValor() + saltoDeLinea;
     		   }
     	   } 
 	    }		
@@ -1288,77 +1289,136 @@ private void getCodAsignacion(){
 		}
 	}
 	
-	public void generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
+	public String generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
 		String formato = plantillaOperacionFloat;
+		String cargar = plantillaCargaCompFLOAT;
+		String comparativa = plantillaComparacionFloat;
+		String saltito = saltoPorOverflow;
+		String variableAAgregar = plantillaAgregarVarFLOAT; 
+		String variableAAgregar2 = plantillaAgregarVarFLOAT; 
+		String auxiliar = generarVarAux();
+		String auxiliar2 = generarVarAux();
+		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);
+//		public static String plantillaOperacionFloat = "OpPila REG1" + saltoDeLinea        // Agrega REG a la pila de coprocesador
+//													 + "OpArit REG2" + saltoDeLinea       // Realiza la operacion entre el tope de de l apila de coprocesador y REG
+//				 									 + "FSTP resul"  + saltoDeLinea;
+//		
+//		public static String CompIgualFLOAT =          "JNE Llabel" + saltoDeLinea;
+//		public static String CompDistintoFLOAT =       "JE Llabel"  + saltoDeLinea;
+//		public static String CompMayorFLOAT =          "JBE Llabel" + saltoDeLinea;
+//		public static String CompMenorFLOAT =          "JAE Llabel" + saltoDeLinea;
+//		public static String CompMayorIgualFLOAT =     "JB Llabel"  + saltoDeLinea;
+//		public static String CompMenorIgualFLOAT =     "JA Llabel"  + saltoDeLinea;
+//		
+//		public static String plantillaComparacionFloat = "FSTSW aux"   + saltoDeLinea
+//										 			   + "MOV AX, aux" + saltoDeLinea
+//										 			   + "SAHF"        + saltoDeLinea;
+//		
+//		public static String plantillaCargaCompFLOAT = "carga op1" + saltoDeLinea
+//                									 + "compa op2" + saltoDeLinea;
+	
 		// ESTABLECER OPERACION
-		// NINGUNO SE TIENE QUE CONVERTIR
+		
+		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
 			formato = formato.replace("OpPila", "FLD");
 			// REEMPLAZO DE APERACION ARITMETICA
-			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FADD"); }
+			if (operacionARIT.equals("+")) { 
+				formato = formato.replace("OpArit", "FADD");
+				// GENERACION DE COMPROBACION DE OVERFLOW EN SUMAS
+				formato = formato + cargar + comparativa + saltito;
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace("compa", "FCOMP"); 
+				formato = formato.replace("op2", "_MAX"); 
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace(" aux", " "+ auxiliar2);
+			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
+			
+			}
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 
 		}
-		// SE TIENE QUE CONVERTIR OPRENDO2
+		// SE TIENE QUE CONVERTIR OPRENDO1 (INTEGER-FLOAT)
 		else if (conv==1) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
 			formato = formato.replace("OpPila", "FILD");
 			// REEMPLAZO DE APERACION ARITMETICA
-			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FADD"); }
+			if (operacionARIT.equals("+")) { 
+				formato = formato.replace("OpArit", "FADD"); 
+				// GENERACION DE COMPROBACION DE OVERFLOW EN SUMAS
+				formato = formato + cargar + comparativa + saltito;
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace("compa", "FCOMP"); 
+				formato = formato.replace("op2", "_MAX"); 
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace(" aux", " "+ auxiliar2);
+			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FDIV"); 
+			
+			}
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
 		}
+		// SE TIENE QUE CONVERTIR OPRENDO2 (FLOAT-INTEGER)
 		else if (conv==2) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
 			formato = formato.replace("OpPila", "FLD");
 			// REEMPLAZO DE APERACION ARITMETICA
-			if (operacionARIT.equals("+")) { formato = formato.replace("OpArit", "FIADD"); }
+			if (operacionARIT.equals("+")) { 
+				formato = formato.replace("OpArit", "FIADD"); 
+				// GENERACION DE COMPROBACION DE OVERFLOW EN SUMAS
+				formato = formato + cargar + comparativa + saltito;
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace("compa", "FCOMP"); 
+				formato = formato.replace("op2", "_MAX"); 
+				formato = formato.replace("carga", "FLD"); 
+				formato = formato.replace(" aux", " "+ auxiliar2);
+			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
-			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FIDIV"); }
+			if (operacionARIT.equals("/")) { formato = formato.replace("OpArit", "FIDIV"); 
+			
+			}
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
 		}
 		// REEMPLAZO DE REGISTROS
 		formato = formato.replace("REG1", operando1);
 		formato = formato.replace("REG2", operando2);
-		String auxiliar = generarVarAux();
 		formato = formato.replace("resul", auxiliar);
-		// AGREGAR INSTRUCCION AL MAIN
-		this.main = this.main + formato;
+		formato = formato.replace("op1", auxiliar);  
 		// AGREGAR VAIRABLE AL DATA
-		String variableAAgregar = plantillaAgregarVarFLOAT; 
-		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);
+		variableAAgregar2 = variableAAgregar.replace("VAR", auxiliar2);
 		this.data = this.data + variableAAgregar;
+		return formato;
 	}
 	
 	
 	public String generarCodigoParaFlotantes(String operando1, String operando2, String operacion, String registro, int operandoAConvertir) {
 		// Generacion cuando NO hay que convertir
 		if (operandoAConvertir==0) {
-			if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",0); }
-			if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",0); }
-			if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",0); }
-			if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",0); }
+			if (operacion.equals("+")) { return generarInstruccionesFLOAT(operando1, operando2, "+",0); }
+			if (operacion.equals("-")) { return generarInstruccionesFLOAT(operando1, operando2, "-",0); }
+			if (operacion.equals("/")) { return generarInstruccionesFLOAT(operando1, operando2, "/",0); }
+			if (operacion.equals("*")) { return generarInstruccionesFLOAT(operando1, operando2, "*",0); }
 		}
 		// Generacion cuando SI hay que convertir
 		else {
 			// operando1 operacion operando2
 			// Si se necesita convertir el operando1
 			if (operandoAConvertir==1) {
-				if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",1); }
-				if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",1); }
-				if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",1); }
-				if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",1); }
+				if (operacion.equals("+")) { return generarInstruccionesFLOAT(operando1, operando2, "+",1); }
+				if (operacion.equals("-")) { return generarInstruccionesFLOAT(operando1, operando2, "-",1); }
+				if (operacion.equals("/")) { return generarInstruccionesFLOAT(operando1, operando2, "/",1); }
+				if (operacion.equals("*")) { return generarInstruccionesFLOAT(operando1, operando2, "*",1); }
 			}
 			// Si se necesita convertir el operando2
 			else if (operandoAConvertir==2) {
-				if (operacion.equals("+")) { generarInstruccionesFLOAT(operando1, operando2, "+",2); }
-				if (operacion.equals("-")) { generarInstruccionesFLOAT(operando1, operando2, "-",2); }
-				if (operacion.equals("/")) { generarInstruccionesFLOAT(operando1, operando2, "/",2); }
-				if (operacion.equals("*")) { generarInstruccionesFLOAT(operando1, operando2, "*",2); }
+				if (operacion.equals("+")) { return generarInstruccionesFLOAT(operando1, operando2, "+",2); }
+				if (operacion.equals("-")) { return generarInstruccionesFLOAT(operando1, operando2, "-",2); }
+				if (operacion.equals("/")) { return generarInstruccionesFLOAT(operando1, operando2, "/",2); }
+				if (operacion.equals("*")) { return generarInstruccionesFLOAT(operando1, operando2, "*",2); }
 			}
 		}
 		return null;
@@ -1367,6 +1427,7 @@ private void getCodAsignacion(){
 	public String generarAsignacion(String operando1, String operando2, int caso) {
 		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 		//ublic static String extender16a32Bits   = "CWDE" + saltoDeLinea;
+		
 		String ardiente;
 		if (caso == 0) {
 			// GENERACION DE COGIDO
@@ -1378,7 +1439,9 @@ private void getCodAsignacion(){
 			linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
 			// AGREGAR VARIABLE
 			String variableData = plantillaAgregarVarFLOAT;
+			
 			variableData = variableData.replace("VAR", aux);
+			
 			this.data = this.data + variableData;
 			// AGREGAR CODIGO
 			ardiente = linea1 + linea2;
@@ -1448,7 +1511,9 @@ private void getCodAsignacion(){
 		codigo = codigo.replace("op2", reg2);
 		// AGREGAR VARIABLE AL .data
 		String variableData = plantillaAgregarVarFLOAT;
+		
 		variableData = variableData.replace("VAR", auxiliar);
+		
 		this.data = this.data + variableData;
 		// RETORNA CODIGO QUE POSTERIORMENTE SE AGREGARA A .main, O A .code
 		return codigo;
