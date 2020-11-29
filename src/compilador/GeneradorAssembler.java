@@ -274,6 +274,7 @@ public class GeneradorAssembler {
 		
 		for (int i = 0; i < listaPolaca.size(); i++) {
 			String elemento = listaPolaca.get(i).getValor();
+			System.out.println("ELEMENTALMENTE: "+elemento);
 			if ( !this.operadoresUnarios.contains(elemento) && !this.operadoresBinarios.contains(elemento) && !elemento.contains(PROC) )  // Si son ids o ctes las apilo
 				pila.add(elemento);
 			if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
@@ -288,6 +289,7 @@ public class GeneradorAssembler {
 				if (elemento.equals("BI")) {
 					String salto = pila.pop();
 					this.main = this.main + generarBI(salto);
+					//this.main  = this.main + generarCall(salto);
 				}
 			}
 			if (operadoresBinarios.contains(elemento)) {
@@ -301,17 +303,17 @@ public class GeneradorAssembler {
 					String operando2 = pila.pop();  // Ver el assembler si es el op1
 					String operando1 = pila.pop();  // Ver el assembler si es el op2
 					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
-					i++; 
+					i++;
 					//String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
 					// generar comparacion
 					generarComparadores(salto, elemento, operando1, operando2);
 					// generar salto
-					this.main  =this.main + generarCall(salto);
 				}
 			}
-			// generea labels
-			if (elemento.contains("L") && elemento.matches("[0-9]")) {
+			// generar labels
+			if (elemento.charAt(0) == 'L' ) {
 				this.main = this.main + generarInvocacion(elemento);
+				//this.main  =this.main + generarCall(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
 				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
@@ -1251,7 +1253,6 @@ public class GeneradorAssembler {
 		String compSimple = "cmp opio" + saltoDeLinea;
 		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
-		
 		String auxiliar2 = generarVarAux();
 		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
@@ -1268,6 +1269,7 @@ public class GeneradorAssembler {
 				formato = formato.replace("op2", "_MAX"); 
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
 			}
 			if (operacionARIT.equals("/")) { 
 				formato = formato.replace("OpArit", "FDIV"); 
@@ -1275,6 +1277,8 @@ public class GeneradorAssembler {
 				formato = formato.replace("cmp", "FCOMP");
 				formato = formato.replace("opio", operando2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				formato = formato.replace(" aux", " "+ auxiliar2);
+				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
@@ -1294,6 +1298,7 @@ public class GeneradorAssembler {
 				formato = formato.replace("op2", "_MAX"); 
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("/")) { 
 				formato = formato.replace("OpArit", "FDIV"); 
@@ -1301,6 +1306,8 @@ public class GeneradorAssembler {
 				formato = formato.replace("cmp", "FCOMP");
 				formato = formato.replace("opio", operando2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				formato = formato.replace(" aux", " "+ auxiliar2);
+				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
@@ -1319,6 +1326,7 @@ public class GeneradorAssembler {
 				formato = formato.replace("op2", "_MAX"); 
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("/")) { 
 				formato = formato.replace("OpArit", "FIDIV"); 
@@ -1326,7 +1334,7 @@ public class GeneradorAssembler {
 				formato = formato.replace("cmp", "FICOMP");
 				formato = formato.replace("opio", operando2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
-			
+				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
@@ -1341,7 +1349,8 @@ public class GeneradorAssembler {
 		this.data = this.data + variableAAgregar;
 		this.data = this.data + variableAAgregar2;
 		pila.push(auxiliar);
-		System.out.println("VARSOVIA QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar);
+		System.out.println("VARSOVIA1 QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar);
+		System.out.println("VARSOVIA2 QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar2);
 		return formato;
 	}
 	
@@ -1422,7 +1431,7 @@ public class GeneradorAssembler {
 		// FLOAT comp INTEGER
 		if (caso==2) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
 		// INTEGER comp INTEGER
-		if (caso==3) { return generarSaltosInteger(comparacion, reg1, reg2); }
+		if (caso==3) { return generarSaltosInteger(comparacion, reg1, reg2).replace("label", salto); }
 		return null;
 	}
 	

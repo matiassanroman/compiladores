@@ -2,5 +2,14 @@
 
 /*  Tabla de Simbolos  */
 
+<<<<<<< HEAD
 Clave: 3.2E+1	 Value: 3.2E+1	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 3.2E+1@Main	 Declarada: false	 tipoCTE: FLOAT
 Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: FLOAT
+=======
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 5	 Value: 5	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 5@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 1@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: "hola"	 Value: "hola"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "hola"@Main
+>>>>>>> c12489623c9b2ba9a9da39086074f53b8924d014
