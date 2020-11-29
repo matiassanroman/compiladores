@@ -14,10 +14,8 @@ _MAX dt 604462909807314587353087
 @aux1 dt ?
 VAR dt ?
 @aux3 dt ?
-@aux4 dt ?
-VAR dt ?
+_3.2E+1 dt 3.2E+1
 i@Main dt ?
-_3.250E+3 dt 3.250E+3
 .code
 overflow:
 invoke MessageBox, NULL, addr errorOverflowSuma, addr mensaje, MB_OK 
@@ -26,8 +24,8 @@ divcero:
 invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK 
 call fin
 main:
-FLD 3.250E+3
-FADD 3.250E+3
+FLD 32.3
+FADD 32.33
 FSTP @aux1
 FLD @aux1
 FCOMP _MAX
