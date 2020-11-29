@@ -2,16 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Proc	 Ambito: b@Main@a	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 0
-Clave: x	 Value: x	 Uso: ID	 TipoDeUso: Var	 Ambito: x@Main	 Declarada: true	 tipoVar: INTEGER
-Clave: x	 Value: x	 Uso: ID	 TipoDeUso: Var	 Ambito: x@Main@a	 Declarada: true	 tipoVar: INTEGER
-Clave: x	 Value: x	 Uso: ID	 TipoDeUso: Var	 Ambito: x@Main@a@b	 Declarada: true	 tipoVar: INTEGER
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Proc	 Ambito: a@Main	 Declarada: true	 CantParametros: 0	 NA: 2	 NS: 2
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 2@Main@a	 Declarada: false	 tipoCTE: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2@Main@a	 Declarada: false	 tipoCTE: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2@Main@a@b@c	 Declarada: false	 tipoCTE: INTEGER
-Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1@Main@a@b	 Declarada: false	 tipoCTE: INTEGER
-Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 0@Main@a@b	 Declarada: false	 tipoCTE: INTEGER
-Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@a@b@c	 Declarada: false	 tipoCTE: INTEGER
-Clave: 20	 Value: 20	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 20@Main@a@b@c	 Declarada: false	 tipoCTE: INTEGER
-Clave: c	 Value: c	 Uso: ID	 TipoDeUso: Proc	 Ambito: c@Main@a@b	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 2
+Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: 3.250E+3	 Value: 3.250E+3	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 3.250E+3@Main	 Declarada: false	 tipoCTE: FLOAT

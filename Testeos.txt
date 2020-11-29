@@ -1,11 +1,4 @@
-INTEGER x;
+FLOAT i;
 
-PROC a() NA=2_i, NS=2_i{
-	INTEGER x;
-	PROC b() NA=1_i, NS=0_i{
-		INTEGER x;
-		PROC c() NA=0_i, NS=2_i{
-			x = 20_i;
-		}
-	}
-}
+
+i = 32.5f+2 + 32.5f+2;
