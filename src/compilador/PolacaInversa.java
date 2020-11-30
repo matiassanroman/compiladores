@@ -52,14 +52,30 @@ public class PolacaInversa {
 	}
 	
 	public String toString() {
-		reordenamientoProc();
+			
 		String salida = "Lista de pasos de la polaca inversa:\n";
+		
+		//Acomodo los indices
+		int cantidad = 0;
+		ArrayList<Par> aux = new ArrayList<Par>();
+		
+		for (int i = 0; i < pasosPolaca.size(); i++) {
+			Par p = new Par(pasosPolaca.get(i).getValor());
+			p.setClave(cantidad);
+			aux.add(p);
+			cantidad++;
+		}
+		
+		pasosPolaca = aux;
+		reordenarFinal();
+		
 		for (int i = 0; i < pasosPolaca.size(); i++) {
 			if (i == pasosPolaca.size()-1)
 				salida = salida + pasosPolaca.get(i).toString();
 			else
 				salida = salida + pasosPolaca.get(i).toString() + "\n";
 		}
+		
 		return salida;
 	
 	}
@@ -257,71 +273,83 @@ public class PolacaInversa {
 //			System.out.println(procedimientos.get(i).toString());
 //	}
 	
-	public void reordenamientoProc() {
+	public void reordenarFinal() {
 		
-		ArrayList<Par> aux = new ArrayList<Par>();
+		ArrayList<Par> proc = new ArrayList<Par>();
 		ArrayList<Par> aux2 = new ArrayList<Par>();
-		
+		ArrayList<Par> aux3 = new ArrayList<Par>();
+	
 		for(int i=0; i<pasosPolaca.size(); i++) {
 			if(pasosPolaca.get(i).getValor().length() > 3 && pasosPolaca.get(i).getValor().substring(0, 4).equals("PROC")) {
-				aux.add(pasosPolaca.get(i));
+				proc.add(pasosPolaca.get(i));
 			}
 			else if(pasosPolaca.get(i).getValor().length() > 2 && pasosPolaca.get(i).getValor().substring(0, 3).equals("RET")) 
-				aux.add(pasosPolaca.get(i));
+				proc.add(pasosPolaca.get(i));
 		}
-		
-			
-		if(aux.size() > 0) {
-			int i = 0;
-			Par inicio = null;
-			Par fin = null;
-			int finAux = 0;
-			while(finAux < pasosPolaca.size()) {
-				//Si no veo Proc agrego a aux2 y elimino de pasosPolaca
-				if(aux.size() == 0)
-					i=finAux;
-				if(!(pasosPolaca.get(i).getValor().length() > 3 && pasosPolaca.get(i).getValor().substring(0, 4).equals("PROC"))){
-					if(!(pasosPolaca.get(i).getValor().length() > 2 && pasosPolaca.get(i).getValor().substring(0, 3).equals("REC"))){
-						aux2.add(pasosPolaca.get(i));
-						//pasosPolaca.remove(aux2.get(aux2.size()-1));
-						finAux++;
-						i++;
-					}
-				}
-				//Si encuentro Proc recorro la lista aux hasta el primer RET
-				else if(pasosPolaca.get(i).getValor().length() > 3 && pasosPolaca.get(i).getValor().substring(0, 4).equals("PROC")) {
-					int j= 0;
-					boolean p = true;
-					while( (j < aux.size()) && p) {
-						if(aux.get(j).getValor().length() > 2 && aux.get(j).getValor().substring(0, 3).equals("RET")) {
-							inicio = aux.get(j-1);
-							fin = aux.get(j);
-							aux.remove(j-1);
-							aux.remove(j-1);
-							p = false;	
-						}
-						j++;
-					}
 				
-					if(!p) {
-						for(int z=inicio.getClave(); z<=fin.getClave(); z++) {
-							if(aux2.size() > 0) {
-								if(!aux2.contains(pasosPolaca.get(z))) {
-									aux2.add(pasosPolaca.get(z));
-									finAux++;
-								}
-							}
-							else {
-								finAux++;
-								aux2.add(pasosPolaca.get(z));
-								//i++;
-							}
-						}
-						
-					}
+		int recorrido = proc.size();
+		int inic = 0, fin = 0;
+		
+		while(recorrido > 0) {
+			int j= 0;
+			boolean p= true;
+			while(j < proc.size() && p){
+				if(proc.get(j).getValor().contains("RET")) {
+					inic = proc.get(j-1).getClave();
+					fin = proc.get(j).getClave();
+					proc.remove(j-1);
+					proc.remove(j-1);
+					p = false;	
+					recorrido = recorrido - 2;
+				}
+				j++;
+			}
+			
+			if(aux2.size() == 0) {
+				for(int i=inic; i<=fin; i++) {
+					aux2.add(pasosPolaca.get(i));
 				}
 			}
-			pasosPolaca = aux2;
+			else {
+				for(int i=inic; i<=fin; i++) {
+					boolean esta = false;
+					for(int z=0; z<aux2.size(); z++) {
+						if(aux2.get(z).getClave().equals(i))
+							esta = true;
+					}
+					if(!esta) {
+						aux2.add(pasosPolaca.get(i));
+					}
+				}
+			}			
+		}
+		
+		//aux2 estan los proc
+		//aux3 el main
+		if(aux2.size() > 0) {
+			for(int i=0; i<pasosPolaca.size(); i++) {
+				if(!pasosPolaca.get(i).getValor().contains("PROC")) {
+					aux3.add(pasosPolaca.get(i));
+				}
+				else
+					break;
+			}
+			
+			aux3.addAll(aux2);
+			ArrayList<Par> aux4 = new ArrayList<Par>();
+			
+			for(int i=pasosPolaca.size()-1; i>=0; i--) {
+				if(!pasosPolaca.get(i).getValor().contains("RET")) {
+					aux4.add(pasosPolaca.get(i));
+				}
+				else {
+					for(int z=aux4.size()-1; z>=0; z--) {
+						aux3.add(aux4.get(z));
+					}
+					break;
+				}
+			}
+			pasosPolaca = aux3;
 		}
 	}
 }

@@ -1498,7 +1498,7 @@ public class GeneradorAssembler {
 				if(!flot.equals(""))
 					aux[0] = flot;
 			}
-			
+					
 			if(compilador.Compilador.tablaSimbolo.get(aux[0]) != null) {				
 				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); i++)
 					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getUso().equals("CTE")){

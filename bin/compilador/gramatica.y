@@ -636,7 +636,63 @@ senteciaUnicaElse : sentenciaEjecutable
 }
 				  ;
 
-condicionIf : condicion
+//------------------------------------------------
+
+
+
+condicionDelIf : identificador comparador asignacion
+{	
+	setearAmbito($1.sval);
+	//Par id = new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par comp = new Par($2.sval);
+	polaca.agregarPaso(id);
+	polaca.agregarPaso(comp);
+}
+		  | identificador comparador identificador
+{
+	if(sePuedeUsar(val_peek(0).sval) == 0 ) {
+		boolean aux = false;
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
+			//Compruebo que el id no sea proc y que el ambito sea Main
+			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
+				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
+				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
+				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
+						aux = true;
+						break;
+					}
+			}
+		}
+	}else {
+		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
+	//Par id1 = new Par($1.sval);
+	//Par id2 = new Par($3.sval);
+	Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
+	Par comp = new Par($2.sval);
+	polaca.agregarPaso(id1);
+	polaca.agregarPaso(id2);
+	polaca.agregarPaso(comp);
+}
+		  | identificador comparador constante
+{
+	setearAmbito($1.sval);
+	//Par id = new Par($1.sval);
+	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par comp = new Par($2.sval);
+	polaca.agregarPaso(id);
+	polaca.agregarPaso(comp);
+}
+		  ;
+
+
+//-----------------------------------------------
+
+condicionIf : condicionDelIf
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
