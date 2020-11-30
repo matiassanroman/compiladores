@@ -13,8 +13,8 @@ errorDivisionCero db "Se intenta dividir por cero, programa terminado por su seg
 _MAX dt 604462909807314587353087
 @aux1 dt ?
 @aux2 dt ?
+_2.15E+2 dt 2.15E+2
 _25 dw 25
-_2.1E+1 dt 2.1E+1
 _3.250E+3 dt 3.250E+3
 _1 dw 1
 jj@Main dt ?
@@ -34,12 +34,12 @@ JA overflow
 MOV AX, jj@Main
 CWDE
 MOV BX, EAX
-FLD 21.5
+FLD 2.15E+2
 FCOMP jj@Main
 FSTSW @aux1
 MOV AX, @aux1
 SAHF
-JAE L15
+JA L15
 JMP L19
 L15:
 MOV @aux2, jj@Main

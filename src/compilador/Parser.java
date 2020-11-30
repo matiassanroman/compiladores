@@ -938,7 +938,6 @@ void setearAmbitoNaNs(String na, String ns){
 }
 
 void setearAmbito(String sval){
-	System.out.println("HHH: " + sval);
 	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') {
 		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 

@@ -2,8 +2,8 @@
 
 /*  Tabla de Simbolos  */
 
+Clave: 2.15E+2	 Value: 2.15E+2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2.15E+2@Main	 Declarada: false	 tipoCTE: FLOAT
 Clave: 25	 Value: 25	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 25@Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: 2.1E+1	 Value: 2.1E+1	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2.1E+1@Main	 Declarada: false	 tipoCTE: FLOAT
 Clave: 3.250E+3	 Value: 3.250E+3	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 3.250E+3@Main	 Declarada: false	 tipoCTE: FLOAT
 Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 1@Main	 Declarada: false	 tipoCTE: INTEGER
 Clave: jj	 Value: jj	 Uso: ID	 TipoDeUso: Var	 Ambito: jj@Main	 Declarada: true	 tipoVar: FLOAT
