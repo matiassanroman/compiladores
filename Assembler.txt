@@ -26,6 +26,7 @@ divcero:
 invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK 
 call fin
 main:
+<<<<<<< HEAD
 FLD _3.45000e+5
 FADD _1.5000e+4
 FSTP @aux1
