@@ -376,15 +376,13 @@ public class GeneradorAssembler {
 		//PILLA: OPERANDO1 OPERANDO2 (TOPE)
 		String operando2 = pila.pop();
 		String operando1 = pila.pop();
-		System.out.println("holaa 1:" + operando2);
+		
 		//SON DOS NUMEROS O CTE
 		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
-			System.out.println("holaa 2:");
 			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
 				generarCodigoParaInteger(operando1, operando2, operador);
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				System.out.println("holaa 3:");
 				this.main = this.main + generarCodigoParaFlotantes(operando1, operando2, operador, 0);
 			}
 			//COVERSION

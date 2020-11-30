@@ -496,8 +496,8 @@ inicioFor : identificador '=' constante
 {
 	if(!verficarCTEEnteras($3.sval))
 		yyerror("CTE de: " + $1.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
-
-	polaca.agregarVariableControl($1.sval);
+	setearAmbito($1.sval);
+	polaca.agregarVariableControl(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	//Par id = new Par($1.sval);
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	polaca.agregarPaso(id);
@@ -509,7 +509,8 @@ inicioFor : identificador '=' constante
 		  ;
 
 condicion : identificador comparador asignacion
-{
+{	
+	setearAmbito($1.sval);
 	//Par id = new Par($1.sval);
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par comp = new Par($2.sval);
@@ -553,6 +554,7 @@ condicion : identificador comparador asignacion
 	if(!verficarCTEEnteras($3.sval))
 		yyerror("CTE de la comparacion debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 
+	setearAmbito($1.sval);
 	//Par id = new Par($1.sval);
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par comp = new Par($2.sval);

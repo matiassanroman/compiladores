@@ -480,7 +480,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE",
 };
 
-//#line 832 "gramatica.y"
+//#line 834 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -1724,8 +1724,8 @@ case 38:
 {
 	if(!verficarCTEEnteras(val_peek(0).sval))
 		yyerror("CTE de: " + val_peek(2).sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
-
-	polaca.agregarVariableControl(val_peek(2).sval);
+	setearAmbito(val_peek(2).sval);
+	polaca.agregarVariableControl(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).size()-1).getAmbito());
 	/*Par id = new Par($1.sval);*/
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).size()-1).getAmbito());
 	polaca.agregarPaso(id);
@@ -1737,7 +1737,8 @@ case 38:
 break;
 case 39:
 //#line 512 "gramatica.y"
-{
+{	
+	setearAmbito(val_peek(2).sval);
 	/*Par id = new Par($1.sval);*/
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).size()-1).getAmbito());
 	Par comp = new Par(val_peek(1).sval);
@@ -1746,7 +1747,7 @@ case 39:
 }
 break;
 case 40:
-//#line 520 "gramatica.y"
+//#line 521 "gramatica.y"
 {
 	if(sePuedeUsar(val_peek(0).sval) == 0 ) {
 		boolean aux = false;
@@ -1780,11 +1781,12 @@ case 40:
 }
 break;
 case 41:
-//#line 552 "gramatica.y"
+//#line 553 "gramatica.y"
 {
 	if(!verficarCTEEnteras(val_peek(0).sval))
 		yyerror("CTE de la comparacion debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
 
+	setearAmbito(val_peek(2).sval);
 	/*Par id = new Par($1.sval);*/
 	Par id =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).size()-1).getAmbito());
 	Par comp = new Par(val_peek(1).sval);
@@ -1793,7 +1795,7 @@ case 41:
 }
 break;
 case 42:
-//#line 565 "gramatica.y"
+//#line 567 "gramatica.y"
 {	
 	if(!verficarCTEEnteras(val_peek(0).sval))
 		yyerror("CTE del UP debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
@@ -1802,7 +1804,7 @@ case 42:
 }
 break;
 case 43:
-//#line 572 "gramatica.y"
+//#line 574 "gramatica.y"
 {
 	if(!verficarCTEEnteras(val_peek(0).sval))
 		yyerror("CTE del DOWN debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
@@ -1811,29 +1813,29 @@ case 43:
 }
 break;
 case 44:
-//#line 579 "gramatica.y"
+//#line 581 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 45:
-//#line 585 "gramatica.y"
+//#line 587 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 588 "gramatica.y"
+//#line 590 "gramatica.y"
 {
 }
 break;
 case 47:
-//#line 593 "gramatica.y"
+//#line 595 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 48:
-//#line 597 "gramatica.y"
+//#line 599 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -1843,27 +1845,27 @@ case 48:
 }
 break;
 case 49:
-//#line 607 "gramatica.y"
+//#line 609 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 610 "gramatica.y"
+//#line 612 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 613 "gramatica.y"
+//#line 615 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 616 "gramatica.y"
+//#line 618 "gramatica.y"
 {
 }
 break;
 case 53:
-//#line 622 "gramatica.y"
+//#line 624 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1874,12 +1876,12 @@ case 53:
 }
 break;
 case 54:
-//#line 633 "gramatica.y"
+//#line 635 "gramatica.y"
 {
 }
 break;
 case 55:
-//#line 638 "gramatica.y"
+//#line 640 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1889,7 +1891,7 @@ case 55:
 }
 break;
 case 56:
-//#line 648 "gramatica.y"
+//#line 650 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -1900,22 +1902,22 @@ case 56:
 }
 break;
 case 57:
-//#line 659 "gramatica.y"
+//#line 661 "gramatica.y"
 {
 }
 break;
 case 58:
-//#line 664 "gramatica.y"
+//#line 666 "gramatica.y"
 {
 }
 break;
 case 59:
-//#line 667 "gramatica.y"
+//#line 669 "gramatica.y"
 {
 }
 break;
 case 60:
-//#line 672 "gramatica.y"
+//#line 674 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	if(sePuedeUsar(val_peek(3).sval) == 1){
@@ -1931,62 +1933,62 @@ case 60:
 }
 break;
 case 61:
-//#line 686 "gramatica.y"
+//#line 688 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 62:
-//#line 690 "gramatica.y"
+//#line 692 "gramatica.y"
 {
 	yyerror("Error: asignacion mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 63:
-//#line 696 "gramatica.y"
+//#line 698 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 64:
-//#line 701 "gramatica.y"
+//#line 703 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 65:
-//#line 706 "gramatica.y"
+//#line 708 "gramatica.y"
 {
 }
 break;
 case 66:
-//#line 711 "gramatica.y"
+//#line 713 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 67:
-//#line 716 "gramatica.y"
+//#line 718 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 68:
-//#line 721 "gramatica.y"
+//#line 723 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 726 "gramatica.y"
+//#line 728 "gramatica.y"
 {
 }
 break;
 case 70:
-//#line 729 "gramatica.y"
+//#line 731 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	if(sePuedeUsar(val_peek(0).sval) == 1){
@@ -2001,68 +2003,68 @@ case 70:
 }
 break;
 case 71:
-//#line 744 "gramatica.y"
+//#line 746 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 747 "gramatica.y"
+//#line 749 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 750 "gramatica.y"
+//#line 752 "gramatica.y"
 {
 }
 break;
 case 74:
-//#line 753 "gramatica.y"
+//#line 755 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 756 "gramatica.y"
+//#line 758 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 759 "gramatica.y"
+//#line 761 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 762 "gramatica.y"
+//#line 764 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 78:
-//#line 768 "gramatica.y"
+//#line 770 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 771 "gramatica.y"
+//#line 773 "gramatica.y"
 {
 }
 break;
 case 80:
-//#line 776 "gramatica.y"
+//#line 778 "gramatica.y"
 {
 }
 break;
 case 81:
-//#line 781 "gramatica.y"
+//#line 783 "gramatica.y"
 {
 }
 break;
 case 82:
-//#line 784 "gramatica.y"
+//#line 786 "gramatica.y"
 {
 }
 break;
 case 83:
-//#line 788 "gramatica.y"
+//#line 790 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -2080,13 +2082,13 @@ case 83:
 }
 break;
 case 84:
-//#line 804 "gramatica.y"
+//#line 806 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 85:
-//#line 810 "gramatica.y"
+//#line 812 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -2103,7 +2105,7 @@ case 85:
 	polaca.agregarPaso(cte);
 }
 break;
-//#line 2030 "Parser.java"
+//#line 2032 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
