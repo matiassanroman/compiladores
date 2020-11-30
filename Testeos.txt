@@ -1,11 +1,3 @@
-INTEGER a,b,i;
+FLOAT i,a;
 
-%%IF (a>b)
-%%	a = 2_i;
-%%ELSE
-%%	a = 1_i;
-%%END_IF
-
-FOR(i=1_i; i<5_i; UP 1_i){
-	OUT("hola");
-}
+i = 34.5f+4 + 1.5f+4;

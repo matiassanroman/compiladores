@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
-import java.util.regex.*;
 
 /*  Para las operaciones entre datos de tipo entero se deberá generar código que utilice los registros del
 	procesador (EAX, EBX, ECX Y EDX o AX, BX, CX y DX), y seguimiento de registros.
@@ -272,7 +271,7 @@ public class GeneradorAssembler {
 		
 		for (int i = 0; i < listaPolaca.size(); i++) {
 			String elemento = listaPolaca.get(i).getValor();
-			System.out.println("ELEMENTALMENTE: "+elemento);
+			
 			if ( !this.operadoresUnarios.contains(elemento) && !this.operadoresBinarios.contains(elemento) && !elemento.contains(PROC) )  // Si son ids o ctes las apilo
 				pila.add(elemento);
 			if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
@@ -287,7 +286,6 @@ public class GeneradorAssembler {
 				if (elemento.equals("BI")) {
 					String salto = pila.pop();
 					this.main = this.main + generarBI(salto);
-					//this.main  = this.main + generarCall(salto);
 				}
 			}
 			if (operadoresBinarios.contains(elemento)) {
@@ -301,8 +299,7 @@ public class GeneradorAssembler {
 					String operando2 = pila.pop();  // Ver el assembler si es el op1
 					String operando1 = pila.pop();  // Ver el assembler si es el op2
 					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
-					i++;
-					//String BF = listaPolaca.get(i).getValor();    // BF que ya no es necesario y por eso se lo saca de la lista
+					
 					// generar comparacion
 					generarComparadores(salto, elemento, operando1, operando2);
 					// generar salto
@@ -311,7 +308,6 @@ public class GeneradorAssembler {
 			// generar labels
 			if (elemento.charAt(0) == 'L' ) {
 				this.main = this.main + generarInvocacion(elemento);
-				//this.main  =this.main + generarCall(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
 				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
@@ -1222,6 +1218,10 @@ public class GeneradorAssembler {
 		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
 		String auxiliar2 = generarVarAux();
+		operando1 = operando1.replace("E", "e");
+		operando2 = operando2.replace("E", "e");
+		operando1 = "_"+operando1;
+		operando2 = "_"+operando2;
 		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
@@ -1308,6 +1308,9 @@ public class GeneradorAssembler {
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
 		}
 		// REEMPLAZO DE REGISTROS
+		System.out.println("parametral1: "+ operando1);
+		System.out.println("parametral1: "+ operando2);
+		
 		formato = formato.replace("REG1", operando1);
 		formato = formato.replace("REG2", operando2);
 		formato = formato.replace("resul", auxiliar);
