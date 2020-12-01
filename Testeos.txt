@@ -1,5 +1,4 @@
 INTEGER a;
-
 a = -20_i;
 
 OUT("hola -

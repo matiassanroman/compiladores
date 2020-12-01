@@ -24,6 +24,6 @@ call fin
 main:
 MOV BX, -20
 MOV a@Main, BX
-invoke MessageBox, NULL, addr hola_-hola, addr mensaje, MB_OK
+invoke MessageBox, NULL, addr hola_hola, addr mensaje, MB_OK
 fin: invoke ExitProcess, 0
 end main
