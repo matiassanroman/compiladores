@@ -41,6 +41,10 @@ public class Simbolo {
 			this.ambito = getValor() + "@Main" + compilador.Compilador.ambito;
 	}
 	
+	public void setAmbito(String a) {
+		this.ambito = a;
+	}
+	
 	public String ambitoSinNombre() {
 		String [] arreglo = getAmbito().split("\\@");
 		String auxSinNombre = "";

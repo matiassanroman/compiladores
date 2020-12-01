@@ -253,17 +253,17 @@ sentenciaEjecutable : asignacion
 }
 					| identificador '(' ')' ';'
 {
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
-
 	//mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
 	setearAmbito($1.sval);
+
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
 
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
@@ -290,17 +290,18 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
 	//mostrarMensaje("Llamada a procedimiento con 1 parametro en linea nro: " + compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
 	setearAmbito($1.sval);
 	
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
+
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
@@ -335,17 +336,18 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));	
 
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
 	//mostrarMensaje("Llamada a procedimiento con 2 parametros en linea nro: " + compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
 	setearAmbito($1.sval);
 	
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
+
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
 	if(aux == 1 || aux == 2){
@@ -386,16 +388,17 @@ sentenciaEjecutable : asignacion
 	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($7.sval).get(compilador.Compilador.tablaSimbolo.get($7.sval).size()-1).getAmbito()));
 	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
 	//mostrarMensaje("Llamada a procedimiento con 3 parametros en linea nro: " + compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
 	setearAmbito($1.sval);
+
+	//Par nomProc = new Par($1.sval); 
+	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par call = new Par("CALL");
+	polaca.agregarPaso(nomProc);
+	polaca.agregarPaso(call);
 
 	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
 	int aux = sePuedeUsar($1.sval);
@@ -512,14 +515,18 @@ condicion : identificador comparador asignacion
 {	
 	setearAmbito($1.sval);
 	//Par id = new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
 }
 		  | identificador comparador identificador
 {
-	if(sePuedeUsar(val_peek(0).sval) == 0 ) {
+	setearAmbito($1.sval);
+	setearAmbito($3.sval);
+
+	if((sePuedeUsar($1.sval) == 0) && (sePuedeUsar($3.sval) == 0)) {
 		boolean aux = false;
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
 			//Compruebo que el id no sea proc y que el ambito sea Main
@@ -556,7 +563,8 @@ condicion : identificador comparador asignacion
 
 	setearAmbito($1.sval);
 	//Par id = new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
@@ -643,15 +651,38 @@ senteciaUnicaElse : sentenciaEjecutable
 condicionDelIf : identificador comparador asignacion
 {	
 	setearAmbito($1.sval);
+
+	if((sePuedeUsar($1.sval) == 0)) {
+		boolean aux = false;
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
+			//Compruebo que el id no sea proc y que el ambito sea Main
+			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
+				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
+				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
+				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
+						aux = true;
+						break;
+					}
+			}
+		}
+	}else {
+		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
 	//Par id = new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
 }
 		  | identificador comparador identificador
-{
-	if(sePuedeUsar(val_peek(0).sval) == 0 ) {
+{	
+	setearAmbito($1.sval);
+	setearAmbito($3.sval);
+
+	if((sePuedeUsar($1.sval) == 0) && (sePuedeUsar($3.sval) == 0)) {
 		boolean aux = false;
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
 			//Compruebo que el id no sea proc y que el ambito sea Main
@@ -671,8 +702,10 @@ condicionDelIf : identificador comparador asignacion
 
 	//Par id1 = new Par($1.sval);
 	//Par id2 = new Par($3.sval);
-	Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
+	//Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
+	Par id1 =  new Par(getAmbitoVerdadero($1.sval));
+	Par id2 =  new Par(getAmbitoVerdadero($3.sval));
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id1);
 	polaca.agregarPaso(id2);
@@ -681,8 +714,28 @@ condicionDelIf : identificador comparador asignacion
 		  | identificador comparador constante
 {
 	setearAmbito($1.sval);
+
+	if((sePuedeUsar($1.sval) == 0)) {
+		boolean aux = false;
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get($1.sval).size(); i++){
+			//Compruebo que el id no sea proc y que el ambito sea Main
+			if(!compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get($1.sval).get(i).isDeclarada()) {
+				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito();
+				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getAmbito();
+				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+					if(!compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getTipoParametro().equals("INTEGER"))
+						aux = true;
+						break;
+					}
+			}
+		}
+	}else {
+		yyerror("Variable de comparacion: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
 	//Par id = new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	Par id =  new Par(getAmbitoVerdadero($1.sval));
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
@@ -1356,7 +1409,13 @@ void setearAmbito(String sval){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Proc") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
-		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
+		for(int i=compilador.Compilador.tablaSimbolo.get(sval).size()-1; i>=0; i--){
+			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+				compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
+				break;
+			}
+		}
+		
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
 		//compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
