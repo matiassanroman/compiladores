@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import compilador.Simbolo;
-import compilador.Compilador;;
 
 public class AS2_Verificar_Longitud_Id extends AccionSemantica{
 

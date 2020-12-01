@@ -541,7 +541,7 @@ void mostrarMensaje(String mensaje){
 
 void comprobarRango(String sval, boolean negativo){
 	double flotante;
-	int entero;
+	//int entero;
 
 	//ES NEGATIVO???
 	if(negativo) {	
@@ -1023,7 +1023,7 @@ String getAmbitoVerdaderoVerdadero(String sval) {
 String getAmbitoVerdadero(String sval){
 	
 	//Tomo el ambito de la id (asignacion)
-	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
+	//String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
 	
 	//Esta en la tabla de simbolos?
 	if(compilador.Compilador.tablaSimbolo.containsKey(sval)) {
@@ -1904,7 +1904,7 @@ case 55:
 	setearAmbito(val_peek(2).sval);
 
 	if((sePuedeUsar(val_peek(2).sval) == 0)) {
-		boolean aux = false;
+		//boolean aux = false;
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
 			/*Compruebo que el id no sea proc y que el ambito sea Main*/
 			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
@@ -1912,7 +1912,7 @@ case 55:
 				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
 				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
+						//aux = true;
 						break;
 					}
 			}
@@ -1936,7 +1936,7 @@ case 56:
 	setearAmbito(val_peek(0).sval);
 
 	if((sePuedeUsar(val_peek(2).sval) == 0) && (sePuedeUsar(val_peek(0).sval) == 0)) {
-		boolean aux = false;
+		//boolean aux = false;
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
 			/*Compruebo que el id no sea proc y que el ambito sea Main*/
 			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
@@ -1944,7 +1944,7 @@ case 56:
 				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
 				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
+						//aux = true;
 						break;
 					}
 			}
@@ -1971,7 +1971,7 @@ case 57:
 	setearAmbito(val_peek(2).sval);
 
 	if((sePuedeUsar(val_peek(2).sval) == 0)) {
-		boolean aux = false;
+		//boolean aux = false;
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).size(); i++){
 			/*Compruebo que el id no sea proc y que el ambito sea Main*/
 			if(!compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(i).isDeclarada()) {
@@ -1979,7 +1979,7 @@ case 57:
 				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(i).getAmbito();
 				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
 					if(!compilador.Compilador.tablaSimbolo.get(val_peek(2).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
+						//aux = true;
 						break;
 					}
 			}

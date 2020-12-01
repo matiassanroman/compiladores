@@ -3,7 +3,6 @@
 
 package compilador;
 import java.io.*;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
