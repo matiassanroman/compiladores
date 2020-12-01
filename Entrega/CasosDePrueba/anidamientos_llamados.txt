@@ -1,0 +1,29 @@
+INTEGER z;
+z=20_i;
+
+FLOAT jj, ii;
+
+PROC a() NA=2_i, NS=2_i { 
+	z = 44_i;
+	PROC b() NA=1_i, NS=2_i {
+		FLOAT id1;
+		id1 = 2_i;
+		PROC cc() NA=0_i, NS=2_i {
+			FLOAT id1;
+			id1 = 90_i;
+		}
+		id1= 77_i;
+	}
+	b();
+	INTEGER i;
+	PROC c() NA=1_i, NS=2_i {
+		
+		IF(i == 20_i)
+			OUT("hola");
+		END_IF
+	}
+}
+
+z= 21_i;
+
+jj = ii + 1_i;

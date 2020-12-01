@@ -8,7 +8,7 @@ public class CrearAssembler {
 
 	public static void crearTxtSalida(String assembler) {
 		try {
-			String ruta = "Assembler.txt";
+			String ruta = "Assembler.asm";
 			BufferedWriter salida = new BufferedWriter(new FileWriter(ruta));
 			salida.write(assembler);
 			salida.close();

@@ -2,6 +2,36 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER
-Clave: "hola -hola"	 Value: "hola -hola"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "hola -hola"@Main
-Clave: -20	 Value: -20	 Uso: CTE	 TipoDeUso: CTE	 Ambito: -20@Main	 Declarada: false	 tipoCTE: INTEGER
+Clave: id4	 Value: id4	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id4@Main@f3	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: id3	 Value: id3	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id3@Main@f3@f1	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: id2	 Value: id2	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id2@Main@f3@f1	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: id1	 Value: id1	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id1@Main@a	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: ax2	 Value: ax2	 Uso: ID	 TipoDeUso: Var	 Ambito: ax2@Main@f3	 Declarada: true	 tipoVar: FLOAT
+Clave: ax1	 Value: ax1	 Uso: ID	 TipoDeUso: Var	 Ambito: ax1@Main@f3@f1	 Declarada: true	 tipoVar: FLOAT
+Clave: ax	 Value: ax	 Uso: ID	 TipoDeUso: Var	 Ambito: ax@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: 45	 Value: 45	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 45@Main@a	 Declarada: false	 tipoCTE: INTEGER
+Clave: f3	 Value: f3	 Uso: ID	 TipoDeUso: Proc	 Ambito: f3@Main	 Declarada: true	 CantParametros: 3	 NA: 1	 NS: 1
+Clave: f1	 Value: f1	 Uso: ID	 TipoDeUso: Proc	 Ambito: f1@Main@f3	 Declarada: true	 CantParametros: 2	 NA: 0	 NS: 1
+Clave: h	 Value: h	 Uso: ID	 TipoDeUso: Var	 Ambito: h@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: g	 Value: g	 Uso: ID	 TipoDeUso: Var	 Ambito: g@Main@b@d@f	 Declarada: true	 tipoVar: FLOAT
+Clave: f	 Value: f	 Uso: ID	 TipoDeUso: Proc	 Ambito: f@Main@b@d	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 4
+Clave: e	 Value: e	 Uso: ID	 TipoDeUso: Var	 Ambito: e@Main@b@d	 Declarada: true	 tipoVar: FLOAT
+Clave: d	 Value: d	 Uso: ID	 TipoDeUso: Proc	 Ambito: d@Main@b	 Declarada: true	 CantParametros: 0	 NA: 1	 NS: 4
+Clave: 4	 Value: 4	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 4@Main@b@d	 Declarada: false	 tipoCTE: INTEGER
+Clave: 4	 Value: 4	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 4@Main@b@d@f	 Declarada: false	 tipoCTE: INTEGER
+Clave: c	 Value: c	 Uso: ID	 TipoDeUso: Var	 Ambito: c@Main@b	 Declarada: true	 tipoVar: FLOAT
+Clave: 3	 Value: 3	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 3@Main@b	 Declarada: false	 tipoCTE: INTEGER
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Proc	 Ambito: b@Main	 Declarada: true	 CantParametros: 0	 NA: 2	 NS: 3
+Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 2@Main@b	 Declarada: false	 tipoCTE: INTEGER
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Proc	 Ambito: a@Main	 Declarada: true	 CantParametros: 1	 NA: 0	 NS: 0
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1@Main@f3	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1@Main@f3	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 1@Main@f3@f1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 1	 Value: 1	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 1@Main@b@d	 Declarada: false	 tipoCTE: INTEGER
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@a	 Declarada: false	 tipoCTE: INTEGER
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 0@Main@a	 Declarada: false	 tipoCTE: INTEGER
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@f3@f1	 Declarada: false	 tipoCTE: INTEGER
+Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@b@d@f	 Declarada: false	 tipoCTE: INTEGER
+Clave: id6	 Value: id6	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id6@Main@f3	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: id5	 Value: id5	 Uso: ID	 TipoDeUso: PARAM_PROC	 Ambito: id5@Main@f3	 Declarada: true	 tipoParametro: INTEGER	 pasajeParametro: COPIA VALOR
+Clave: 20	 Value: 20	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 20@Main@f3@f1	 Declarada: false	 tipoCTE: INTEGER

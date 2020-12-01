@@ -14,20 +14,19 @@ _MAX dd 2147483647
 @aux1 dd ?
 @aux2 dw ?
 @aux3 dd ?
-id4@Main@f3 dw ?
-id3@Main@f3@f1 dw ?
-id2@Main@f3@f1 dw ?
-id1@Main@a dw ?
-ax2@Main@f3 dd ?
-ax1@Main@f3@f1 dd ?
-ax@Main dd ?
-_45 dw 45
-h@Main dd ?
-g@Main@b@d@f dd ?
-e@Main@b@d dd ?
-c@Main@b dd ?
-id6@Main@f3 dw ?
-id5@Main@f3 dw ?
+id1@Main@a@b dd ?
+id1@Main@a@b@cc dd ?
+hola db "hola", 0
+_90 dw 90
+z@Main dw ?
+ii@Main dd ?
+_77 dw 77
+_44 dw 44
+i@Main@a dw ?
+jj@Main dd ?
+_2 dw 2
+_1 dw 1
+_21 dw 21
 _20 dw 20
 .code
 overflow:
@@ -36,23 +35,42 @@ call fin
 divcero:
 invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK 
 call fin
+cc@Main@a@b:
+MOV AX, 90
+CWDE
+MOV EBX, EAX
+MOV id1@Main@a@b, EBX
+ret
+b@Main@a:
+MOV AX, 2
+CWDE
+MOV EBX, EAX
+MOV id1@Main@a@b, EBX
+MOV AX, 77
+CWDE
+MOV EBX, EAX
+MOV id1@Main@a@b, EBX
+ret
+c@Main@a:
+MOV BX, i@Main@a
+CMP BX, 20
+JNE L30
+call L30
+invoke MessageBox, NULL, addr hola, addr mensaje, MB_OK
+ret
 a@Main:
-MOV AX, 45
-CWDE
-MOV EBX, EAX
-MOV ax@Main, EBX
+MOV BX, 44
+MOV z@Main, BX
+call b@Main@a
 ret
-f1@Main@f3:
-MOV AX, 20
-CWDE
-MOV EBX, EAX
-MOV ax2@Main@f3, EBX
-ret
-f3@Main:
-ret
-f@Main@b@d:
-FLD c@Main@b
-FADD g@Main@b@d@f
+main:
+MOV BX, 20
+MOV z@Main, BX
+L30:
+MOV BX, 21
+MOV z@Main, BX
+FLD ii@Main
+FIADD _1
 FSTP @aux1
 FLD @aux1
 FCOMP _MAX
@@ -61,12 +79,6 @@ MOV AX, @aux2
 SAHF
 JA overflow
 MOV EBX, @aux1
-MOV c@Main@b, EBX
-ret
-d@Main@b:
-ret
-b@Main:
-ret
-main:
+MOV jj@Main, EBX
 fin: invoke ExitProcess, 0
 end main

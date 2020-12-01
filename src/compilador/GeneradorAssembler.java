@@ -192,7 +192,7 @@ public class GeneradorAssembler {
 		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
 		cadenaAMostrar = cadenaAMostrar.replace("-", "");
 		cadenaAMostrar = cadenaAMostrar.replaceAll(" ", "_");
-		System.out.println("CHORONGA: "+cadenaAMostrar);
+	
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
 		return codigo; 
 	}
@@ -1489,7 +1489,7 @@ public class GeneradorAssembler {
 			
 			// AGREGAR CODIGO
 			ardiente = linea1 + linea2;
-			System.out.println("MIS HUEVOS11111111:\r\n "+ardiente);
+			
 			return ardiente;
 		}
 		if (caso ==1) {

@@ -1,7 +1,6 @@
 package compilador;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PolacaInversa {
 	
@@ -229,7 +228,7 @@ public class PolacaInversa {
 					this.parametrosFormales.remove(i);
 					this.parametrosFormales.remove(i);
 					int j=i;
-					while ((j < this.parametrosFormales.size()-1)&&!this.parametrosFormales.get(j+2).contains("PROC")) {
+					while ((j < this.parametrosFormales.size()-2)&&!this.parametrosFormales.get(j+2).contains("PROC")) {
 						this.parametrosFormales.remove(i);
 						j++;
 					}
