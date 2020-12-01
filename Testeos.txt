@@ -1,3 +1,5 @@
-FLOAT i,a;
-
-i = 34.5f+4 + 1.5f+4;
+FLOAT jj;
+	
+jj = 20_i + 1_i;
+jj = 25_i;
+jj = 32.5f+2;
