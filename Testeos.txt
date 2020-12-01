@@ -1,3 +1,2 @@
-INTEGER a;
-
-a = -20_i;
+OUT("v--er  ga-
+c hau");

@@ -2,10 +2,4 @@
 
 /*  Tabla de Simbolos  */
 
-<<<<<<< HEAD
-Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER
-Clave: -20	 Value: -20	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 20@Main	 Declarada: false	 tipoCTE: INTEGER
-=======
-Clave: -25	 Value: -25	 Uso: CTE	 TipoDeUso: CTE	 Ambito: -25@Main	 Declarada: false	 tipoCTE: INTEGER
-Clave: jj	 Value: jj	 Uso: ID	 TipoDeUso: Var	 Ambito: jj@Main	 Declarada: true	 tipoVar: INTEGER
->>>>>>> af824cf6ccf082085ae6f6a578113d0f61b7cc27
+Clave: "v--er  ga-c hau"	 Value: "v--er  ga-c hau"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "v--er  ga-c hau"@Main
