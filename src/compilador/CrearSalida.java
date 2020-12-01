@@ -44,11 +44,18 @@ public class CrearSalida {
 	    			   if(aux.get(i).getUso().equals("ID"))
 	    				   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() +  "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoVar: " + aux.get(i).getTipoParametro() );
 	    			   else if(aux.get(i).getUso().equals("CTE")) {
-	    				   if(aux.get(i).getTipo().equals("int"))
+	    				   
+	    				   if(aux.get(i).getTipo().equals("int")) {
+	    					   if(aux.get(i).getValor().charAt(0) == '-')
+	    						   aux.get(i).setAmbito2Ojo("-");
 	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
-	    				   else if(aux.get(i).getTipo().equals("float"))
-	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
-	    				   else
+	    				   }
+	    					  else if(aux.get(i).getTipo().equals("float")) {
+	    						  if(aux.get(i).getValor().charAt(0) == '-')
+		    						   aux.get(i).setAmbito2Ojo("-");  
+	    						  salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
+	    					  }
+	    					   else
 	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    			   }
 	    			   else {
