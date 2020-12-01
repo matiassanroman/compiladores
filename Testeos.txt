@@ -1,6 +1,1 @@
-PROC d()NA=0_i, NS=2_i{
-		INTEGER i;
-		FOR(i=0_i; i<i; UP 2_i){
-			OUT("hola");
-		}
-	}
+INTEGER a;
