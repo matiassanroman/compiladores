@@ -180,7 +180,12 @@ public class GeneradorAssembler {
 	}
 	
 	private String generarCall(String nombreProc){
-		String invocacion = plantillaCall.replace("F", nombreProc);
+		
+		String invocacion = "";
+		if (nombreProc.matches("[0-9]*"))
+			invocacion = plantillaCall.replace("F", "L"+nombreProc);
+		else
+			invocacion = plantillaCall.replace("F", nombreProc);
 		return invocacion;
 	}
 	
@@ -1130,10 +1135,20 @@ public class GeneradorAssembler {
 		//SON DOS NUMEROS O CTE
 		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				this.main = this.main + generarComparacion(salto, comparacion, 3, operando1, operando2);
+				String codigo = plantillaAsignacion;		
+				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",""), 1);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("OP1", operando2);
+				this.main = this.main + codigo +generarComparacion(salto, comparacion, 3, operando1, registro.getRegistro(1, "INTEGER"));
+				registro.ocuparRegistro(registro.getRegistro(1, "INTEGER"), 0);
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				this.main = this.main + generarComparacion(salto, comparacion, 0, operando1, operando2);
+				String codigo = plantillaAsignacion;		
+				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "FLOAT"));
+				codigo = codigo.replace("OP1", operando2);
+				this.main = this.main + codigo +generarComparacion(salto, comparacion, 0, operando1, registro.getRegistro(1, "FLOAT"));
+				registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
@@ -1194,14 +1209,24 @@ public class GeneradorAssembler {
 	}
 	
 	private void generarComparadoresProc(String salto, String comparacion, String operando1, String operando2) {
-		
 		//SON DOS NUMEROS O CTE
 		if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 			if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
-				this.code = this.code + generarComparacion(salto, comparacion, 3, operando1, operando2);
+				String codigo = plantillaAsignacion;		
+				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",""), 1);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("OP1", operando2);
+				this.code = this.code + codigo +generarComparacion(salto, comparacion, 3, operando1, registro.getRegistro(1, "INTEGER"));
+				registro.ocuparRegistro(registro.getRegistro(1, "INTEGER"), 0);
+			
 			}
 			if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				this.code = this.code + generarComparacion(salto, comparacion, 0, operando1, operando2);
+				String codigo = plantillaAsignacion;		
+				registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "FLOAT"));
+				codigo = codigo.replace("OP1", operando2);
+				this.code = this.code + codigo +generarComparacion(salto, comparacion, 0, operando1, registro.getRegistro(1, "FLOAT"));
+				registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
 			}
 			//COVERSION
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando2).getTipoParametro().equals("INTEGER")) {
@@ -1606,11 +1631,11 @@ public class GeneradorAssembler {
 	    		boolean r = true;
 	    		for(int j=0; j<aux.size(); j++) {
 	    			if(aux.get(j).getUso().equals("CTE") && !aux.get(j).getTipo().equals("NA_PROC") && !aux.get(j).getTipo().equals("NS_PROC")) {
-	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    				if(aux.get(j).getValor().equals(l.get(i).getValor()))
 	    					r = false;
 	    			}
 	    			else if(aux.get(j).getUso().equals("CADENA")){
-	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    				if(aux.get(j).getValor().equals(l.get(i).getValor()))
 	    					r = false;
 		    		}
 	    		}
