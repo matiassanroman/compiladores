@@ -1,2 +1,3 @@
-OUT("v--er  ga-
-c hau");
+INTEGER c;
+FLOAT a,b;
+a = b + c;

@@ -2,4 +2,6 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: "v--er  ga-c hau"	 Value: "v--er  ga-c hau"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "v--er  ga-c hau"@Main
+Clave: b	 Value: b	 Uso: ID	 TipoDeUso: Var	 Ambito: b@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: FLOAT
+Clave: c	 Value: c	 Uso: ID	 TipoDeUso: Var	 Ambito: c@Main	 Declarada: true	 tipoVar: INTEGER
