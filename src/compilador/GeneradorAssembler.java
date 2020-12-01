@@ -83,10 +83,8 @@ public class GeneradorAssembler {
 			  + "OP XX, OP2" + saltoDeLinea;
 
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
-	
 
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
-
 			 						   + "ADD XX, OP2" + saltoDeLinea
 			 						   + "MOV VAR-REG, XX" + saltoDeLinea;
 	
@@ -230,7 +228,7 @@ public class GeneradorAssembler {
 		Set<String> keys = this.tablaSimbolo.keySet();
 	    Iterator<String> itr = keys.iterator();
 	    String str;
-	    
+	   
 	    while (itr.hasNext()) { 
 	       str = itr.next();
 	       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
@@ -252,6 +250,7 @@ public class GeneradorAssembler {
 			   		}
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
+    			   
 				   if(aux.get(i).getTipo().equals("int"))
 					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float")) {
@@ -263,8 +262,10 @@ public class GeneradorAssembler {
 					   nombre = nombre.replace("+", "");
 					   nombre = nombre.replace("-", "");
 					   valor = valor.replace("E", "e");
+					   
 					   this.data = this.data + nombre + " dd " + valor + saltoDeLinea;
 				   }
+				   
 			   }
     		   else if(aux.get(i).getUso().equals("CADENA")) {
     			   	   String cadenipi = aux.get(i).getValor();
@@ -1463,35 +1464,38 @@ public class GeneradorAssembler {
 			// se tiene  que mover a un regitro antes de pasarlo a la varaible final
 			// GENERACION DE COGIDO
 			String linea1 = plantillaAsignacion;
-			//String linea2 = plantillaAsignacion;
+			String linea2 = plantillaAsignacion;
 			String aux = generarVarAux();
 			// REEMPLAZOD DE VARIABLES
 			if (operando1.contains("E")) {
-				operando1 = "_"+operando1;
-				operando1 = operando1.replace(".", "");
+				operando1 = operando1.replace("E", "e");
 				operando1 = operando1.replace("-", "");
 				operando1 = operando1.replace("+", "");
-				operando1 = operando1.replace("E", "e");
+				operando1 = operando1.replace(".", "");
+				operando1 = "_"+operando1;
 			}
-			linea1 = linea1.replace("XX", operando2); 
+			registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
+			linea1 = linea1.replace("XX", registro.getRegistro(1, "FLOAT"));
 			linea1 = linea1.replace("OP1", operando1);
-			//linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
+			linea2 = linea2.replace("XX", operando2); 
+			linea2 = linea2.replace("OP1", registro.getRegistro(1, "FLOAT"));
 			// AGREGAR VARIABLE
 			String variableData = plantillaAgregarVarFLOAT;
-			
 			variableData = variableData.replace("VAR", aux);
-			
 			this.data = this.data + variableData;
+			
 			// AGREGAR CODIGO
-			ardiente = linea1;// + linea2;
+			ardiente = linea1 + linea2;
 			System.out.println("MIS HUEVOS11111111:\r\n "+ardiente);
 			return ardiente;
 		}
 		if (caso ==1) {
 			// Convertir lado derecho
 			// GENERACION DE CODIGO
-			String linea1 = plantillaAsignacion;
 			String linea3 = plantillaAsignacion;
+			String linea2 = plantillaAsignacion;
+			String linea1 = plantillaAsignacion;
+			String linea4 = "CWDE" + saltoDeLinea;
 			// REEMPLAZO DE VARIABLES
 			//
 			//registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
@@ -1499,15 +1503,17 @@ public class GeneradorAssembler {
 			// desocupar
 			//registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
 			////
+			
 			registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
-			linea3 = linea3.replace("XX", registro.getRegistro(1, "FLOAT")); 
-			linea3 = linea3.replace("OP1", operando1);
+			linea2 = linea2.replace("XX", registro.getRegistro(1, "FLOAT")); 
+			linea2 = linea2.replace("OP1", "EAX");
 			linea1 = linea1.replace("XX", operando2); 
 			linea1 = linea1.replace("OP1", registro.getRegistro(1, "FLOAT"));
+			linea3 = linea3.replace("XX", "AX");
+			linea3 = linea3.replace("OP1", operando1);
 			registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
 			// AGREGAR CODIGO
-			ardiente = linea3 + linea1;
-			System.out.println("MIS HUEVOS222222222:\r\n "+ardiente);
+			ardiente = linea3 + linea4 + linea2 + linea1;
 			return ardiente;
 		}
 		return null;
@@ -1644,6 +1650,7 @@ public class GeneradorAssembler {
 	    			aux.add(l.get(i));
 	    	}		
 	    }
+	
 	    return aux;
 	}
 	
@@ -1667,9 +1674,7 @@ public class GeneradorAssembler {
 	public String toString(){
 		this.generarData();
 		// acomodar .data
-		for (int i =0; i < data.length(); i++) {
-			
-		}
+		this.data = this.data.replaceAll("_-", "_");
 		assembler = assembler + encabezado;
 		assembler = assembler + data;
 		assembler = assembler + code;

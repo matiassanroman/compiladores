@@ -33,6 +33,9 @@ public class Simbolo {
 		
 		
 	}
+	public void setAmbito2Ojo(String signo) {
+		this.ambito = signo+this.ambito;
+	}
 	
 	public void setAmbito() {
 			this.ambito = getValor() + "@Main" + compilador.Compilador.ambito;
