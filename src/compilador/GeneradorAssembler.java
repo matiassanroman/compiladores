@@ -58,7 +58,7 @@ public class GeneradorAssembler {
 			"mensaje db \"Mensaje por pantalla\", 0" + saltoDeLinea +
 			"errorOverflowSuma db \"Ha ocurrido overflow al sumar, programa terminado inesperadamente\", 0" + saltoDeLinea +
 			"errorDivisionCero db \"Se intenta dividir por cero, programa terminado por su seguridad\", 0" + saltoDeLinea +
-			"_MAX dt 604462909807314587353087" + saltoDeLinea;
+			"_MAX dd 2147483647" + saltoDeLinea;
 	private String data = "";
 	private String code = ".code" + saltoDeLinea
 						+ "overflow:" + saltoDeLinea
@@ -83,7 +83,7 @@ public class GeneradorAssembler {
 			  + "OP XX, OP2" + saltoDeLinea;
 
 	public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
-	public static String extender16a32Bits   = "CWDE" + saltoDeLinea;
+	
 
 	public static String plantillaSuma = "MOV XX, OP1" + saltoDeLinea 
 
@@ -117,7 +117,7 @@ public class GeneradorAssembler {
 	public static String plantillaEtiqueta = "ETIQUETA:" + saltoDeLinea;
 	public static String plantillaCall = "call F" + saltoDeLinea;
 	public static String plantillaAgregarVarINTEGER = "VAR dw ?" + saltoDeLinea;
-	public static String plantillaAgregarVarFLOAT   = "VAR dt ?" + saltoDeLinea;
+	public static String plantillaAgregarVarFLOAT   = "VAR dd ?" + saltoDeLinea;
 	
 	public static String saltoPorOverflow = "JA overflow" + saltoDeLinea;
 	public static String saltoDivCero = "JZ divcero" + saltoDeLinea;
@@ -186,7 +186,6 @@ public class GeneradorAssembler {
 	
 	private String generarMensajePorPantalla(String cadenaAMostrar){
 		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
-		cadenaAMostrar = "_"+cadenaAMostrar;
 		cadenaAMostrar = cadenaAMostrar.replace(" ", "_");
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
 		return codigo; 
@@ -201,8 +200,8 @@ public class GeneradorAssembler {
 				else if (comp.equals(">=")) bestial = bestial + plantillaCompMayorIgual;
 					else if (comp.equals("==")) bestial = bestial + plantillaCompIgual;
 						else if (comp.equals("!=")) bestial = bestial + plantillaCompDistinto;
-		bestial = bestial.replace("RA", regComp1);
-		bestial = bestial.replace("RB", regComp2);
+		bestial = bestial.replace("RA", regComp2);
+		bestial = bestial.replace("RB", regComp1);
 		return bestial;
 	}
 	
@@ -237,15 +236,31 @@ public class GeneradorAssembler {
     		   else if(aux.get(i).getUso().equals("ID")) {
 				   if(aux.get(i).getTipoParametro().equals("INTEGER"))
 					   this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dw ?" + saltoDeLinea;
-			   		if(aux.get(i).getTipoParametro().equals("FLOAT"))
-			   			this.data = this.data + aux.get(i).getAmbito().replaceAll(":", "@") + " dt ?" + saltoDeLinea;
+			   		if(aux.get(i).getTipoParametro().equals("FLOAT")) {
+			   			String nombre = aux.get(i).getAmbito().replaceAll(":", "@");
+			   			nombre = nombre.replace(".", "");
+						nombre = nombre.replace("E", "e");
+						//nombre = "_"+nombre;
+						nombre = nombre.replace("+", "");
+						nombre = nombre.replace("-", "");
+			   			this.data = this.data + nombre + " dd ?" + saltoDeLinea;
+			   		}
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int"))
 					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
-				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "_" + aux.get(i).getValor().replaceAll(":", "@") + " dt " + aux.get(i).getValor() + saltoDeLinea;
-    		   }
+				   if(aux.get(i).getTipo().equals("float")) {
+					   String nombre = aux.get(i).getValor().replaceAll(":", "@");
+					   String valor = aux.get(i).getValor();
+					   nombre = nombre.replace(".", "");
+					   nombre = nombre.replace("E", "e");
+					   nombre = "_"+nombre;
+					   nombre = nombre.replace("+", "");
+					   nombre = nombre.replace("-", "");
+					   valor = valor.replace("E", "e");
+					   this.data = this.data + nombre + " dd " + valor + saltoDeLinea;
+				   }
+			   }
     		   else if(aux.get(i).getUso().equals("CADENA")) {
     			   	   String cadenipi = aux.get(i).getValor();
     			   	   String cadenipi2 = cadenipi;
@@ -258,14 +273,14 @@ public class GeneradorAssembler {
 				   if(aux.get(i).getTipo().equals("int"))
 					   this.data = this.data + "@" + aux.get(i).getValor() + " dw " + aux.get(i).getValor() + saltoDeLinea;
 				   if(aux.get(i).getTipo().equals("float"))
-					   this.data = this.data + "@" + aux.get(i).getValor() + " dt " + aux.get(i).getValor() + saltoDeLinea;
+					   this.data = this.data + "@" + aux.get(i).getValor() + " dd " + aux.get(i).getValor() + saltoDeLinea;
     		   }
     	   } 
 	    }		
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////// METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////////	
+	/////////////////////////////////// METODO PRINCIPAL DE GENERACION DE ASSEMBLER //////////////////////////////////////////////	
 	
 	public void generarAssembler(PolacaInversa polaca) {
 		// generar assembler a partir de la polaca
@@ -352,7 +367,7 @@ public class GeneradorAssembler {
 							this.code  =this.code + generarCall(salto);
 						}
 					}
-					if (elemento.contains("L") && elemento.matches("[0-9]")) {
+					if (elemento.charAt(0) == 'L') {
 						this.main = this.main + generarInvocacion(elemento);
 					}
 					i++;
@@ -637,6 +652,7 @@ public class GeneradorAssembler {
 				codigo = codigo.replace("Llabel", "divcero");
 				
 				codigo = codigo  + plantillaOperacion;
+				
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("OP1", operando1);
 				codigo = codigo.replace("OP2", operando2);
@@ -990,6 +1006,10 @@ public class GeneradorAssembler {
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
 			}
+			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
+			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
+				this.main = this.main + generarAsignacion(operando2, operando1, 1);
+			}
 		}
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
 		else if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) == null){
@@ -1073,6 +1093,10 @@ public class GeneradorAssembler {
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
 				errorDeEjecucion("Se quiere asignar un FLOAT a un INTEGER");
+			}
+			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
+			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
+				this.code = this.code + generarAsignacion(operando2, operando1, 1);
 			}
 		}
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
@@ -1238,6 +1262,20 @@ public class GeneradorAssembler {
 	}
 	
 	public String generarInstruccionesFLOAT(String operando1, String operando2, String operacionARIT, int conv) {
+		// FORMATEO PREVIO DE LOS OPERANDOS
+		if (operando1.charAt(0) != '@') { operando1 = "_"+operando1; }
+		if (operando2.charAt(0) != '@') { operando2 = "_"+operando2; }
+		if (operando1.contains("@") && (operando1.charAt(0)=='_')) { operando1 = operando1.replace("_", ""); }
+		if (operando2.contains("@") && (operando2.charAt(0)=='_')) { operando2 = operando2.replace("_", ""); }
+		operando1 = operando1.replace("E", "e");
+		operando2 = operando2.replace("E", "e");
+		operando1 = operando1.replace(".", "");
+		operando2 = operando2.replace(".", "");
+		operando1 = operando1.replace("+", "");
+		operando2 = operando2.replace("+", "");
+		operando1 = operando1.replace("-", "");
+		operando2 = operando2.replace("-", "");
+		/////////////////////////////////////////////////////////
 		String formato = plantillaOperacionFloat;
 		String cargar = plantillaCargaCompFLOAT;
 		String comparativa = plantillaComparacionFloat;
@@ -1249,10 +1287,6 @@ public class GeneradorAssembler {
 		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
 		String auxiliar2 = generarVarAux();
-		operando1 = operando1.replace("E", "e");
-		operando2 = operando2.replace("E", "e");
-		operando1 = "_"+operando1;
-		operando2 = "_"+operando2;
 		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
@@ -1269,15 +1303,18 @@ public class GeneradorAssembler {
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
 				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
+				
 			}
 			if (operacionARIT.equals("/")) { 
 				formato = formato.replace("OpArit", "FDIV"); 
 				formato = ceroALaPila + compSimple + comparativa + saltito0 + formato;
 				formato = formato.replace("cmp", "FCOMP");
 				formato = formato.replace("opio", operando2);
-				formato = formato.replace(" aux", " "+ auxiliar2);
-				formato = formato.replace(" aux", " "+ auxiliar2);
-				this.data = this.data + variableAAgregar2;
+				formato = formato.replace(" aux", " "+ auxiliar2);				
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
+				//this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
@@ -1297,6 +1334,10 @@ public class GeneradorAssembler {
 				formato = formato.replace("op2", "_MAX"); 
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				// linea de cambio de tipo, puede no ir 
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
+				// 
 				this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("/")) { 
@@ -1306,7 +1347,9 @@ public class GeneradorAssembler {
 				formato = formato.replace("opio", operando2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
-				this.data = this.data + variableAAgregar2;
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				//this.data = this.data + variableAAgregar2;
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
 			}
 			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FSUB"); }
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FMUL"); }
@@ -1325,7 +1368,11 @@ public class GeneradorAssembler {
 				formato = formato.replace("op2", "_MAX"); 
 				formato = formato.replace("carga", "FLD"); 
 				formato = formato.replace(" aux", " "+ auxiliar2);
-				this.data = this.data + variableAAgregar2;
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				// linea de cambio de tipo, puede no ir 
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
+				// 
+				//this.data = this.data + variableAAgregar2;
 			}
 			if (operacionARIT.equals("/")) { 
 				formato = formato.replace("OpArit", "FIDIV"); 
@@ -1333,15 +1380,13 @@ public class GeneradorAssembler {
 				formato = formato.replace("cmp", "FICOMP");
 				formato = formato.replace("opio", operando2);
 				formato = formato.replace(" aux", " "+ auxiliar2);
-				this.data = this.data + variableAAgregar2;
+				variableAAgregar2 = variableAAgregar2.replace("VAR", auxiliar2);
+				variableAAgregar2 = variableAAgregar2.replace("dd", "dw");
 			}
-			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); }
+			if (operacionARIT.equals("-")) { formato = formato.replace("OpArit", "FISUB"); variableAAgregar2 = variableAAgregar2.replace("VAR", "PORONGA");}
 			if (operacionARIT.equals("*")) { formato = formato.replace("OpArit", "FIMUL"); }
 		}
-		// REEMPLAZO DE REGISTROS
-		System.out.println("parametral1: "+ operando1);
-		System.out.println("parametral1: "+ operando2);
-		
+		// REEMPLAZO DE REGISTROS		
 		formato = formato.replace("REG1", operando1);
 		formato = formato.replace("REG2", operando2);
 		formato = formato.replace("resul", auxiliar);
@@ -1349,10 +1394,9 @@ public class GeneradorAssembler {
 		// AGREGAR VAIRABLE AL DATA
 		
 		this.data = this.data + variableAAgregar;
-		this.data = this.data + variableAAgregar2;
+		if (operacionARIT.equals("/") || operacionARIT.equals("+"))
+			this.data = this.data + variableAAgregar2;
 		pila.push(auxiliar);
-		System.out.println("VARSOVIA1 QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar);
-		System.out.println("VARSOVIA2 QUE SE AGREGO A L A PILA NUESTRA: "+auxiliar2);
 		return formato;
 	}
 	
@@ -1387,18 +1431,26 @@ public class GeneradorAssembler {
 	}
 		
 	public String generarAsignacion(String operando1, String operando2, int caso) {
-		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
-		//ublic static String extender16a32Bits   = "CWDE" + saltoDeLinea;
-		
 		String ardiente;
+		
 		if (caso == 0) {
+			// no convertir nada
+			// se tiene  que mover a un regitro antes de pasarlo a la varaible final
 			// GENERACION DE COGIDO
 			String linea1 = plantillaAsignacion;
-			String linea2 = plantillaAsignacion;
+			//String linea2 = plantillaAsignacion;
 			String aux = generarVarAux();
 			// REEMPLAZOD DE VARIABLES
-			linea1 = linea1.replace("XX", aux); linea1 = linea1.replace("OP1", operando2);
-			linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
+			if (operando1.contains("E")) {
+				operando1 = "_"+operando1;
+				operando1 = operando1.replace(".", "");
+				operando1 = operando1.replace("-", "");
+				operando1 = operando1.replace("+", "");
+				operando1 = operando1.replace("E", "e");
+			}
+			linea1 = linea1.replace("XX", operando2); 
+			linea1 = linea1.replace("OP1", operando1);
+			//linea2 = linea2.replace("XX", operando1); linea2 = linea2.replace("OP1", aux);
 			// AGREGAR VARIABLE
 			String variableData = plantillaAgregarVarFLOAT;
 			
@@ -1406,20 +1458,31 @@ public class GeneradorAssembler {
 			
 			this.data = this.data + variableData;
 			// AGREGAR CODIGO
-			ardiente = linea1 + linea2;
+			ardiente = linea1;// + linea2;
+			System.out.println("MIS HUEVOS11111111:\r\n "+ardiente);
 			return ardiente;
 		}
 		if (caso ==1) {
+			// Convertir lado derecho
 			// GENERACION DE CODIGO
 			String linea1 = plantillaAsignacion;
-			String linea2 = extender16a32Bits;
 			String linea3 = plantillaAsignacion;
 			// REEMPLAZO DE VARIABLES
-			linea1 = linea1.replace("XX", "AX"); linea1 = linea1.replace("OP1", operando2);
-			linea3 = linea3.replace("XX", operando1); linea3 = linea3.replace("OP1", "EAX");
+			//
+			//registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
+			//codigo = codigo.replace("XX", registro.getRegistro(1, "FLOAT"));
+			// desocupar
+			//registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
+			////
+			registro.ocuparRegistro(registro.getPrimerRegistroLibre("FLOAT",""), 1);
+			linea3 = linea3.replace("XX", registro.getRegistro(1, "FLOAT")); 
+			linea3 = linea3.replace("OP1", operando1);
+			linea1 = linea1.replace("XX", operando2); 
+			linea1 = linea1.replace("OP1", registro.getRegistro(1, "FLOAT"));
+			registro.ocuparRegistro(registro.getRegistro(1, "FLOAT"), 0);
 			// AGREGAR CODIGO
-			ardiente = linea1 + linea2 + linea3;
-			
+			ardiente = linea3 + linea1;
+			System.out.println("MIS HUEVOS222222222:\r\n "+ardiente);
 			return ardiente;
 		}
 		return null;
@@ -1577,6 +1640,10 @@ public class GeneradorAssembler {
 	
 	public String toString(){
 		this.generarData();
+		// acomodar .data
+		for (int i =0; i < data.length(); i++) {
+			
+		}
 		assembler = assembler + encabezado;
 		assembler = assembler + data;
 		assembler = assembler + code;
