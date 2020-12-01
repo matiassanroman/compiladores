@@ -188,8 +188,11 @@ public class GeneradorAssembler {
 	}
 	
 	private String generarMensajePorPantalla(String cadenaAMostrar){
+		//.data no aparece el guion
 		cadenaAMostrar = cadenaAMostrar.replace("\"", "");
-		cadenaAMostrar = cadenaAMostrar.replace(" ", "_");
+		cadenaAMostrar = cadenaAMostrar.replace("-", "");
+		cadenaAMostrar = cadenaAMostrar.replaceAll(" ", "_");
+		System.out.println("CHORONGA: "+cadenaAMostrar);
 		String codigo = plantillaMostrarPorPantalla.replace("VAR", cadenaAMostrar);	
 		return codigo; 
 	}
@@ -272,6 +275,7 @@ public class GeneradorAssembler {
     			   	   String cadenipi2 = cadenipi;
     			   	   cadenipi = cadenipi.replaceAll("\"", "");
     			   	   cadenipi = cadenipi.replaceAll(" ", "_");
+    			   	   cadenipi = cadenipi.replaceAll("-", "");
     			   	   this.data = this.data + cadenipi + " db " + cadenipi2 + ", 0" + saltoDeLinea;
     				   //this.data = this.data + "_" + aux.get(i).getValor() + " DB " + aux.get(i).getValor() + " , 0" + saltoDeLinea;			   
     		   }	   
@@ -322,10 +326,8 @@ public class GeneradorAssembler {
 					String operando2 = pila.pop();  // Ver el assembler si es el op1
 					String operando1 = pila.pop();  // Ver el assembler si es el op2
 					i++; String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
-					
 					// generar comparacion
 					generarComparadores(salto, elemento, operando1, operando2);
-					// generar salto
 				}
 			}
 			// generar labels
@@ -343,6 +345,7 @@ public class GeneradorAssembler {
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
 								String cadena = pila.pop();
 								this.code = this.code + generarMensajePorPantalla(cadena);
+								
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();

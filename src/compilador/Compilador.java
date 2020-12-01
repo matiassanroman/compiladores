@@ -233,8 +233,6 @@ public class Compilador {
 					generador.generarAssembler(polaca);
 					CrearAssembler.crearTxtSalida(generador.toString());
 				}
-					
-					
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
 			}
