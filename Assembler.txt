@@ -11,14 +11,11 @@ mensaje db "Mensaje por pantalla", 0
 errorOverflowSuma db "Ha ocurrido overflow al sumar, programa terminado inesperadamente", 0
 errorDivisionCero db "Se intenta dividir por cero, programa terminado por su seguridad", 0
 _MAX dt 604462909807314587353087
-@aux1 dt ?
-@aux2 dt ?
-_2.15E+2 dt 2.15E+2
-_25 dw 25
-_3.250E+3 dt 3.250E+3
-_1 dw 1
-jj@Main dt ?
-_20 dw 20
+_5 dw 5
+_2 dw 2
+i@Main dw ?
+hola db "hola", 0
+_0 dw 0
 .code
 overflow:
 invoke MessageBox, NULL, addr errorOverflowSuma, addr mensaje, MB_OK 
@@ -27,23 +24,13 @@ divcero:
 invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK 
 call fin
 main:
-MOV BX, 20
-ADD BX, 1
-CMP BX, 32767
-JA overflow
-MOV AX, jj@Main
-CWDE
-MOV BX, EAX
-FLD 2.15E+2
-FCOMP jj@Main
-FSTSW @aux1
-MOV AX, @aux1
-SAHF
-JA L15
-JMP L19
-L15:
-MOV @aux2, jj@Main
-MOV 3.250E+3, @aux2
-L19:
+MOV BX, 0
+MOV i@Main, BX
+L3:
+CMP 5, i@Main
+JGE L18
+invoke MessageBox, NULL, addr _hola, addr mensaje, MB_OK
+JMP L3
+L18:
 fin: invoke ExitProcess, 0
 end main

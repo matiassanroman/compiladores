@@ -1,9 +1,4 @@
-FLOAT jj;
-
-jj = 20_i + 1_i;
-
-IF (jj <= 21.5f+1)
-	jj=25_i;
-ELSE
-	jj = 32.5f+2;
-END_IF
+INTEGER i;
+FOR(i=0_i; i<5_i; UP 2_i){
+	OUT("hola");
+}

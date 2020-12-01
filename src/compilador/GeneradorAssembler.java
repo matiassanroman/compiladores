@@ -966,6 +966,7 @@ public class GeneradorAssembler {
 				this.main = this.main + generarAsignacion(operando2, operando1, 1);
 			}
 		}
+		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) != null){
 			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS	
@@ -974,11 +975,11 @@ public class GeneradorAssembler {
 				codigo = plantillaAsignacion;
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
-				codigo = codigo.replace("OP1", operando1);
+				codigo = codigo.replace("OP1", operando2);
 				codigo = codigo + plantillaAsignacion;
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("OP1", registro.getRegistro(1, "INTEGER"));
-				codigo = codigo.replace("XX", operando2);
+				codigo = codigo.replace("XX", operando1);
 				registro.ocuparRegistro(registro.getRegistro(1, "INTEGER"), 0);
 				this.main = this.main + codigo;
 			}
@@ -1058,11 +1059,11 @@ public class GeneradorAssembler {
 				codigo = plantillaAsignacion;
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
-				codigo = codigo.replace("OP1", operando1);
+				codigo = codigo.replace("OP1", operando2);
 				codigo = codigo + plantillaAsignacion;
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("OP1", registro.getRegistro(1, "INTEGER"));
-				codigo = codigo.replace("XX", operando2);
+				codigo = codigo.replace("XX", operando1);
 				registro.ocuparRegistro(registro.getRegistro(1, "INTEGER"), 0);
 				this.code = this.code + codigo;
 			}
