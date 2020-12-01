@@ -12,7 +12,8 @@ errorOverflowSuma db "Ha ocurrido overflow al sumar, programa terminado inespera
 errorDivisionCero db "Se intenta dividir por cero, programa terminado por su seguridad", 0
 _MAX dd 2147483647
 a@Main dw ?
-_-20 dw -20
+hola_hola db "hola -hola", 0
+_20 dw -20
 .code
 overflow:
 invoke MessageBox, NULL, addr errorOverflowSuma, addr mensaje, MB_OK 
@@ -23,5 +24,6 @@ call fin
 main:
 MOV BX, -20
 MOV a@Main, BX
+invoke MessageBox, NULL, addr hola_-hola, addr mensaje, MB_OK
 fin: invoke ExitProcess, 0
 end main
