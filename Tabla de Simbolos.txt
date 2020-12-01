@@ -2,10 +2,5 @@
 
 /*  Tabla de Simbolos  */
 
-Clave: i	 Value: i	 Uso: ID	 TipoDeUso: Var	 Ambito: i@Main@d	 Declarada: true	 tipoVar: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: NS_PROC	 Ambito: 2@Main@d	 Declarada: false	 tipoCTE: INTEGER
-Clave: 2	 Value: 2	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 2@Main@d	 Declarada: false	 tipoCTE: INTEGER
-Clave: "hola"	 Value: "hola"	 Uso: CADENA	 TipoDeUso: Cadena	 Ambito: "hola"@Main@d
-Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: NA_PROC	 Ambito: 0@Main@d	 Declarada: false	 tipoCTE: INTEGER
-Clave: 0	 Value: 0	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 0@Main@d	 Declarada: false	 tipoCTE: INTEGER
-Clave: d	 Value: d	 Uso: ID	 TipoDeUso: Proc	 Ambito: d@Main	 Declarada: true	 CantParametros: 0	 NA: 0	 NS: 2
+Clave: a	 Value: a	 Uso: ID	 TipoDeUso: Var	 Ambito: a@Main	 Declarada: true	 tipoVar: INTEGER
+Clave: -20	 Value: -20	 Uso: CTE	 TipoDeUso: CTE	 Ambito: 20@Main	 Declarada: false	 tipoCTE: INTEGER

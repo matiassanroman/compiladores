@@ -1590,14 +1590,15 @@ public class GeneradorAssembler {
 				if(!flot.equals(""))
 					aux[0] = flot;
 			}
-					
-			if(compilador.Compilador.tablaSimbolo.get(aux[0]) != null) {				
-				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); i++)
-					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getUso().equals("CTE")){
-						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+			
+			String n = aux[0].replace("-", "");
+			if(compilador.Compilador.tablaSimbolo.get(n) != null) {
+				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(n).size(); i++)
+					if(compilador.Compilador.tablaSimbolo.get(n).get(i).getUso().equals("CTE")){
+						return compilador.Compilador.tablaSimbolo.get(n).get(i);
 					}
-					else if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(i).getAmbito().equals(elemento)){
-						return compilador.Compilador.tablaSimbolo.get(aux[0]).get(i);
+					else if(compilador.Compilador.tablaSimbolo.get(n).get(i).getAmbito().equals(elemento)){
+						return compilador.Compilador.tablaSimbolo.get(n).get(i);
 					}				
 			}
 			return null;		
