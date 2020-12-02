@@ -67,10 +67,13 @@ public class GeneradorAssembler {
 						+ "divcero:" + saltoDeLinea
 						+ "invoke MessageBox, NULL, addr errorDivisionCero, addr mensaje, MB_OK " + saltoDeLinea
 						+ "call fin" + saltoDeLinea;
-	public static String inicioMainAssembler = "main:" + saltoDeLinea;
+	public static String inicioMainAssembler = "main:" + saltoDeLinea 
+										     + "FNINIT" + saltoDeLinea 
+										     + "FNCLEX" + saltoDeLinea;
 	private String main = "";
-	public static String finMainAssembler = 
-										   "fin: invoke ExitProcess, 0" + saltoDeLinea
+	public static String finMainAssembler = "FNINIT" + saltoDeLinea 
+										  + "FNCLEX" + saltoDeLinea
+										  + "fin: invoke ExitProcess, 0" + saltoDeLinea
 										  +	"end main" + saltoDeLinea;	
 	
 	/////////// FIN ESTRUCTURA DEL ARCHIVO CON EL ASEMBLER ////////////////////////

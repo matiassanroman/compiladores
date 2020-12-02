@@ -1,8 +1,0 @@
-INTEGER c;
-FLOAT a,b;
-
-IF (a < c)
-	a = b + c;
-ELSE
-	OUT("hola");
-END_IF
