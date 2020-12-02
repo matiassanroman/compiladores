@@ -609,16 +609,19 @@ public class GeneradorAssembler {
 			//SITUACION 1 - (2 VARIABLES O CTES)
 			if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
+				codigo = codigo + "MOV XX, OP2" + saltoDeLinea;
 				codigo = codigo + plantillaComparacion;
 				codigo = codigo + plantillaCompDistinto;
-				codigo = codigo.replace("RA", operando2);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("RA", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("RB", "0");
 				codigo = codigo.replace("Llabel", "divcero");
 				codigo = codigo + plantillaOperacion;
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("OP1", operando1);
 				codigo = codigo.replace("OP2", operando2);
-				codigo = codigo.replace("OP", "IDIV");
+				codigo = codigo.replace("OP", "IDIV"); 
+				codigo = codigo.replace("IDIV AX, ", "IDIV _");
 				pila.push(registro.getRegistro(1, "INTEGER"));	
 				this.main = this.main + codigo;
 			}
@@ -893,16 +896,19 @@ public class GeneradorAssembler {
 			//SITUACION 1 - (2 VARIABLES O CTES)
 			if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
+				codigo = codigo + "MOV XX, OP2" + saltoDeLinea;
 				codigo = codigo + plantillaComparacion;
 				codigo = codigo + plantillaCompDistinto;
-				codigo = codigo.replace("RA", operando2);
+				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
+				codigo = codigo.replace("RA", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("RB", "0");
 				codigo = codigo.replace("Llabel", "divcero");
 				codigo = codigo + plantillaOperacion;
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
 				codigo = codigo.replace("OP1", operando1);
 				codigo = codigo.replace("OP2", operando2);
-				codigo = codigo.replace("OP", "IDIV");
+				codigo = codigo.replace("OP", "IDIV"); 
+				codigo = codigo.replace("IDIV AX, ", "IDIV _");
 				pila.push(registro.getRegistro(1, "INTEGER"));	
 				this.code = this.code + codigo;
 			}
@@ -1573,7 +1579,7 @@ public class GeneradorAssembler {
 		String variableData = plantillaAgregarVarFLOAT;
 		
 		variableData = variableData.replace("VAR", auxiliar);
-		
+		variableData = variableData.replace("dd", "dw");
 		this.data = this.data + variableData;
 		// RETORNA CODIGO QUE POSTERIORMENTE SE AGREGARA A .main, O A .code
 		return codigo;
@@ -1600,7 +1606,14 @@ public class GeneradorAssembler {
 					aux[0] = flot;
 			}
 			
-			String n = aux[0].replace("-", "");
+			String n = "";
+			if(!aux[0].equals("")) {
+				if(aux[0].charAt(0) == '-')
+						n = aux[0].replace("-", "");
+				else
+					n = aux[0];
+			}
+			
 			if(compilador.Compilador.tablaSimbolo.get(n) != null) {
 				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(n).size(); i++)
 					if(compilador.Compilador.tablaSimbolo.get(n).get(i).getUso().equals("CTE")){

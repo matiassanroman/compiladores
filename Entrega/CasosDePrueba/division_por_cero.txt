@@ -1,0 +1,6 @@
+
+
+INTEGER c;
+FLOAT a,b;
+
+a = c / 0_i ;
