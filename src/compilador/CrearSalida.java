@@ -3,6 +3,7 @@ package compilador;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -30,6 +31,8 @@ public class CrearSalida {
 		    Iterator<String> itr = keys.iterator();
 		    String str;
 		    
+		    setearNeg(tablaSimbolo);
+		    
 		    while (itr.hasNext()) { 
 		       str = itr.next();
 		       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
@@ -46,16 +49,12 @@ public class CrearSalida {
 	    			   else if(aux.get(i).getUso().equals("CTE")) {
 	    				   
 	    				   if(aux.get(i).getTipo().equals("int")) {
-	    					   if(aux.get(i).getValor().charAt(0) == '-')
-	    						   aux.get(i).setAmbito2Ojo("-");
 	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    				   }
-	    					  else if(aux.get(i).getTipo().equals("float")) {
-	    						  if(aux.get(i).getValor().charAt(0) == '-')
-		    						   aux.get(i).setAmbito2Ojo("-");  
-	    						  salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
-	    					  }
-	    					   else
+	    				   else if(aux.get(i).getTipo().equals("float")) {
+	    					  salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + "CTE" + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
+	    				   }
+	    				   else
 	    					   salida.write("Clave: " + aux.get(i).getValor() + "\t Value: " + aux.get(i).getValor() + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t tipoCTE: " + aux.get(i).getTipoParametro() );
 	    			   }
 	    			   else {
@@ -75,6 +74,23 @@ public class CrearSalida {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
+	}
+	
+	public static void setearNeg(Hashtable<String,ArrayList<Simbolo>> tablaSimbolo){
+		Set<String> keys = tablaSimbolo.keySet();
+	    Iterator<String> itr = keys.iterator();
+	    String str;
+	    
+	    while (itr.hasNext()) { 
+	       str = itr.next();
+	       ArrayList<Simbolo> l = tablaSimbolo.get(str);
+	       for(int i=0; i<l.size(); i++) {  
+	    	   if(l.get(i).getUso().equals("CTE") && !l.get(i).getTipo().equals("NA_PROC") && !l.get(i).getTipo().equals("NS_PROC")){
+	    		   if(l.get(i).getValor().charAt(0) == '-')
+					   l.get(i).setAmbito2Ojo("-");
+	    	   }
+	       }
+	    }
 	}
 	
 	public static ArrayList<Simbolo> eliminarRepetidos(ArrayList<Simbolo> l){
@@ -105,7 +121,7 @@ public class CrearSalida {
 	    		boolean r = true;
 	    		for(int j=0; j<aux.size(); j++) {
 	    			if(aux.get(j).getUso().equals("CTE") && !aux.get(j).getTipo().equals("NA_PROC") && !aux.get(j).getTipo().equals("NS_PROC")) {
-	    				if(aux.get(j).ambitoSinNombre().equals(l.get(i).ambitoSinNombre()))
+	    				if(aux.get(j).getAmbito().equals(l.get(i).getAmbito()))
 	    					r = false;
 	    			}
 	    			else if(aux.get(j).getUso().equals("CADENA")){

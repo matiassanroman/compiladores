@@ -24,6 +24,7 @@ import accionesSemanticas.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Arrays;
+import java.util.Enumeration;
 //#line 25 "Parser.java"
 
 
@@ -614,8 +615,9 @@ void comprobarRango(String sval, boolean negativo){
 			}
 		}
 		// ES ENTERA Y POSITIVA
-		else{
+		else{			
 			if ( AS9_Verificar_Rango_Constante.estaEnRango(sval) ){
+				//System.out.println("Tam: +" + compilador.Compilador.tablaSimbolo.get(sval).size());
 				//mostrarMensaje("CTE ENTERA postiva esta dentro del rango");
 			}
 			else {

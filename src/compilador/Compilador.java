@@ -31,6 +31,8 @@ public class Compilador {
 	public static int naa = 0;
 	public static ArrayList<Integer> anidamientos = new ArrayList<Integer>(); 
 	
+	public static ArrayList<String> errores = new ArrayList<String>();
+	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
 	static AccionSemantica as2_verificar_longitud_id = new AS2_Verificar_Longitud_Id(tablaSimbolo, tablaToken); 
@@ -206,7 +208,7 @@ public class Compilador {
 		tablaToken.put("==", 278);
 		
 		Compilador c = new Compilador();
-		ArrayList<String> errores = new ArrayList<String>();
+		//ArrayList<String> errores = new ArrayList<String>();
 		ArrayList<String> reconocidos = new ArrayList<String>();	
 
 		// Obtengo la ruta del archivo de los argumentos de programa
@@ -230,7 +232,13 @@ public class Compilador {
 					System.out.println(polaca.toString());
 					GeneradorAssembler generador = new GeneradorAssembler(tablaSimbolo,polaca);
 					generador.generarAssembler(polaca);
-					CrearAssembler.crearTxtSalida(generador.toString());
+					if(errores.size() ==  0)
+						CrearAssembler.crearTxtSalida(generador.toString(),ruta);
+					else {
+						System.out.println("Hay problemas para generar el Assembler");
+						for (int i=0; i<errores.size(); i++)
+							System.out.println(errores.get(i));		
+					}
 				}
 			} catch (IOException e) {
 				System.out.print("Hubo un error con el Archivo.");
