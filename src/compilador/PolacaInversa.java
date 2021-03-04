@@ -203,7 +203,7 @@ public class PolacaInversa {
 		return pos-1;
 	}
 	
-	public void asignarParametros(ArrayList<String> parametrosInvocados, int inicio) {
+	public void asignarParametros(ArrayList<String> parametrosInvocados, int inicio, String nombreProc) {
 		// 'parametros' son los parametros de la invocacion
 		// inicio es el nivel de ese procedimiento en la lista de 
 		int cant = parametrosInvocados.size();
@@ -215,16 +215,32 @@ public class PolacaInversa {
 			this.agregarPaso(operando1);
 			this.agregarPaso(operando2);
 			this.agregarPaso(operador);
+			
+			String [] aux = operando2.getValor().split("\\@");
+			for(int j=0; j<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); j++){
+				if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).getAmbito().equals(operando2.getValor())) 
+					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).isDeclarada())
+						compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).setLineaConv(compilador.Compilador.nroLinea);
+			}
+			
 			posParamFormales++;
 		}
 	}
 	
 	public void borrarProcYParametros() {
 		int i=0;
+		/*
+		System.out.println("INICIO");
+		for(int h=0; h<parametrosFormales.size(); h++)
+			System.out.println("Param Formal: "  + parametrosFormales.get(h));
+		System.out.println("FIN");
+		*/
 		while( (i < this.parametrosFormales.size()) && (i+1 < this.parametrosFormales.size()) ) {
 			if (this.parametrosFormales.get(i+1).contains("PROC")) {
+				//System.out.println("entro: " + this.parametrosFormales.get(i+1));
+				//System.out.println("entro 2: " + this.parametrosFormales.get(i));
 				int nivelActual = Integer.parseInt(this.parametrosFormales.get(i));
-				if ( Math.abs(nivelActual - nivelProc) >= 2 ) {
+				if ( Math.abs(nivelActual - nivelProc) > 2 ) {
 					this.parametrosFormales.remove(i);
 					this.parametrosFormales.remove(i);
 					int j=i;
@@ -272,12 +288,14 @@ public class PolacaInversa {
 //			System.out.println(procedimientos.get(i).toString());
 //	}
 	
+	
+	
 	public void reordenarFinal() {
 		
 		ArrayList<Par> proc = new ArrayList<Par>();
 		ArrayList<Par> aux2 = new ArrayList<Par>();
 		ArrayList<Par> aux3 = new ArrayList<Par>();
-	
+		
 		for(int i=0; i<pasosPolaca.size(); i++) {
 			if(pasosPolaca.get(i).getValor().length() > 3 && pasosPolaca.get(i).getValor().substring(0, 4).equals("PROC")) {
 				proc.add(pasosPolaca.get(i));
@@ -326,6 +344,32 @@ public class PolacaInversa {
 		//aux2 estan los proc
 		//aux3 el main
 		if(aux2.size() > 0) {
+			ArrayList<Par> yyy = new ArrayList<Par>();
+			
+			for(int i=0; i<pasosPolaca.size(); i++) {
+				boolean encontrado = false;
+				for(int j=0; j<aux2.size(); j++) {
+					if(pasosPolaca.get(i).getClave().equals(aux2.get(j).getClave())) {
+						encontrado = true;
+						break;
+					}
+				}
+				if(!encontrado)
+					yyy.add(pasosPolaca.get(i));
+			}
+			pasosPolaca.clear();
+			for(int i=0; i<aux2.size(); i++) {
+				pasosPolaca.add(aux2.get(i));
+			}
+			for(int i=0; i<yyy.size(); i++) {
+				pasosPolaca.add(yyy.get(i));
+			}
+		}		
+		
+		//aux2 estan los proc
+		//aux3 el main
+		/*
+		if(aux2.size() > 0) {
 			for(int i=0; i<pasosPolaca.size(); i++) {
 				if(!pasosPolaca.get(i).getValor().contains("PROC")) {
 					aux3.add(pasosPolaca.get(i));
@@ -350,5 +394,6 @@ public class PolacaInversa {
 			}
 			pasosPolaca = aux3;
 		}
+		*/
 	}
 }

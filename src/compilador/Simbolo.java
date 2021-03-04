@@ -13,6 +13,7 @@ public class Simbolo {
 	private int ns;
 	private String tipoParametro;
 	private String pasajeParametro;
+	private int lineaConv;
 
 	public Simbolo(String valor) {
 	this.valor = valor;
@@ -130,6 +131,15 @@ public class Simbolo {
 
 	public void setPasajeParametro(String pasajeParametro) {
 		this.pasajeParametro = pasajeParametro;
+	}
+	
+
+	public int getLineaConv() {
+		return lineaConv;
+	}
+
+	public void setLineaConv(int lineaConv) {
+		this.lineaConv = lineaConv;
 	}
 
 	@Override

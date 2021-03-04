@@ -73,8 +73,12 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 {
 	//mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
-	if(!(compilador.Compilador.anidamientos.size() == 0))
+	if(!(compilador.Compilador.anidamientos.size() == 0)){
+		verificacionNa();
 		compilador.Compilador.anidamientos.remove(compilador.Compilador.anidamientos.size()-1);
+		compilador.Compilador.anidamientosNombre.remove(compilador.Compilador.anidamientosNombre.size()-1);
+		compilador.Compilador.anidamientosLinea.remove(compilador.Compilador.anidamientosLinea.size()-1);
+	}
 }
 						 ;
 
@@ -94,7 +98,9 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-		verificarNa($7.sval,$2.sval);
+		compilador.Compilador.anidamientosNombre.add($2.sval);
+		compilador.Compilador.anidamientosLinea.add(compilador.Compilador.nroLinea);
+		setearVerificacionNa($7.sval,$2.sval);
 	}
 	else{
 		//mostrarMensaje("NA o NS no es una CTE ENTERA");
@@ -123,7 +129,9 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-		verificarNa($9.sval,$2.sval);
+		compilador.Compilador.anidamientosNombre.add($2.sval);
+		compilador.Compilador.anidamientosLinea.add(compilador.Compilador.nroLinea);
+		setearVerificacionNa($9.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
 	}
@@ -155,7 +163,9 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-		verificarNa($12.sval,$2.sval);
+		compilador.Compilador.anidamientosNombre.add($2.sval);
+		compilador.Compilador.anidamientosLinea.add(compilador.Compilador.nroLinea);
+		setearVerificacionNa($12.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 		polaca.agregarParametro(compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito());
@@ -190,7 +200,9 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 			//mostrarMensaje($2.sval + " esta Redeclarada.");
 			yyerror($2.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-		verificarNa($15.sval,$2.sval);
+		compilador.Compilador.anidamientosNombre.add($2.sval);
+		compilador.Compilador.anidamientosLinea.add(compilador.Compilador.nroLinea);
+		setearVerificacionNa($15.sval,$2.sval);
 		setearAmbitoyDeclarada($5.sval,$4.sval);
 		setearAmbitoyDeclarada($8.sval,$7.sval);
 		setearAmbitoyDeclarada($11.sval,$10.sval);
@@ -287,14 +299,15 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ')' ';'
 {
 	setearAmbito($3.sval);
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
 	
-	//mostrarMensaje("Llamada a procedimiento con 1 parametro en linea nro: " + compilador.Compilador.nroLinea);
-
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
 	setearAmbito($1.sval);
+
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito()));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	
+	//mostrarMensaje("Llamada a procedimiento con 1 parametro en linea nro: " + compilador.Compilador.nroLinea);
 	
 	//Par nomProc = new Par($1.sval); 
 	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
@@ -333,14 +346,15 @@ sentenciaEjecutable : asignacion
 {
 	setearAmbito($3.sval);
 	setearAmbito($5.sval);
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));	
-
-	//mostrarMensaje("Llamada a procedimiento con 2 parametros en linea nro: " + compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
 	setearAmbito($1.sval);
+
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito()));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());	
+
+	//mostrarMensaje("Llamada a procedimiento con 2 parametros en linea nro: " + compilador.Compilador.nroLinea);
 	
 	//Par nomProc = new Par($1.sval); 
 	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
@@ -385,14 +399,15 @@ sentenciaEjecutable : asignacion
 	setearAmbito($3.sval);
 	setearAmbito($5.sval);
 	setearAmbito($7.sval);
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($7.sval).get(compilador.Compilador.tablaSimbolo.get($7.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval));
-	
-	//mostrarMensaje("Llamada a procedimiento con 3 parametros en linea nro: " + compilador.Compilador.nroLinea);
 
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
 	setearAmbito($1.sval);
+
+	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($7.sval).get(compilador.Compilador.tablaSimbolo.get($7.sval).size()-1).getAmbito()));
+	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+	
+	//mostrarMensaje("Llamada a procedimiento con 3 parametros en linea nro: " + compilador.Compilador.nroLinea);
 
 	//Par nomProc = new Par($1.sval); 
 	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
@@ -498,90 +513,114 @@ condiFOR : condicion
 inicioFor : identificador '=' constante
 {
 	if(!verficarCTEEnteras($3.sval))
-		yyerror("CTE de: " + $1.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+		yyerror("La CTE de inicio del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		
 	setearAmbito($1.sval);
-	polaca.agregarVariableControl(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	//Par id = new Par($1.sval);
-	Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	polaca.agregarPaso(id);
-	Par asig = new Par($2.sval);
-	polaca.agregarPaso(asig);
-	polaca.agregarInicioFOR();
-	polaca.agregarLabel();
+	String aux = comprobarAlcance($1.sval); 
+	if(!aux.equals("")){
+		polaca.agregarVariableControl(aux);
+		Par id = new Par(aux);
+		polaca.agregarPaso(id);
+		Par asig = new Par($2.sval);
+		polaca.agregarPaso(asig);
+		polaca.agregarInicioFOR();
+		polaca.agregarLabel();
+	}
+	else{
+		yyerror("El identificador del inicio del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
 }
 		  ;
 
 condicion : identificador comparador asignacion
 {	
 	setearAmbito($1.sval);
-	//Par id = new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id);
-	polaca.agregarPaso(comp);
+	String aux = comprobarAlcance($1.sval); 
+	if(!aux.equals("")){
+		if(verficarIDEnteras(aux)){
+			Par id = new Par(aux);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id);
+			polaca.agregarPaso(comp);
+		}
+		else{
+			yyerror("El identificador de la comparacion del for: " +$1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}	
+	}
+	else{
+		yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
 }
 		  | identificador comparador identificador
 {
+	
 	setearAmbito($1.sval);
 	setearAmbito($3.sval);
+	String aux = comprobarAlcance($1.sval); 
+	String aux2 = comprobarAlcance($3.sval); 
 
-	if((sePuedeUsar($1.sval) == 0) && (sePuedeUsar($3.sval) == 0)) {
-		boolean aux = false;
-		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
-			//Compruebo que el id no sea proc y que el ambito sea Main
-			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
-				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
-				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
-				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
-					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
-						break;
-					}
-			}
+	if(!aux.equals("") && !aux2.equals("")){
+		if(verficarIDEnteras(aux) && verficarIDEnteras(aux2)){
+			Par id1 =  new Par(aux);
+			Par id2 =  new Par(aux2);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id1);
+			polaca.agregarPaso(id2);
+			polaca.agregarPaso(comp);
 		}
-		if(aux) {
-			yyerror("Variable de comparacion: " + val_peek(0).sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		else{
+			if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else
+				yyerror("El identificador de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-	}else {
-		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-
-	//Par id1 = new Par($1.sval);
-	//Par id2 = new Par($3.sval);
-	Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id1);
-	polaca.agregarPaso(id2);
-	polaca.agregarPaso(comp);
+	else{
+		if(aux.equals(""))
+			yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		else
+			yyerror("El identificador de la comparacion del for: " + $3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
 }
 		  | identificador comparador constante
 {
-	if(!verficarCTEEnteras($3.sval))
-		yyerror("CTE de la comparacion debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
-
 	setearAmbito($1.sval);
-	//Par id = new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id);
-	polaca.agregarPaso(comp);
+	String aux = comprobarAlcance($1.sval); 
+
+	if(!aux.equals("")){
+		if(verficarIDEnteras(aux) && verficarCTEEnteras($3.sval)){
+			Par id =  new Par(aux);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id);
+			polaca.agregarPaso(comp);
+		}
+		else{
+			if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else
+				yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+	}
+	else{
+		yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		if(!verficarCTEEnteras($3.sval))
+			yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+
+	}
 }
 		  ;
 
 incDec : UP constante   
 {	
 	if(!verficarCTEEnteras($2.sval))
-		yyerror("CTE del UP debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+		yyerror("CTE del UP del for No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 	polaca.agregarVariableControl("+");
 	polaca.agregarVariableControl($2.sval);
 }
 	   | DOWN constante 
 {
 	if(!verficarCTEEnteras($2.sval))
-		yyerror("CTE del DOWN debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+		yyerror("CTE del DOWN del for No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 	polaca.agregarVariableControl("-");
 	polaca.agregarVariableControl($2.sval);
 }
@@ -651,6 +690,19 @@ senteciaUnicaElse : sentenciaEjecutable
 condicionDelIf : identificador comparador asignacion
 {	
 	setearAmbito($1.sval);
+	String aux = comprobarAlcance($1.sval); 
+	if(!aux.equals("")){
+		Par id = new Par(aux);
+		Par comp = new Par($2.sval);
+		polaca.agregarPaso(id);
+		polaca.agregarPaso(comp);
+	}
+	else{
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
+	/*
+	setearAmbito($1.sval);
 
 	if((sePuedeUsar($1.sval) == 0)) {
 		boolean aux = false;
@@ -676,9 +728,39 @@ condicionDelIf : identificador comparador asignacion
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
+	*/
 }
 		  | identificador comparador identificador
 {	
+	setearAmbito($1.sval);
+	setearAmbito($3.sval);
+	String aux = comprobarAlcance($1.sval); 
+	String aux2 = comprobarAlcance($3.sval); 
+
+	if(!aux.equals("") && !aux2.equals("")){
+		if(verficarIDEnteras(aux) && verficarIDEnteras(aux2)){
+			Par id1 =  new Par(aux);
+			Par id2 =  new Par(aux2);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id1);
+			polaca.agregarPaso(id2);
+			polaca.agregarPaso(comp);
+		}
+		else{
+			if(!verficarIDEnteras(aux))
+				yyerror($1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else
+				yyerror($3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+	}
+	else{
+		if(aux.equals(""))
+			yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		else
+			yyerror($3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
+	/*
 	setearAmbito($1.sval);
 	setearAmbito($3.sval);
 
@@ -710,9 +792,35 @@ condicionDelIf : identificador comparador asignacion
 	polaca.agregarPaso(id1);
 	polaca.agregarPaso(id2);
 	polaca.agregarPaso(comp);
+	*/
 }
 		  | identificador comparador constante
 {
+	setearAmbito($1.sval);
+	String aux = comprobarAlcance($1.sval); 
+
+	if(!aux.equals("")){
+		if(verficarIDEnteras(aux) && verficarCTEEnteras($3.sval)){
+			Par id =  new Par(aux);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id);
+			polaca.agregarPaso(comp);
+		}
+		else{
+			if(!verficarIDEnteras(aux))
+				yyerror($1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else
+				yyerror($3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+	}
+	else{
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		if(!verficarCTEEnteras($3.sval))
+			yyerror("CTE: " + $3.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
+
+	}
+
+	/*
 	setearAmbito($1.sval);
 
 	if((sePuedeUsar($1.sval) == 0)) {
@@ -739,6 +847,7 @@ condicionDelIf : identificador comparador asignacion
 	Par comp = new Par($2.sval);
 	polaca.agregarPaso(id);
 	polaca.agregarPaso(comp);
+	*/
 }
 		  ;
 
@@ -782,16 +891,41 @@ cuerpoIncompleto : '(' condicionIf ')' '{' bloqueThen '}'
 asignacion : identificador '=' expresion ';' 
 {
 	setearAmbito($1.sval);
+	String aux = comprobarAlcance($1.sval); 
+	if(!aux.equals("")){
+		Par id = new Par(aux);
+		Par asig = new Par($2.sval);
+		polaca.agregarPaso(id);
+		polaca.agregarPaso(asig);	
+
+		String [] aux2 = aux.split("\\@");
+		for(int j=0; j<compilador.Compilador.tablaSimbolo.get(aux2[0]).size(); j++){
+			if(compilador.Compilador.tablaSimbolo.get(aux2[0]).get(j).getAmbito().equals(aux)) 
+				if(compilador.Compilador.tablaSimbolo.get(aux2[0]).get(j).isDeclarada())
+					compilador.Compilador.tablaSimbolo.get(aux2[0]).get(j).setLineaConv(compilador.Compilador.nroLinea);
+		}
+	}
+	else{
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
+	/*
 	if(sePuedeUsar($1.sval) == 1){
 		//mostrarMensaje($1.sval + " No esta declarada.");
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-	//Par id =  new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	Par asig = new Par($2.sval);
-	polaca.agregarPaso(id);
-	polaca.agregarPaso(asig);
+	else{
+		//Par id =  new Par($1.sval);
+		//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par id =  new Par(getAmbitoVerdadero($1.sval));
+		sePuedeUsar2($1.sval);
+		Par id = new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par asig = new Par($2.sval);
+		polaca.agregarPaso(id);
+		polaca.agregarPaso(asig);
+		compilador.Compilador.nroLineaConversion.add(String.valueOf(compilador.Compilador.nroLinea));
+	}
+	*/
 }
 		   | error '=' expresion
 {
@@ -839,14 +973,29 @@ factor : constante
 	   | identificador
 { 
 	setearAmbito($1.sval);
+	String aux = comprobarAlcance($1.sval); 
+	if(!aux.equals("")){
+		Par id = new Par(aux);
+		polaca.agregarPaso(id);
+	}
+	else{
+		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+
+	/*
 	if(sePuedeUsar($1.sval) == 1){
 		//mostrarMensaje($1.sval + " No esta declarada.");
 		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-    //Par id =  new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	polaca.agregarPaso(id);
+	else{
+		//Par id =  new Par($1.sval);
+		//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par id =  new Par(getAmbitoVerdadero($1.sval));
+		sePuedeUsar2($1.sval);
+		Par id = new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		polaca.agregarPaso(id);
+	}
+	*/
 	
 } 
 	   ;
@@ -1097,14 +1246,14 @@ void disminuirAmbito(){
 	compilador.Compilador.ambito = aux;
 }
 
-void verificarNa(String sval, String proc){
+void setearVerificacionNa(String sval, String proc){
 	if(sval.charAt(0) >= '0' && sval.charAt(0) <= '9') 
 		if(sval.contains("_") && sval.contains("i")){
 			sval = sval.toString().substring(0, sval.length()-2); 
 		}
 	
 	compilador.Compilador.anidamientos.add(Integer.parseInt(sval));
-	int tamano = compilador.Compilador.anidamientos.size();
+	//int tamano = compilador.Compilador.anidamientos.size();
 	/*
 	if(tamano > 1)
 		for(int i=0; i<tamano-1; i++)
@@ -1113,6 +1262,15 @@ void verificarNa(String sval, String proc){
 				yyerror("Error en los niveles de anidamientos en el proc: " + proc + " tiene problemas con los NA de: " + compilador.Compilador.anidamientos.get(i).getValor() + " Error en linea: " + compilador.Compilador.nroLinea);
 			}
 	*/
+
+	/*
+	System.out.println("INICIO");
+	for(int i=0; i<compilador.Compilador.anidamientos.size(); i++) {
+		System.out.println("NOMBRE: " + compilador.Compilador.anidamientosNombre.get(i));
+		System.out.println("NA: " + compilador.Compilador.anidamientos.get(i));
+	}
+	System.out.println("FIN");
+	
 	if(tamano > 1)
 		for(int i=0; i<tamano-1; i++){
 			if( compilador.Compilador.anidamientos.get(tamano-1) >= compilador.Compilador.anidamientos.get(i)){
@@ -1121,41 +1279,54 @@ void verificarNa(String sval, String proc){
 				break;
 			}
 		}
+	*/
 		
+}
+
+void verificacionNa(){
+
+	int tamano = compilador.Compilador.anidamientos.size();
+	if(tamano > 1)
+		if(compilador.Compilador.anidamientos.get(tamano-2) <= compilador.Compilador.anidamientos.get(tamano-1)){
+			String msj1 = "Conflicto en los niveles de anidamientos de los procedimientos." + ".\n";
+			String msj2 = "Descripcion: el proc con el nombre: " + compilador.Compilador.anidamientosNombre.get(tamano-2) + " de la linea: " + compilador.Compilador.anidamientosLinea.get(tamano-2) + " tiene un NA: " + compilador.Compilador.anidamientos.get(tamano-2) + " y es menor o igual que el proc con el nombre: " + compilador.Compilador.anidamientosNombre.get(tamano-1) + " que esta en la linea: " + compilador.Compilador.anidamientosLinea.get(tamano-1) + " y tiene un Na: " + compilador.Compilador.anidamientos.get(tamano-1) + ".";
+			yyerror(msj1 + msj2);
+		}
 }
 
 boolean nameManglingNs(String sval) {
 	
 	String ambitoId = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito();
-	
+	//System.out.println("USOOO:" + ambitoId);
 	//Recorro la lista con todos los id con ese nombre
-	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+	//for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+	for(int i=compilador.Compilador.tablaSimbolo.get(sval).size()-1; i>=0; i--) {
 		//Veo que el id no sea Proc y no sea una variable declarada en el main (sino que este adentro de un Proc)
 		if(!compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc") && !compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(sval + "@Main") && (compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada())) {
-			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getValor());
+			//System.out.println("ACAAAAAAAAAAAAAAAAAAA: " + compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
 			//Compruebo que el ambito de id no declarado este contenido en la lista de id declarados
 			if(ambitoId.indexOf(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito()) != -1){
 				String [] arreglo = compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().split("\\@");
 				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
 				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
-					//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
-					//Compruebo que el ambito del id del Proc este contenido
-					String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
-					String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
-					//System.out.println("ambitoSinVar: " + ambitoSinNombreVar);
-					//System.out.println("ambitoSinProc: " + ambitoSinNombreProc);
-					//System.out.println("NSSSSS: " + compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs());
-					if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
-						//Compruebo que el NS sea >= que la cantidad de anidamientos
-						String [] id = ambitoSinNombreVar.split("\\@"); 
-						String [] proc = ambitoSinNombreProc.split("\\@"); 
-						//System.out.println("TAMANO: " + (id.length - proc.length));
-						if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
-							return true;
+						System.out.println("entro");
+						//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
+						//Compruebo que el ambito del id del Proc este contenido
+						String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
+						String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(idProc).get(j).ambitoSinNombre();
+						//System.out.println("ambitoSinVar: " + compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getAmbito());
+						//System.out.println("ambitoSinProc: " + compilador.Compilador.tablaSimbolo.get(idProc).get(j).getAmbito());
+						//System.out.println("NSSSSS: " + compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs());
+						if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
+							//Compruebo que el NS sea >= que la cantidad de anidamientos
+							String [] id = ambitoSinNombreVar.split("\\@"); 
+							String [] proc = ambitoSinNombreProc.split("\\@"); 
+							//System.out.println("TAMANO: " + (id.length - proc.length));
+							if(compilador.Compilador.tablaSimbolo.get(idProc).get(j).getNs() >= ((id.length - proc.length)-1)) {
+								return true;
+							}		
 						}
-							
-					}
 				}
 				return false;
 			}
@@ -1213,7 +1384,7 @@ int sePuedeUsar(String sval){
 				//Recorro la lista de id de proc
 				for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 					//Busco que esos id esten declarados
-					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
+					if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Proc")){
 						String ambitoSinNombreLlamador = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
 						String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(sval).get(i).ambitoSinNombre();
 						//Pregunto si tienen el mismo ambito
@@ -1409,12 +1580,15 @@ void setearAmbito(String sval){
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Proc") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
+		/*
 		for(int i=compilador.Compilador.tablaSimbolo.get(sval).size()-1; i>=0; i--){
 			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada()){
 				compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito());
 				break;
 			}
-		}
+		}*/
+		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito();
+
 		
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
@@ -1502,7 +1676,172 @@ String getAmbitoVerdadero(String sval){
 	return "";
 }
 
+String getAmbitoProc(String ambitoGeneral) {
+	String [] arreglo = ambitoGeneral.split("\\@");
+	String aux = arreglo[arreglo.length-1];
+	//System.out.println("AUX: " + aux);
+	for(int i=0; i<arreglo.length-1; i++)
+		aux = aux + "@" + arreglo[i];
+	//System.out.println("AUX 2: " + aux);
+	return aux;	
+}
 
+int getNsProc(String ambitoProc, String sval) {
+	String [] arreglo = ambitoProc.split("\\@");
+	String aux = sval;
+	for(int j=0; j<arreglo.length-1; j++)
+		aux = aux + "@" + arreglo[j];
+	
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(aux))
+			return compilador.Compilador.tablaSimbolo.get(sval).get(i).getNs();
+	}
+	return 0;
+}
+
+int getNivelVar(String sval) {
+	String [] arreglo = sval.split("\\@");
+	return arreglo.length-1;
+}
+
+boolean dadoProcVerDeclaracionVar(String ambitoProc, String sval) {
+	String [] ambitoProcedimiento = ambitoProc.split("\\@");
+	String ambitoVar = sval;
+	if(ambitoProcedimiento.length > 1) {
+		for(int i=1; i<ambitoProcedimiento.length; i++) {
+			ambitoVar =  ambitoVar + "@" + ambitoProcedimiento[i];
+		}
+		ambitoVar = ambitoVar + "@" + ambitoProcedimiento[0];
+	}
+	else {
+		ambitoVar = ambitoVar + "@" + ambitoProc;
+	}
+	
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+		if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(ambitoVar))
+			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var"))
+				return true;				
+	}
+	return false;				
+}
+
+String construirAmbito (String[] array) {
+	String delimiter = "@";
+    return String.join(delimiter, array);
+}
+
+String[] construirAmbitoMenosUltimo (String[] array) {
+	String aux = "";
+	for(int j=0; j<array.length-1; j++)
+		if(j==0)
+			aux = array[j];
+		else
+			aux = aux + "@" + array[j];
+	return aux.split("\\@");
+	
+}
+
+String construirAmbitoMenosUltimoString (String array2) {
+	String [] array = array2.split("\\@");
+	String aux = "";
+	for(int j=0; j<array.length-1; j++)
+		if(j==0)
+			aux = array[j];
+		else
+			aux = aux + "@" + array[j];
+	String delimiter = "@";
+    return String.join(delimiter, aux);
+	
+}
+
+boolean verificarAnidamientos(String ambitoProc, String ambitoVar, int ns) {	
+	String proc = "";
+	String [] aux = ambitoProc.split("\\@");
+	for(int i=1; i<aux.length; i++)
+		if(i==1)
+			proc = aux[i];
+		else
+			proc = proc + "@" + aux[i];
+	
+	String var = "";
+	String [] aux2 = ambitoVar.split("\\@");
+	for(int i=1; i<aux2.length; i++)
+		if(i==1)
+			var = aux2[i];
+		else
+			var = var + "@" + aux2[i];
+	
+	//En proc tengo f2@main@f1 => main@f1@f2
+	//Nivel son las veces que me voy metiendo hasta encontrar donde esta declarado
+	//var es el ambito de la variable ax1@main@f1@f2 => main@f1@f2
+	proc = proc + "@" + aux[0];
+	int nivel = 0;
+	
+	while(var.length() > 0) {
+		if(var.equals(proc)) {
+			if(ns >= nivel) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		var = construirAmbitoMenosUltimoString(var);
+		nivel++;
+	}
+	
+	return false;
+}
+
+String comprobarAlcance(String sval) {
+	String ambito = "Main" + compilador.Compilador.ambito;
+	String [] ambitoAux = ambito.split("\\@");
+	String ambitoUsoVar = sval + "@" + ambito;
+	String [] ambitoArr = ambito.split("\\@");
+	boolean primero = true;
+	for(int i = ambitoArr.length-1; i>=0; i--) {
+		if(!ambitoArr[i].equals("Main")) {
+			if(primero) {
+				primero = false;
+				if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+					//System.out.println("SALIDA 1: " + sval + "@" + construirAmbito(ambitoAux));
+					return sval + "@" + construirAmbito(ambitoAux);
+				}
+					
+			}
+			else {
+				if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+					if(verificarAnidamientos(getAmbitoProc(construirAmbito(ambitoAux)), ambitoUsoVar,getNsProc(construirAmbito(ambitoAux),ambitoArr[i]))) {
+						//System.out.println("SALIDA 2: " + sval + "@" + construirAmbito(ambitoAux));
+						return sval + "@" + construirAmbito(ambitoAux);
+					}
+				}
+			}
+		}
+		else {
+			if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+				//System.out.println("SALIDA 3: " + sval + "@" + construirAmbito(ambitoAux));
+				return sval + "@" + construirAmbito(ambitoAux);
+			}
+		}
+		
+		ambitoAux = construirAmbitoMenosUltimo(ambitoAux);
+	}
+	return "";		
+}
+
+boolean verficarIDEnteras(String id){
+	
+	String [] var = id.split("\\@");
+	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(var[0]).size(); i++){
+		if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getAmbito().equals(id))
+			if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getTipoParametro().equals("INTEGER"))
+					return true;
+	}
+
+	return false;
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////

@@ -26,6 +26,7 @@ public class GeneradorAssembler {
 	// agregar una variable archivo que es donde se va 
 	// guardar el assembler
 	
+	private int nroLinea = compilador.Compilador.nroLineaConversion.size()-1;
 	private String assembler;
 	private Hashtable<String,ArrayList<Simbolo>> tablaSimbolo;
 	
@@ -324,6 +325,7 @@ public class GeneradorAssembler {
 				}
 				if (elemento.equals("=")) {
 					this.getCodAsignacion();
+					nroLinea--;
 				}
 				if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
 					String operando2 = pila.pop();  // Ver el assembler si es el op1
@@ -366,6 +368,7 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("=")) {
 							this.getCodAsignacionProc();
+							nroLinea--;
 						}
 						if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
 							String operando2 = pila.pop();  // Ver el assembler si es el op1
@@ -993,7 +996,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2) ) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			//CONVERSION - OPERANDO 2 AUX(FLOAT) Y OPERANDO 1 VAR(INTEGER)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2) ) {
@@ -1022,7 +1025,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
@@ -1032,7 +1035,7 @@ public class GeneradorAssembler {
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
 		else if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) == null){
 			if(registroInt(operando1) && registroFloat(operando2)) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			else if(registroFloat(operando2) && registroFloat(operando1)) {
 				this.main = this.main + generarAsignacion(operando2, operando1, 0);
@@ -1044,7 +1047,7 @@ public class GeneradorAssembler {
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) == null){
 			if(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && registroFloat(operando1)) {
 				this.main = this.main + generarAsignacion(operando2, operando1, 0);
@@ -1082,7 +1085,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && registroFloat(operando2) ) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			//CONVERSION - OPERANDO 2 AUX(FLOAT) Y OPERANDO 1 VAR(INTEGER)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") && registroInt(operando2) ) {
@@ -1110,7 +1113,7 @@ public class GeneradorAssembler {
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
 			else if(this.getSimbolo(operando1).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") ) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
@@ -1120,7 +1123,7 @@ public class GeneradorAssembler {
 		//CONVERSION OPERANDO 2 REG (INTEGER) Y OPERANDO 1 AUX (FLOAT) 
 		else if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) == null){
 			if(registroInt(operando1) && registroFloat(operando2)) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			else if(registroFloat(operando2) && registroFloat(operando1)) {
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
@@ -1132,7 +1135,7 @@ public class GeneradorAssembler {
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) == null){
 			if(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
-				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER");
+				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && registroFloat(operando1)) {
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
@@ -1686,8 +1689,15 @@ public class GeneradorAssembler {
 			return false;
 	}
 
-	void errorDeTipos(String mensaje) {
-		compilador.Compilador.errores.add(mensaje);
+	void errorDeTipos(String mensaje, Simbolo op1, Simbolo op2) {
+		String msj1 = mensaje + " en la linea: " + op1.getLineaConv() + ".\n";
+		String msj2 = "Descripcion: la asignacion de la variable " + op1.getAmbito() + " es de tipo INTEGER y se le quiere asignar algo del tipo FLOAT.";
+		String msj3 = "Descripcion: el parametro formal " + op1.getAmbito() + " es de tipo INTEGER y se le quiere asignar un parametro real del tipo FLOAT.";
+		
+		if(op1.getTipo().equals("PARAM_PROC"))
+			compilador.Compilador.errores.add(msj1 + msj3);
+		else
+			compilador.Compilador.errores.add(msj1 + msj2);
 	}
 	
 	public String toString(){

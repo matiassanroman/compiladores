@@ -29,9 +29,14 @@ public class Compilador {
 	public static int na = 0;
 	public static boolean primero = true;
 	public static int naa = 0;
-	public static ArrayList<Integer> anidamientos = new ArrayList<Integer>(); 
+	public static ArrayList<Integer> anidamientos = new ArrayList<Integer>();
+	public static ArrayList<String> anidamientosNombre = new ArrayList<String>();
+	public static ArrayList<Integer> anidamientosLinea = new ArrayList<Integer>();
 	
 	public static ArrayList<String> errores = new ArrayList<String>();
+	
+	public static ArrayList<Integer> nroLineaConversion = new ArrayList<Integer>();
+	public static ArrayList<String> idConversion = new ArrayList<String>();
 	
 	//Acciones Semanticas
 	static AccionSemantica as1_agregar_buffer = new AS1_Agregar_Buffer();
