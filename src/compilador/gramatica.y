@@ -479,24 +479,28 @@ sentenciaEjecutable : asignacion
 
 cicloFor : FOR '(' condicionFor ')' '{' bloqueSentencia '}'
 {
-	polaca.borrarVariablesControl();
-	Par pasoEnBlanco = new Par("");
-	polaca.agregarPaso(pasoEnBlanco);
-	polaca.agregarPasoIncompleto();
-	Par pasoBI = new Par("BI");
-	polaca.agregarPaso(pasoBI);
-	//polaca.agregarLabel();
-	polaca.completarFOR();
-	polaca.borrarInicioFOR();
-	polaca.borrarPasoIncompleto();
-	polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());
-	polaca.agregarLabel();
+	if(!erroresFor()){
+		polaca.borrarVariablesControl();
+		Par pasoEnBlanco = new Par("");
+		polaca.agregarPaso(pasoEnBlanco);
+		polaca.agregarPasoIncompleto();
+		Par pasoBI = new Par("BI");
+		polaca.agregarPaso(pasoBI);
+		//polaca.agregarLabel();
+		polaca.completarFOR();
+		polaca.borrarInicioFOR();
+		polaca.borrarPasoIncompleto();
+		polaca.completarPolaca(PolacaInversa.getRetrocesosFOR());
+		polaca.agregarLabel();
+	}
 }
          ;
 
 condicionFor : inicioFor ';' condiFOR ';' incDec 
 {
-	polaca.borrarPasoPolaca();
+	if(!erroresFor()){
+		polaca.borrarPasoPolaca();
+	}
 }
 			 ;
 
@@ -534,6 +538,7 @@ inicioFor : identificador '=' constante
 
 condicion : identificador comparador asignacion
 {	
+	erroresForAsignacion(compilador.Compilador.nroLinea);
 	setearAmbito($1.sval);
 	String aux = comprobarAlcance($1.sval); 
 	if(!aux.equals("")){
@@ -1845,6 +1850,20 @@ boolean verficarIDEnteras(String id){
 
 	return false;
 
+}
+
+boolean erroresFor(){
+	for(int i=0; i<this.errores.size(); i++)
+		if(this.errores.get(i).contains("for"))
+			return true;
+
+	return false;
+}
+
+void erroresForAsignacion(int linea){
+	for(int i=0; i<this.errores.size(); i++)
+		if(this.errores.get(i).contains(String.valueOf(linea)))
+			this.errores.set(i,"El id de la comparacion del for: " + this.errores.get(i));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

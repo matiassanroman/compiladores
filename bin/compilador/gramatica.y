@@ -612,17 +612,21 @@ condicion : identificador comparador asignacion
 
 incDec : UP constante   
 {	
-	if(!verficarCTEEnteras($2.sval))
+	if(verficarCTEEnteras($2.sval)){
+		polaca.agregarVariableControl("+");
+		polaca.agregarVariableControl($2.sval);
+	}
+	else
 		yyerror("CTE del UP del for No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-	polaca.agregarVariableControl("+");
-	polaca.agregarVariableControl($2.sval);
 }
 	   | DOWN constante 
 {
-	if(!verficarCTEEnteras($2.sval))
+	if(verficarCTEEnteras($2.sval)){
+		polaca.agregarVariableControl("-");
+		polaca.agregarVariableControl($2.sval);
+	}
+	else
 		yyerror("CTE del DOWN del for No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-	polaca.agregarVariableControl("-");
-	polaca.agregarVariableControl($2.sval);
 }
 	   | error constante
 {
