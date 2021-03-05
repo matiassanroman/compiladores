@@ -211,7 +211,7 @@ public class Compilador {
 		tablaToken.put(">=", 276);
 		tablaToken.put("!=", 277);
 		tablaToken.put("==", 278);
-		
+		// holis
 		Compilador c = new Compilador();
 		//ArrayList<String> errores = new ArrayList<String>();
 		ArrayList<String> reconocidos = new ArrayList<String>();	
