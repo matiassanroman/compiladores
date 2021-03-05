@@ -382,6 +382,7 @@ public class GeneradorAssembler {
 						if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
 							String operando2 = pila.pop();  // Ver el assembler si es el op1
 							String operando1 = pila.pop();  // Ver el assembler si es el op2
+							
 							i++; 
 							String salto = listaPolaca.get(i).getValor(); // Posicion  para generar el label
 							i++;
