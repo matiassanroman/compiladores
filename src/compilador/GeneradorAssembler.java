@@ -265,7 +265,7 @@ public class GeneradorAssembler {
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int")){
-					   // ESTA SECCION SE AGREG� PARA DIFERENCIAR LOS NUMEROS NEGATIVOS EN EL ASSEMBLER
+					   // ESTA SECCION SE AGREGA PARA DIFERENCIAR LOS NUMEROS NEGATIVOS EN EL ASSEMBLER
 					   if ( (aux.get(i).getValor()).contains("-"))
 						   this.data = this.data + "__" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
 					   else
@@ -274,15 +274,20 @@ public class GeneradorAssembler {
 				   }
 				   if(aux.get(i).getTipo().equals("float")) {
 					   String nombre = aux.get(i).getValor().replaceAll(":", "@");
+					   System.out.println(nombre);
 					   String valor = aux.get(i).getValor();
 					   // CON MODIFICACION PARA DIFERENCIAR VARIABLES CON . EN EL ASSEMBLER
 					   nombre = nombre.replace(".", "_");
 					   ////////////////////////////////////////////////////////////////////
 					   nombre = nombre.replace("E", "e");
-					   nombre = "_"+nombre;
+					   if (nombre.charAt(0)== '-')
+						   nombre = "__"+nombre.substring(1, nombre.length());
+					   else
+						   nombre = "_"+nombre;
 					   nombre = nombre.replace("+", "");
 					   nombre = nombre.replace("-", "");
 					   valor = valor.replace("E", "e");
+					   System.out.println(nombre);
 					   this.data = this.data + nombre + " dd " + valor + saltoDeLinea;
 				   }
 			   }
@@ -984,12 +989,19 @@ public class GeneradorAssembler {
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-		
+		System.out.println("1--> OPERANDO1: "+operando1);
+		System.out.println("1--> OPERANDO2: "+operando2);
+//		if (operando1.charAt(0)=='-')
+//			operando1 = "__"+operando1.substring(0,operando1.length());
+//		else
+//			operando1 = "_"+operando1;
+
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
+			System.out.println("6--> OPERANDO1: "+operando1);
+			System.out.println("6--> OPERANDO2: "+operando2);
 			// SITACION 1.1 - OPERANDO 1 (REG) Y OPERANDO 2 (VAR) SON INTEGER - VARIANTE DE REGISTROS
-
 			if(registroInt(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				codigo = plantillaAsignacion;
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
@@ -998,7 +1010,7 @@ public class GeneradorAssembler {
 				registro.ocuparRegistro(operando2, 0);
 				this.main = this.main + codigo;
 			}
-			else if(registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
+			else if((registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT")) || operando2.contains("E") ) {
 				this.main = this.main + generarAsignacion(operando2, operando1, 0);
 				ultimaAsignado = operando1; // EN GENERAL ES EL LADO IZQUIEROD DE LA ASIGNACION
 				///////////////////////////////////////////
@@ -1018,13 +1030,16 @@ public class GeneradorAssembler {
 		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) != null){
-			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS	
+			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS
 			if (this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
 				codigo = plantillaAsignacion;
 				/// CORRECCION DE ALGUNOS GUIONES BAJOS QUE NO APARECIAN
 				if (Character.isDigit(operando2.charAt(0)))
 					operando2 = "_"+operando2;
+				if (operando2.charAt(0) == '-') {
+					operando2 = "__"+operando2.replace("-", "");
+				}
 				//////////////////////////////////////////////////////
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
@@ -1089,14 +1104,12 @@ public class GeneradorAssembler {
 	private void getCodAsignacionProc(){
 		
 		// x = y => ope1 = x ; ope2 = y
-
+		
 		String operando1 = pila.pop();
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-		
 		//I(OPERANDO 2) = J (OPERANDO 1)
-		
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
 			// SITACION 1.1 - OPERANDO 1 (REG) Y OPERANDO 2 (VAR) SON INTEGER - VARIANTE DE REGISTROS
@@ -1108,7 +1121,11 @@ public class GeneradorAssembler {
 				registro.ocuparRegistro(operando2, 0);
 				this.code = this.code + codigo;
 			}
-			else if(registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
+			else if((registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT")) || operando2.contains("E") ) {
+
+
+				System.out.println("3--> OPERANDO1: "+operando1);
+				System.out.println("3--> OPERANDO2: "+operando2);
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
@@ -1123,13 +1140,14 @@ public class GeneradorAssembler {
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) != null){
 			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS	
-			System.out.println("OPERANDO 2: " + this.getSimbolo(operando2).getTipoParametro().equals("INTEGER"));
 			if (this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
 				codigo = plantillaAsignacion;
 				//// CORECCION DE ALGUNOS GUIONES BAJOS QUE NO APARACIAN
 				if (Character.isDigit(operando2.charAt(0)))
 					operando2 = "_"+operando2;
+				if (operando2.charAt(0)=='-')
+					operando2 = "__"+operando2.replace("-", "");
 				////////////////////////////////////////////////////////
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
@@ -1142,6 +1160,12 @@ public class GeneradorAssembler {
 				this.code = this.code + codigo;
 			}
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
+				if (operando2.charAt(0) == '-')
+					operando2 = "__"+operando2.replace("-", "");
+				//else
+					
+				System.out.println("8--> OPERANDO1: "+operando1);
+				System.out.println("8--> OPERANDO2: "+operando2);
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
@@ -1377,7 +1401,7 @@ public class GeneradorAssembler {
 		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
 		String auxiliar2 = generarVarAux();
-		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
+		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);	
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
@@ -1519,6 +1543,10 @@ public class GeneradorAssembler {
 	}
 		
 	public String generarAsignacion(String operando1, String operando2, int caso) {
+
+
+		System.out.println("4--> OPERANDO1: "+operando1);
+		System.out.println("4--> OPERANDO2: "+operando2);
 		String ardiente;
 		if (caso == 0) {
 			// no convertir nada
@@ -1528,15 +1556,28 @@ public class GeneradorAssembler {
 			String linea1 = plantillaCargaCompFLOAT;
 			// REEMPLAZOD DE VARIABLES
 			if (operando1.contains("E")) {
+				if (operando1.charAt(0) == '-')
+					System.out.println("EL NUMERO ES MUY NEGATIVO");
 				operando1 = operando1.replace("E", "e");
-				operando1 = operando1.replace("-", "");
 				operando1 = operando1.replace("+", "");
 				operando1 = operando1.replace(".", "_");
-				operando1 = "_"+operando1;
+				
+				if (operando1.charAt(0)=='-') {
+					operando1 = "__"+operando1.substring(1,operando1.length());
+				}
+				else
+					if (operando1.charAt(0)!='_')
+						operando1 = "_"+operando1;
+				operando1 = operando1.replace("-", "");
+			
+				System.out.println("6--> OPERANDO1: "+operando1);
+				System.out.println("6--> OPERANDO2: "+operando2);
 			}
 			if (operando1.contains(".") ) {
 				operando1 = "_"+operando1.replace(".", "_");
 			}
+			System.out.println("7--> OPERANDO1: "+operando1);
+			System.out.println("7--> OPERANDO2: "+operando2);
 			linea1 = linea1.replace("carga", "FLD");
 			linea1 = linea1.replace("op1", operando1);
 			linea1 = linea1.replace("compa", "FSTP");
@@ -1563,7 +1604,6 @@ public class GeneradorAssembler {
 			
 			linea1 = linea1.replace("XX", aux);
 			registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",""), 1);
-			System.out.println(ultimaAsignado);
 			linea1 = linea1.replace("OP1", registro.getRegistro(1, "INTEGER"));
 			
 			linea2 = linea2.replace("carga", "FILD");
