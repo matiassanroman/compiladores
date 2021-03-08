@@ -1,5 +1,7 @@
 package compilador;
 
+import java.util.ArrayList;
+
 public class Simbolo {
 
 	private String valor;       //lexema
@@ -13,7 +15,7 @@ public class Simbolo {
 	private int ns;
 	private String tipoParametro;
 	private String pasajeParametro;
-	private int lineaConv;
+	private ArrayList<Integer> lineaConv = new ArrayList<Integer>();
 
 	public Simbolo(String valor) {
 	this.valor = valor;
@@ -134,12 +136,12 @@ public class Simbolo {
 	}
 	
 
-	public int getLineaConv() {
+	public ArrayList<Integer> getLineaConv() {
 		return lineaConv;
 	}
 
 	public void setLineaConv(int lineaConv) {
-		this.lineaConv = lineaConv;
+		this.lineaConv.add(lineaConv);
 	}
 
 	@Override

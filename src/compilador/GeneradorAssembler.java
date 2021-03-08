@@ -381,6 +381,7 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("=")) {
 							this.getCodAsignacionProc();
+							
 							nroLinea--;
 						}
 						if (elemento.equals("<") || elemento.equals("<=") || elemento.equals(">") || elemento.equals(">=") || elemento.equals("==") || elemento.equals("!=")) {
@@ -1087,6 +1088,9 @@ public class GeneradorAssembler {
 				this.main = this.main + generarAsignacion(operando2, operando1, 1);
 			}
 		}
+		
+		if(this.getSimbolo(operando1) != null)
+			this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void getCodAsignacionProc(){
@@ -1184,6 +1188,8 @@ public class GeneradorAssembler {
 				this.code = this.code + generarAsignacion(operando2, operando1, 1);
 			}
 		}
+		if(this.getSimbolo(operando1) != null)
+			this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void generarComparadores(String salto, String comparacion, String operando1, String operando2) {
@@ -1728,7 +1734,7 @@ public class GeneradorAssembler {
 	}
 
 	void errorDeTipos(String mensaje, Simbolo op1, Simbolo op2) {
-		String msj1 = mensaje + " en la linea: " + op1.getLineaConv() + ".\n";
+		String msj1 = mensaje + " en la linea: " + op1.getLineaConv().get(0) + ".\n";
 		String msj2 = "Descripcion: la asignacion de la variable " + op1.getAmbito() + " es de tipo INTEGER y se le quiere asignar algo del tipo FLOAT.";
 		String msj3 = "Descripcion: el parametro formal " + op1.getAmbito() + " es de tipo INTEGER y se le quiere asignar un parametro real del tipo FLOAT.";
 		

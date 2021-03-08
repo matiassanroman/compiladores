@@ -85,7 +85,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
         if(numero.equals(0.0))
         	return String.valueOf(numero);
         //Caso de 1.051
-        if(Integer.valueOf(division[0]) >= 1 && Integer.valueOf(division[0]) <= 9) {
+        else if(Integer.valueOf(division[0]) >= 1 && Integer.valueOf(division[0]) <= 9) {
 		    return String.valueOf(numero).replace('f', 'E');
         }
         // Caso de 100.001
@@ -94,7 +94,7 @@ public class AS10_Verificar_Rango_Float extends AccionSemantica{
 		         aux = aux + String.valueOf(division[0].charAt(i));
 		         contador++;
 		     } 
-        	 return String.valueOf(division[0].charAt(0)) + "." + aux + "E+" + contador;  
+        	 return String.valueOf(division[0].charAt(0)) + "." + aux  + division[1] + "E+" + contador;  
         }
         //Caso de 0.0001050
         else {

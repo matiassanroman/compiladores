@@ -519,7 +519,7 @@ inicioFor : identificador '=' constante
 	setearAmbito($1.sval);
 	String aux = comprobarAlcance($1.sval); 
 	if(!aux.equals("")){
-		if(verficarCTEEnteras($3.sval)){
+		if(verficarIDEnteras(aux) && verficarCTEEnteras($3.sval)){
 			polaca.agregarVariableControl(aux);
 			Par id = new Par(aux);
 			polaca.agregarPaso(id);
@@ -528,8 +528,16 @@ inicioFor : identificador '=' constante
 			polaca.agregarInicioFOR();
 			polaca.agregarLabel();
 		}
-		else
-			yyerror("La CTE de inicio del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);		
+		else{
+			if(!verficarIDEnteras(aux) && !verficarCTEEnteras($3.sval)){
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+				yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			}
+			else if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else 
+				yyerror("El identificador de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}
 	}
 	else{
 		yyerror("El identificador del inicio del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
@@ -714,15 +722,10 @@ condicionDelIf : identificador comparador asignacion
 	setearAmbito($1.sval);
 	String aux = comprobarAlcance($1.sval); 
 	if(!aux.equals("")){
-		if(verficarIDEnteras(aux)){
-			Par id = new Par(aux);
-			Par comp = new Par($2.sval);
-			polaca.agregarPaso(id);
-			polaca.agregarPaso(comp);
-		}
-		else{
-			yyerror("El identificador de la comparacion del if: " +$1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-		}	
+		Par id = new Par(aux);
+		Par comp = new Par($2.sval);
+		polaca.agregarPaso(id);
+		polaca.agregarPaso(comp);	
 	}
 	else{
 		yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
@@ -736,24 +739,12 @@ condicionDelIf : identificador comparador asignacion
 	String aux2 = comprobarAlcance($3.sval); 
 
 	if(!aux.equals("") && !aux2.equals("")){
-		if(verficarIDEnteras(aux) && verficarIDEnteras(aux2)){
-			Par id1 =  new Par(aux);
-			Par id2 =  new Par(aux2);
-			Par comp = new Par($2.sval);
-			polaca.agregarPaso(id1);
-			polaca.agregarPaso(id2);
-			polaca.agregarPaso(comp);
-		}
-		else{
-			if(!verficarIDEnteras(aux) && !verficarIDEnteras(aux2)){
-				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-				yyerror("El identificador de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			}
-			else if(!verficarIDEnteras(aux))
-				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			else 
-				yyerror("El identificador de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-		}
+		Par id1 =  new Par(aux);
+		Par id2 =  new Par(aux2);
+		Par comp = new Par($2.sval);
+		polaca.agregarPaso(id1);
+		polaca.agregarPaso(id2);
+		polaca.agregarPaso(comp);
 	}
 	else{
 		if(aux.equals("") && aux2.equals("")){
@@ -772,27 +763,13 @@ condicionDelIf : identificador comparador asignacion
 	String aux = comprobarAlcance($1.sval); 
 
 	if(!aux.equals("")){
-		if(verficarIDEnteras(aux) && verficarCTEEnteras($3.sval)){
-			Par id =  new Par(aux);
-			Par comp = new Par($2.sval);
-			polaca.agregarPaso(id);
-			polaca.agregarPaso(comp);
-		}
-		else{
-			if(!verficarIDEnteras(aux) && !verficarCTEEnteras($3.sval)){
-				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-				yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			}
-			else if(!verficarIDEnteras(aux))
-				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			else
-				yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-		}
+		Par id =  new Par(aux);
+		Par comp = new Par($2.sval);
+		polaca.agregarPaso(id);
+		polaca.agregarPaso(comp);
 	}
 	else{
 		yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
-		if(!verficarCTEEnteras($3.sval))
-			yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 }
 		  ;
@@ -995,16 +972,34 @@ ctePositiva : CTE
 	setearAmbito($1.sval);
 	comprobarRango($1.sval,false);
 	String valor = $1.sval;
+	double flotante;
+	String result;
 	if (valor.contains("_i"))
-		valor = valor.replace("_i", "");
-	else 
+		result = valor.replace("_i", "");
+	else {
 		if (valor.contains("f")) {
-			valor = valor.replace('f', 'E');
-			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
-			valor = valor.replace('f', 'E');
+			flotante = Double.parseDouble(valor.replace('f', 'E'));
+			if(String.valueOf(flotante).contains("E"))
+				result = String.valueOf(flotante).replace('f', 'E');
+			else
+				result = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
 		}
-	Par cte =  new Par(valor);
+		else {
+			flotante = Double.parseDouble(valor);
+			result = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
+		}
+	}
+
+	Par cte =  new Par(result);
 	polaca.agregarPaso(cte);
+	
+	/*
+	if (valor.contains("f")) {
+		valor = valor.replace('f', 'E');
+		valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
+		valor = valor.replace('f', 'E');
+	}
+	*/
 }
 			//| error 
 {
@@ -1017,6 +1012,28 @@ cteNegativa	: '-' CTE
 	setearAmbito($2.sval);
 	comprobarRango($2.sval,true);
 	String valor = $2.sval;
+	double flotante;
+	String result;
+	if (valor.contains("_i"))
+		result = valor.replace("_i", "");
+	else {
+		if (valor.contains("f")) {
+			flotante = Double.parseDouble(valor.replace('f', 'E'));
+			if(String.valueOf(flotante).contains("E"))
+				result = String.valueOf(flotante).replace('f', 'E');
+			else
+				result = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
+		}
+		else {
+			flotante = Double.parseDouble(valor);
+			result = String.valueOf(AS10_Verificar_Rango_Float.normalizar(flotante));
+		}
+	}
+
+	Par cte =  new Par('-'+result);
+	polaca.agregarPaso(cte);
+
+	/*
 	if (valor.contains("_i"))
 		valor = valor.replace("_i", "");
 	else 
@@ -1025,8 +1042,7 @@ cteNegativa	: '-' CTE
 			valor = AS10_Verificar_Rango_Float.normalizar( Double.parseDouble(valor));
 			valor = valor.replace('f', 'E');
 		}
-	Par cte =  new Par('-'+valor);
-	polaca.agregarPaso(cte);
+	*/
 }
 			//| '-' error
 //{
@@ -1256,7 +1272,7 @@ boolean nameManglingNs(String sval) {
 				String idProc = arreglo[arreglo.length-1];
 				//Recorro lista de id de Proc
 				for(int j=0; j<compilador.Compilador.tablaSimbolo.get(idProc).size(); j++){
-						System.out.println("entro");
+						//System.out.println("entro");
 						//System.out.println("ID DENTRO DE PROC NO DECLARADOS: " + compilador.Compilador.tablaSimbolo.get(sval).get(j).getValor());
 						//Compruebo que el ambito del id del Proc este contenido
 						String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).ambitoSinNombre();
@@ -1781,7 +1797,8 @@ boolean verficarIDEnteras(String id){
 	String [] var = id.split("\\@");
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(var[0]).size(); i++){
 		if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getAmbito().equals(id))
-			if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getTipoParametro().equals("INTEGER"))
+			if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getTipoParametro() != null)
+				if(compilador.Compilador.tablaSimbolo.get(var[0]).get(i).getTipoParametro().equals("INTEGER"))
 					return true;
 	}
 
