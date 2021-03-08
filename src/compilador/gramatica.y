@@ -299,7 +299,11 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ')' ';'
 {
 	setearAmbito($3.sval);
-	
+	//ACOMODAR QUE PARAMETROS INVOCADOS TOME BIEN EL AMBITO 
+	//VER QUE EL PARAMETRO SEA VAR Y NO PROC
+	//DALEEEE QUE YA ESTAMOS!!!
+
+
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
 	setearAmbito($1.sval);
