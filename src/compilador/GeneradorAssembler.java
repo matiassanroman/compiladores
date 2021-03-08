@@ -1109,6 +1109,11 @@ public class GeneradorAssembler {
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
+		
+		if(this.getSimbolo(operando1) == null)
+			//if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT"))
+				System.out.println("ENTROOOO");
+		
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
@@ -1195,6 +1200,8 @@ public class GeneradorAssembler {
 		}
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) == null){
+			System.out.println("LLLL");
+			System.out.println(operando1);
 			if(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
 				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
@@ -1822,7 +1829,7 @@ public class GeneradorAssembler {
 		
 		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(ambitoVar))
-				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var"))
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && (compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var") || compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("PARAM_PROC")))
 					return true;				
 		}
 		return false;				
