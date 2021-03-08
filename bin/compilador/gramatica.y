@@ -515,20 +515,21 @@ condiFOR : condicion
 		;
 
 inicioFor : identificador '=' constante
-{
-	if(!verficarCTEEnteras($3.sval))
-		yyerror("La CTE de inicio del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-		
+{		
 	setearAmbito($1.sval);
 	String aux = comprobarAlcance($1.sval); 
 	if(!aux.equals("")){
-		polaca.agregarVariableControl(aux);
-		Par id = new Par(aux);
-		polaca.agregarPaso(id);
-		Par asig = new Par($2.sval);
-		polaca.agregarPaso(asig);
-		polaca.agregarInicioFOR();
-		polaca.agregarLabel();
+		if(verficarCTEEnteras($3.sval)){
+			polaca.agregarVariableControl(aux);
+			Par id = new Par(aux);
+			polaca.agregarPaso(id);
+			Par asig = new Par($2.sval);
+			polaca.agregarPaso(asig);
+			polaca.agregarInicioFOR();
+			polaca.agregarLabel();
+		}
+		else
+			yyerror("La CTE de inicio del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);		
 	}
 	else{
 		yyerror("El identificador del inicio del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
@@ -574,14 +575,22 @@ condicion : identificador comparador asignacion
 			polaca.agregarPaso(comp);
 		}
 		else{
-			if(!verficarIDEnteras(aux))
+			if(!verficarIDEnteras(aux) && !verficarIDEnteras(aux2)){
 				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			else
+				yyerror("El identificador de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			}
+			else if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else 
 				yyerror("El identificador de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
-		if(aux.equals(""))
+		if(aux.equals("") && aux2.equals("")){
+			yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+			yyerror("El identificador de la comparacion del for: " + $3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+		else if(aux.equals(""))
 			yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 		else
 			yyerror("El identificador de la comparacion del for: " + $3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
@@ -600,7 +609,11 @@ condicion : identificador comparador asignacion
 			polaca.agregarPaso(comp);
 		}
 		else{
-			if(!verficarIDEnteras(aux))
+			if(!verficarIDEnteras(aux) && !verficarCTEEnteras($3.sval)){
+				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+				yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			}
+			else if(!verficarIDEnteras(aux))
 				yyerror("El identificador de la comparacion del for: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 			else
 				yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
@@ -610,7 +623,6 @@ condicion : identificador comparador asignacion
 		yyerror("El identificador de la comparacion del for: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 		if(!verficarCTEEnteras($3.sval))
 			yyerror("La CTE de la comparacion del for: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-
 	}
 }
 		  ;
@@ -698,46 +710,23 @@ senteciaUnicaElse : sentenciaEjecutable
 
 condicionDelIf : identificador comparador asignacion
 {	
+	erroresIfAsignacion(compilador.Compilador.nroLinea);
 	setearAmbito($1.sval);
 	String aux = comprobarAlcance($1.sval); 
 	if(!aux.equals("")){
-		Par id = new Par(aux);
-		Par comp = new Par($2.sval);
-		polaca.agregarPaso(id);
-		polaca.agregarPaso(comp);
+		if(verficarIDEnteras(aux)){
+			Par id = new Par(aux);
+			Par comp = new Par($2.sval);
+			polaca.agregarPaso(id);
+			polaca.agregarPaso(comp);
+		}
+		else{
+			yyerror("El identificador de la comparacion del if: " +$1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+		}	
 	}
 	else{
-		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-
-	/*
-	setearAmbito($1.sval);
-
-	if((sePuedeUsar($1.sval) == 0)) {
-		boolean aux = false;
-		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
-			//Compruebo que el id no sea proc y que el ambito sea Main
-			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
-				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
-				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
-				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
-					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
-						break;
-					}
-			}
-		}
-	}else {
-		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-
-	//Par id = new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id);
-	polaca.agregarPaso(comp);
-	*/
 }
 		  | identificador comparador identificador
 {	
@@ -756,52 +745,26 @@ condicionDelIf : identificador comparador asignacion
 			polaca.agregarPaso(comp);
 		}
 		else{
-			if(!verficarIDEnteras(aux))
-				yyerror($1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
-			else
-				yyerror($3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			if(!verficarIDEnteras(aux) && !verficarIDEnteras(aux2)){
+				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+				yyerror("El identificador de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			}
+			else if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			else 
+				yyerror("El identificador de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
-		if(aux.equals(""))
-			yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
-		else
-			yyerror($3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-
-	/*
-	setearAmbito($1.sval);
-	setearAmbito($3.sval);
-
-	if((sePuedeUsar($1.sval) == 0) && (sePuedeUsar($3.sval) == 0)) {
-		boolean aux = false;
-		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size(); i++){
-			//Compruebo que el id no sea proc y que el ambito sea Main
-			if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).isDeclarada()) {
-				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).size()-1).getAmbito();
-				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getAmbito();
-				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
-					if(!compilador.Compilador.tablaSimbolo.get(val_peek(0).sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
-						break;
-					}
-			}
+		if(aux.equals("") && aux2.equals("")){
+			yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+			yyerror("El identificador de la comparacion del if: " + $3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-	}else {
-		yyerror("Variable de comparacion: " + val_peek(0).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+		else if(aux.equals(""))
+			yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		else
+			yyerror("El identificador de la comparacion del if: " + $3.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-
-	//Par id1 = new Par($1.sval);
-	//Par id2 = new Par($3.sval);
-	//Par id1 =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	//Par id2 =  new Par(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito());
-	Par id1 =  new Par(getAmbitoVerdadero($1.sval));
-	Par id2 =  new Par(getAmbitoVerdadero($3.sval));
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id1);
-	polaca.agregarPaso(id2);
-	polaca.agregarPaso(comp);
-	*/
 }
 		  | identificador comparador constante
 {
@@ -816,47 +779,21 @@ condicionDelIf : identificador comparador asignacion
 			polaca.agregarPaso(comp);
 		}
 		else{
-			if(!verficarIDEnteras(aux))
-				yyerror($1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			if(!verficarIDEnteras(aux) && !verficarCTEEnteras($3.sval)){
+				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+				yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+			}
+			else if(!verficarIDEnteras(aux))
+				yyerror("El identificador de la comparacion del if: " + $1.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 			else
-				yyerror($3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
+				yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
-		yyerror($1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
+		yyerror("El identificador de la comparacion del if: " + $1.sval + " No esta declarada. Error en linea: " + compilador.Compilador.nroLinea);
 		if(!verficarCTEEnteras($3.sval))
-			yyerror("CTE: " + $3.sval + " debe ser entero. Error en linea: " + compilador.Compilador.nroLinea);
-
+			yyerror("La CTE de la comparacion del if: " + $3.sval + " No es de tipo INTEGER. Error en linea: " + compilador.Compilador.nroLinea);
 	}
-
-	/*
-	setearAmbito($1.sval);
-
-	if((sePuedeUsar($1.sval) == 0)) {
-		boolean aux = false;
-		for(int i=0; i<compilador.Compilador.tablaSimbolo.get($1.sval).size(); i++){
-			//Compruebo que el id no sea proc y que el ambito sea Main
-			if(!compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getTipo().equals("Proc") && compilador.Compilador.tablaSimbolo.get($1.sval).get(i).isDeclarada()) {
-				String ambitoSinNombreVar = compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito();
-				String ambitoSinNombreProc = compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getAmbito();
-				if(ambitoSinNombreVar.indexOf(ambitoSinNombreProc) != -1){
-					if(!compilador.Compilador.tablaSimbolo.get($1.sval).get(i).getTipoParametro().equals("INTEGER"))
-						aux = true;
-						break;
-					}
-			}
-		}
-	}else {
-		yyerror("Variable de comparacion: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-
-	//Par id = new Par($1.sval);
-	//Par id =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par id =  new Par(getAmbitoVerdadero($1.sval));
-	Par comp = new Par($2.sval);
-	polaca.agregarPaso(id);
-	polaca.agregarPaso(comp);
-	*/
 }
 		  ;
 
@@ -1864,6 +1801,12 @@ void erroresForAsignacion(int linea){
 	for(int i=0; i<this.errores.size(); i++)
 		if(this.errores.get(i).contains(String.valueOf(linea)))
 			this.errores.set(i,"El id de la comparacion del for: " + this.errores.get(i));
+}
+
+void erroresIfAsignacion(int linea){
+	for(int i=0; i<this.errores.size(); i++)
+		if(this.errores.get(i).contains(String.valueOf(linea)))
+			this.errores.set(i,"El id de la comparacion del if: " + this.errores.get(i));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

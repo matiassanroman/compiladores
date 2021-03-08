@@ -265,7 +265,7 @@ public class GeneradorAssembler {
     		   }
     		   else if(aux.get(i).getUso().equals("CTE")) {
 				   if(aux.get(i).getTipo().equals("int")){
-					   // ESTA SECCION SE AGREG� PARA DIFERENCIAR LOS NUMEROS NEGATIVOS EN EL ASSEMBLER
+					   // ESTA SECCION SE AGREGA PARA DIFERENCIAR LOS NUMEROS NEGATIVOS EN EL ASSEMBLER
 					   if ( (aux.get(i).getValor()).contains("-"))
 						   this.data = this.data + "__" + aux.get(i).getValor().replaceAll(":", "@") + " dw " + aux.get(i).getValor() + saltoDeLinea;
 					   else
@@ -280,6 +280,10 @@ public class GeneradorAssembler {
 					   ////////////////////////////////////////////////////////////////////
 					   nombre = nombre.replace("E", "e");
 					   nombre = "_"+nombre;
+//					   if (nombre.contains("e")) {
+//						   int pos = nombre.indexOf("e");
+//						   nombre = nombre.substring(0, pos);
+//					   }
 					   nombre = nombre.replace("+", "");
 					   nombre = nombre.replace("-", "");
 					   valor = valor.replace("E", "e");
@@ -1017,13 +1021,16 @@ public class GeneradorAssembler {
 		//public static String plantillaAsignacion = "MOV XX, OP1" + saltoDeLinea;
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) != null){
-			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS	
+			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS
 			if (this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
 				codigo = plantillaAsignacion;
 				/// CORRECCION DE ALGUNOS GUIONES BAJOS QUE NO APARECIAN
 				if (Character.isDigit(operando2.charAt(0)))
 					operando2 = "_"+operando2;
+				if (operando2.charAt(0) == '-') {
+					operando2 = "__"+operando2.replace("-", "");
+				}
 				//////////////////////////////////////////////////////
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
@@ -1092,7 +1099,6 @@ public class GeneradorAssembler {
 		String operador = "";
 		
 		//I(OPERANDO 2) = J (OPERANDO 1)
-		
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
 			// SITACION 1.1 - OPERANDO 1 (REG) Y OPERANDO 2 (VAR) SON INTEGER - VARIANTE DE REGISTROS
@@ -1119,13 +1125,14 @@ public class GeneradorAssembler {
 		// SITACION 2 - OPERANDO 1 (VAR) Y OPERANDO 2 (VAR)
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) != null){
 			//SITUACION 2.2 OPERANDO 1 Y 2 SON VAR Y SON INTEGER - VARIANTE DE REGISTROS	
-			
 			if (this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
 				codigo = plantillaAsignacion;
 				//// CORECCION DE ALGUNOS GUIONES BAJOS QUE NO APARACIAN
 				if (Character.isDigit(operando2.charAt(0)))
 					operando2 = "_"+operando2;
+				if (operando2.charAt(0)=='-')
+					operando2 = "__"+operando2.replace("-", "");
 				////////////////////////////////////////////////////////
 				codigo = codigo.replace("MOV VAR-REG, XX", "");
 				codigo = codigo.replace("XX", registro.getRegistro(1, "INTEGER"));
@@ -1370,7 +1377,7 @@ public class GeneradorAssembler {
 		String ceroALaPila = cargar0ALaPila;
 		String auxiliar = generarVarAux();
 		String auxiliar2 = generarVarAux();
-		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);		
+		variableAAgregar = variableAAgregar.replace("VAR", auxiliar);	
 		// NINGUNO SE TIENE QUE CONVERTIR (FLOAT-FLOAT)
 		if (conv==0) {
 			// REEMPLAZO DE LA OPERACION DE LA PILA
@@ -1556,7 +1563,6 @@ public class GeneradorAssembler {
 			
 			linea1 = linea1.replace("XX", aux);
 			registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",""), 1);
-			System.out.println(ultimaAsignado);
 			linea1 = linea1.replace("OP1", registro.getRegistro(1, "INTEGER"));
 			
 			linea2 = linea2.replace("carga", "FILD");
