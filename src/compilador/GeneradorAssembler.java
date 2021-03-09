@@ -274,7 +274,6 @@ public class GeneradorAssembler {
 				   }
 				   if(aux.get(i).getTipo().equals("float")) {
 					   String nombre = aux.get(i).getValor().replaceAll(":", "@");
-					   System.out.println(nombre);
 					   String valor = aux.get(i).getValor();
 					   // CON MODIFICACION PARA DIFERENCIAR VARIABLES CON . EN EL ASSEMBLER
 					   nombre = nombre.replace(".", "_");
@@ -287,7 +286,6 @@ public class GeneradorAssembler {
 					   nombre = nombre.replace("+", "");
 					   nombre = nombre.replace("-", "");
 					   valor = valor.replace("E", "e");
-					   System.out.println(nombre);
 					   this.data = this.data + nombre + " dd " + valor + saltoDeLinea;
 				   }
 			   }
@@ -979,28 +977,16 @@ public class GeneradorAssembler {
 	}
 	
 	private void getCodAsignacion(){
-		// REVISAR CUANDO SE QUIERE HACER OPERACIONS DEL TIPO DE
-		// ALGO = ALGO + NN;\
-		// NO DETECTA LA PRIMERA AGINACION
-		
 		// x = y => ope1 = x ; ope2 = y
 
 		String operando1 = pila.pop();
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-		System.out.println("1--> OPERANDO1: "+operando1);
-		System.out.println("1--> OPERANDO2: "+operando2);
-//		if (operando1.charAt(0)=='-')
-//			operando1 = "__"+operando1.substring(0,operando1.length());
-//		else
-//			operando1 = "_"+operando1;
 
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
-			System.out.println("6--> OPERANDO1: "+operando1);
-			System.out.println("6--> OPERANDO2: "+operando2);
 			// SITACION 1.1 - OPERANDO 1 (REG) Y OPERANDO 2 (VAR) SON INTEGER - VARIANTE DE REGISTROS
 			if(registroInt(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("INTEGER")) {
 				codigo = plantillaAsignacion;
@@ -1098,7 +1084,8 @@ public class GeneradorAssembler {
 		}
 		
 		if(this.getSimbolo(operando1) != null)
-			this.getSimbolo(operando1).getLineaConv().remove(0);
+			if(this.getSimbolo(operando1).getLineaConv().size() > 0)
+				this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void getCodAsignacionProc(){
@@ -1109,10 +1096,6 @@ public class GeneradorAssembler {
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-		
-		if(this.getSimbolo(operando1) == null)
-			//if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT"))
-				System.out.println("ENTROOOO");
 		
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
@@ -1127,10 +1110,6 @@ public class GeneradorAssembler {
 				this.code = this.code + codigo;
 			}
 			else if((registroFloat(operando2) && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT")) || operando2.contains("E") ) {
-
-
-				System.out.println("3--> OPERANDO1: "+operando1);
-				System.out.println("3--> OPERANDO2: "+operando2);
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 AUX(FLOAT)
@@ -1167,10 +1146,6 @@ public class GeneradorAssembler {
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("FLOAT") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
 				if (operando2.charAt(0) == '-')
 					operando2 = "__"+operando2.replace("-", "");
-				//else
-					
-				System.out.println("8--> OPERANDO1: "+operando1);
-				System.out.println("8--> OPERANDO2: "+operando2);
 				this.code = this.code + generarAsignacion(operando2, operando1, 0);
 			}
 			//CONVERSION - OPERANDO 2 VAR(INTEGER) Y OPERANDO 1 VAR(FLOAT)
@@ -1200,8 +1175,6 @@ public class GeneradorAssembler {
 		}
 		//CONVERSION OPERANDO 2 AUX (FLOAT) Y OPERANDO 1 VAR (FLOAT) 
 		else if(this.getSimbolo(operando2) != null && this.getSimbolo(operando1) == null){
-			System.out.println("LLLL");
-			System.out.println(operando1);
 			if(registroInt(operando1) && this.getSimbolo(operando2).getTipoParametro().equals("FLOAT")) {
 				errorDeTipos("Se quiere asignar un FLOAT a un INTEGER",this.getSimbolo(operando1),this.getSimbolo(operando2) );
 			}
@@ -1214,7 +1187,8 @@ public class GeneradorAssembler {
 		}
 		
 		if(this.getSimbolo(operando1) != null)
-			this.getSimbolo(operando1).getLineaConv().remove(0);
+			if(this.getSimbolo(operando1).getLineaConv().size() > 0)
+				this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void generarComparadores(String salto, String comparacion, String operando1, String operando2) {
@@ -1550,10 +1524,6 @@ public class GeneradorAssembler {
 	}
 		
 	public String generarAsignacion(String operando1, String operando2, int caso) {
-
-
-		System.out.println("4--> OPERANDO1: "+operando1);
-		System.out.println("4--> OPERANDO2: "+operando2);
 		String ardiente;
 		if (caso == 0) {
 			// no convertir nada
@@ -1563,8 +1533,6 @@ public class GeneradorAssembler {
 			String linea1 = plantillaCargaCompFLOAT;
 			// REEMPLAZOD DE VARIABLES
 			if (operando1.contains("E")) {
-				if (operando1.charAt(0) == '-')
-					System.out.println("EL NUMERO ES MUY NEGATIVO");
 				operando1 = operando1.replace("E", "e");
 				operando1 = operando1.replace("+", "");
 				operando1 = operando1.replace(".", "_");
@@ -1576,15 +1544,10 @@ public class GeneradorAssembler {
 					if (operando1.charAt(0)!='_')
 						operando1 = "_"+operando1;
 				operando1 = operando1.replace("-", "");
-			
-				System.out.println("6--> OPERANDO1: "+operando1);
-				System.out.println("6--> OPERANDO2: "+operando2);
 			}
 			if (operando1.contains(".") ) {
 				operando1 = "_"+operando1.replace(".", "_");
 			}
-			System.out.println("7--> OPERANDO1: "+operando1);
-			System.out.println("7--> OPERANDO2: "+operando2);
 			linea1 = linea1.replace("carga", "FLD");
 			linea1 = linea1.replace("op1", operando1);
 			linea1 = linea1.replace("compa", "FSTP");
@@ -1789,10 +1752,8 @@ public class GeneradorAssembler {
 	String getAmbitoProc(String ambitoGeneral) {
 		String [] arreglo = ambitoGeneral.split("\\@");
 		String aux = arreglo[arreglo.length-1];
-		//System.out.println("AUX: " + aux);
 		for(int i=0; i<arreglo.length-1; i++)
 			aux = aux + "@" + arreglo[i];
-		//System.out.println("AUX 2: " + aux);
 		return aux;	
 	}
 
@@ -1881,9 +1842,6 @@ public class GeneradorAssembler {
 			else
 				var = var + "@" + aux2[i];
 		
-		//En proc tengo f2@main@f1 => main@f1@f2
-		//Nivel son las veces que me voy metiendo hasta encontrar donde esta declarado
-		//var es el ambito de la variable ax1@main@f1@f2 => main@f1@f2
 		proc = proc + "@" + aux[0];
 		int nivel = 0;
 		
@@ -1922,7 +1880,6 @@ public class GeneradorAssembler {
 				if(primero) {
 					primero = false;
 					if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
-						//System.out.println("SALIDA 1: " + sval + "@" + construirAmbito(ambitoAux));
 						return sval + "@" + construirAmbito(ambitoAux);
 					}
 						
@@ -1930,7 +1887,6 @@ public class GeneradorAssembler {
 				else {
 					if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
 						if(verificarAnidamientos(getAmbitoProc(construirAmbito(ambitoAux)), ambitoUsoVar,getNsProc(construirAmbito(ambitoAux),ambitoArr[i]))) {
-							//System.out.println("SALIDA 2: " + sval + "@" + construirAmbito(ambitoAux));
 							return sval + "@" + construirAmbito(ambitoAux);
 						}
 					}
@@ -1938,7 +1894,6 @@ public class GeneradorAssembler {
 			}
 			else {
 				if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
-					//System.out.println("SALIDA 3: " + sval + "@" + construirAmbito(ambitoAux));
 					return sval + "@" + construirAmbito(ambitoAux);
 				}
 			}

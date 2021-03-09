@@ -41,7 +41,6 @@ bloquePrograma : bloquePrograma sentenciaDeclarativa
 
 sentenciaDeclarativa : tipo listaVariables ';'
 {
-	//mostrarMensaje("Declaracion de una o mas variables en linea nro: " + compilador.Compilador.nroLinea);
 	setearTipoParam($1.sval);
 }     
 					 | declaracionProcedimiento 
@@ -55,7 +54,6 @@ listaVariables : listaVariables ',' identificador
 {
 	setearAmbitoyDeclarada($3.sval,"");
 	if(sePuedeUsar($3.sval) == 2){
-		//mostrarMensaje($3.sval + " esta Redeclarada.");
 		yyerror($3.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 }
@@ -63,7 +61,6 @@ listaVariables : listaVariables ',' identificador
 {
 	setearAmbitoyDeclarada($1.sval,"");
 	if(sePuedeUsar($1.sval) == 2){
-		//mostrarMensaje($1.sval + " esta Redeclarada.");
 		yyerror($1.sval + " esta Redeclarada. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 }
@@ -71,7 +68,6 @@ listaVariables : listaVariables ',' identificador
 
 declaracionProcedimiento : encabezadoProc bloqueProc
 {
-	//mostrarMensaje("Procedimiento completo, en linea nro: " + compilador.Compilador.nroLinea);
 	disminuirAmbito();
 	if(!(compilador.Compilador.anidamientos.size() == 0)){
 		verificacionNa();
@@ -84,7 +80,6 @@ declaracionProcedimiento : encabezadoProc bloqueProc
 
 encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 {
-	//mostrarMensaje("Procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);
 	if(verficarNANSEnteras($7.sval, $11.sval)){
 		setearProc($2.sval, "0", $7.sval, $11.sval);
 		//setearAmbito($2.sval);
