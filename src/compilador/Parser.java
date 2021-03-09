@@ -1830,7 +1830,7 @@ case 29:
 //#line 390 "gramatica.y"
 {
 	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(1);
+	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(2);
 	setearAmbito(val_peek(6).sval);
 	setearAmbito(val_peek(4).sval);
 	setearAmbito(val_peek(2).sval);
@@ -1929,7 +1929,7 @@ case 30:
 //#line 487 "gramatica.y"
 {
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setCantParametros(1);
+	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setCantParametros(3);
 	setearAmbito(val_peek(8).sval);
 	setearAmbito(val_peek(6).sval);
 	setearAmbito(val_peek(4).sval);
@@ -1965,7 +1965,7 @@ case 30:
 			yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	else{
-		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3,aux4));
 		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(val_peek(8).sval), compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).getAmbito());
 
 		/*Par nomProc = new Par($1.sval); */

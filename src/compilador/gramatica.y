@@ -389,7 +389,7 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ',' identificador ')' ';'
 {
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
 	setearAmbito($1.sval);
 	setearAmbito($3.sval);
 	setearAmbito($5.sval);
@@ -486,7 +486,7 @@ sentenciaEjecutable : asignacion
 					| identificador '(' identificador ',' identificador ',' identificador ')' ';'
 {
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
 	setearAmbito($1.sval);
 	setearAmbito($3.sval);
 	setearAmbito($5.sval);
@@ -522,7 +522,7 @@ sentenciaEjecutable : asignacion
 			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	else{
-		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3,aux4));
 		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 
 		//Par nomProc = new Par($1.sval); 
