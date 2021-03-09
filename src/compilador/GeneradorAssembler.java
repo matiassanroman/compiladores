@@ -977,17 +977,13 @@ public class GeneradorAssembler {
 	}
 	
 	private void getCodAsignacion(){
-		
+
 		// x = y => ope1 = x ; ope2 = y
 
 		String operando1 = pila.pop();
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-//		if (operando1.charAt(0)=='-')
-//			operando1 = "__"+operando1.substring(0,operando1.length());
-//		else
-//			operando1 = "_"+operando1;
 
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
@@ -1089,7 +1085,8 @@ public class GeneradorAssembler {
 		}
 		
 		if(this.getSimbolo(operando1) != null)
-			this.getSimbolo(operando1).getLineaConv().remove(0);
+			if(this.getSimbolo(operando1).getLineaConv().size() > 0)
+				this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void getCodAsignacionProc(){
@@ -1190,8 +1187,10 @@ public class GeneradorAssembler {
 				this.code = this.code + generarAsignacion(operando2, operando1, 1);
 			}
 		}
+		
 		if(this.getSimbolo(operando1) != null)
-			this.getSimbolo(operando1).getLineaConv().remove(0);
+			if(this.getSimbolo(operando1).getLineaConv().size() > 0)
+				this.getSimbolo(operando1).getLineaConv().remove(0);
 	}
 	
 	private void generarComparadores(String salto, String comparacion, String operando1, String operando2) {
@@ -1679,7 +1678,7 @@ public class GeneradorAssembler {
 					if(compilador.Compilador.tablaSimbolo.get(n).get(i).getUso().equals("CTE")){
 						return compilador.Compilador.tablaSimbolo.get(n).get(i);
 					}
-					else if(compilador.Compilador.tablaSimbolo.get(n).get(i).getAmbito().equals(elemento)){
+					else if(compilador.Compilador.tablaSimbolo.get(n).get(i).getAmbito().equals(comprobarAlcance(elemento))){
 						return compilador.Compilador.tablaSimbolo.get(n).get(i);
 					}				
 			}
@@ -1750,6 +1749,160 @@ public class GeneradorAssembler {
 			compilador.Compilador.errores.add(msj1 + msj3);
 		else
 			compilador.Compilador.errores.add(msj1 + msj2);
+	}
+	
+	String getAmbitoProc(String ambitoGeneral) {
+		String [] arreglo = ambitoGeneral.split("\\@");
+		String aux = arreglo[arreglo.length-1];
+		for(int i=0; i<arreglo.length-1; i++)
+			aux = aux + "@" + arreglo[i];
+		return aux;	
+	}
+
+	int getNsProc(String ambitoProc, String sval) {
+		String [] arreglo = ambitoProc.split("\\@");
+		String aux = sval;
+		for(int j=0; j<arreglo.length-1; j++)
+			aux = aux + "@" + arreglo[j];
+		
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(aux))
+				return compilador.Compilador.tablaSimbolo.get(sval).get(i).getNs();
+		}
+		return 0;
+	}
+
+	int getNivelVar(String sval) {
+		String [] arreglo = sval.split("\\@");
+		return arreglo.length-1;
+	}
+
+	boolean dadoProcVerDeclaracionVar(String ambitoProc, String sval) {
+		String [] ambitoProcedimiento = ambitoProc.split("\\@");
+		String ambitoVar = sval;
+		if(ambitoProcedimiento.length > 1) {
+			for(int i=1; i<ambitoProcedimiento.length; i++) {
+				ambitoVar =  ambitoVar + "@" + ambitoProcedimiento[i];
+			}
+			ambitoVar = ambitoVar + "@" + ambitoProcedimiento[0];
+		}
+		else {
+			ambitoVar = ambitoVar + "@" + ambitoProc;
+		}
+		
+		for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
+			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(ambitoVar))
+				if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && (compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var") || compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("PARAM_PROC")))
+					return true;				
+		}
+		return false;				
+	}
+
+	String construirAmbito (String[] array) {
+		String delimiter = "@";
+	    return String.join(delimiter, array);
+	}
+
+	String[] construirAmbitoMenosUltimo (String[] array) {
+		String aux = "";
+		for(int j=0; j<array.length-1; j++)
+			if(j==0)
+				aux = array[j];
+			else
+				aux = aux + "@" + array[j];
+		return aux.split("\\@");
+		
+	}
+
+	String construirAmbitoMenosUltimoString (String array2) {
+		String [] array = array2.split("\\@");
+		String aux = "";
+		for(int j=0; j<array.length-1; j++)
+			if(j==0)
+				aux = array[j];
+			else
+				aux = aux + "@" + array[j];
+		String delimiter = "@";
+	    return String.join(delimiter, aux);
+		
+	}
+
+	boolean verificarAnidamientos(String ambitoProc, String ambitoVar, int ns) {	
+		String proc = "";
+		String [] aux = ambitoProc.split("\\@");
+		for(int i=1; i<aux.length; i++)
+			if(i==1)
+				proc = aux[i];
+			else
+				proc = proc + "@" + aux[i];
+		
+		String var = "";
+		String [] aux2 = ambitoVar.split("\\@");
+		for(int i=1; i<aux2.length; i++)
+			if(i==1)
+				var = aux2[i];
+			else
+				var = var + "@" + aux2[i];
+		
+		proc = proc + "@" + aux[0];
+		int nivel = 0;
+		
+		while(var.length() > 0) {
+			if(var.equals(proc)) {
+				if(ns >= nivel) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			var = construirAmbitoMenosUltimoString(var);
+			nivel++;
+		}
+		
+		return false;
+	}
+
+	String comprobarAlcance(String elemento) {
+		String [] elementoAux = elemento.split("\\@");
+		
+		String ambito = "Main";
+		
+		for(int i=2; i<elementoAux.length; i++)
+			ambito = ambito + "@" + elementoAux[i];
+		
+		String sval = elementoAux[0];
+		
+		String [] ambitoAux = ambito.split("\\@");
+		String ambitoUsoVar = sval + "@" + ambito;
+		String [] ambitoArr = ambito.split("\\@");
+		boolean primero = true;
+		for(int i = ambitoArr.length-1; i>=0; i--) {
+			if(!ambitoArr[i].equals("Main")) {
+				if(primero) {
+					primero = false;
+					if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+						return sval + "@" + construirAmbito(ambitoAux);
+					}
+						
+				}
+				else {
+					if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+						if(verificarAnidamientos(getAmbitoProc(construirAmbito(ambitoAux)), ambitoUsoVar,getNsProc(construirAmbito(ambitoAux),ambitoArr[i]))) {
+							return sval + "@" + construirAmbito(ambitoAux);
+						}
+					}
+				}
+			}
+			else {
+				if(dadoProcVerDeclaracionVar(getAmbitoProc(construirAmbito(ambitoAux)),sval)) {
+					return sval + "@" + construirAmbito(ambitoAux);
+				}
+			}
+			
+			ambitoAux = construirAmbitoMenosUltimo(ambitoAux);
+		}
+		return "";		
 	}
 	
 	public String toString(){

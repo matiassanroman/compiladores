@@ -36,7 +36,7 @@ public class CrearSalida {
 		    while (itr.hasNext()) { 
 		       str = itr.next();
 		       ArrayList<Simbolo> aux =  eliminarRepetidos(tablaSimbolo.get(str));
-	    	   for(int i=0; i<aux.size(); i++) {
+	    	   for(int i=0; i<aux.size(); i++) {	    		   
 	    		   if (aux.get(i).getTipo().equals("Proc")) { 
 	    			   salida.write("Clave: " + str + "\t Value: " + str + "\t Uso: " + aux.get(i).getUso() + "\t TipoDeUso: " + aux.get(i).getTipo() + "\t Ambito: " + aux.get(i).getAmbito() + "\t Declarada: " + aux.get(i).isDeclarada() + "\t CantParametros: " + aux.get(i).getCantParametros() + "\t NA: " + aux.get(i).getNa() + "\t NS: " + aux.get(i).getNs());
 	    		   }
