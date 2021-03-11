@@ -1814,7 +1814,7 @@ boolean dadoProcVerDeclaracionVar(String ambitoProc, String sval) {
 	
 	for(int i=0; i<compilador.Compilador.tablaSimbolo.get(sval).size(); i++){
 		if(compilador.Compilador.tablaSimbolo.get(sval).get(i).getAmbito().equals(ambitoVar))
-			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var"))
+			if(compilador.Compilador.tablaSimbolo.get(sval).get(i).isDeclarada() && (compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("Var") || compilador.Compilador.tablaSimbolo.get(sval).get(i).getTipo().equals("PARAM_PROC")))
 				return true;				
 	}
 	return false;				
