@@ -518,6 +518,14 @@ public class GeneradorAssembler {
 		if(operador.equals("+")) {
 			//SITUACION 1 - (2 VARIABLES O CTES)
 			if(this.getSimbolo(operando1) != null && this.getSimbolo(operando2) != null) {
+				if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@")) {
+					if (operando1.charAt(0) != '_') {
+						if (operando1.charAt(0) == '-')
+							operando1 = "__"+operando1;
+						else
+							operando1 = "_"+operando1;
+					}
+				}
 				registro.ocuparRegistro(registro.getPrimerRegistroLibre("INTEGER",operador), 1);
 				codigo = plantillaOperacion;
 				UltimoReg = registro.getRegistro(1, "INTEGER");
@@ -532,8 +540,14 @@ public class GeneradorAssembler {
 					//////////////////////////////////////////
 					codigo = codigo.replace("OP1", operando1);
 				}
-				if (!operando2.contains("X") && (operando2.charAt(0) != '@') && !operando2.contains("@"))
-					operando2 = "_"+operando2;
+				if (!operando2.contains("X") && (operando2.charAt(0) != '@') && !operando2.contains("@")) {
+					if (operando2.charAt(0) != '_') {
+						if (operando2.charAt(0) == '-')
+							operando2 = "__"+operando2;
+						else
+							operando2 = "_"+operando2;
+					}
+				}
 				codigo = codigo.replace("OP2", operando2);
 				codigo = codigo.replace("OP", "ADD");
 				pila.push(registro.getRegistro(1, "INTEGER"));
@@ -1533,8 +1547,6 @@ public class GeneradorAssembler {
 			operando1 = operando1 + "0";
 		if (operando2.charAt(operando2.length()-1) == '_')
 			operando2 = operando2 + "0";
-		System.out.println("1-->OPERANDO1: " + operando1);
-		System.out.println("1-->OPERANDO2: " + operando2 + saltoDeLinea);
 		/////////////////////////////////////////////////////////
 		String formato = plantillaOperacionFloat;
 		String cargar = plantillaCargaCompFLOAT;
@@ -1809,16 +1821,53 @@ public class GeneradorAssembler {
 	
 	public String generarComparacion(String salto, String comparacion, int caso, String reg1, String reg2) {
 		// FLOAT comp FLOAT
+		
 		if (caso==0) { 
-			if (reg1.contains("."))
+			if (!reg1.contains("X") && (reg1.charAt(0) != '@') && !reg1.contains("@")) {
+				if (reg1.charAt(0) == '-')
+					reg1 = "__"+reg1;
+				else
+					if (reg1.charAt(0) != '_')
+						reg1 = "_"+reg1;
 				reg1 = reg1.replace(".", "_");
+			}
 			return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
 		// INTEGER comp FLOAT
-		if (caso==1) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		if (caso==1) { 
+			if (!reg1.contains("X") && (reg1.charAt(0) != '@') && !reg1.contains("@")) {
+				if (reg1.charAt(0) == '-')
+					reg1 = "__"+reg1;
+				else
+					if (reg1.charAt(0) != '_')
+						reg1 = "_"+reg1;
+				reg1 = reg1.replace(".", "_");
+			}
+			return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); 
+		}
 		// FLOAT comp INTEGER
-		if (caso==2) { return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); }
+		if (caso==2) { 
+			if (!reg1.contains("X") && (reg1.charAt(0) != '@') && !reg1.contains("@")) {
+				if (reg1.charAt(0) == '-')
+					reg1 = "__"+reg1;
+				else
+					if (reg1.charAt(0) != '_')
+						reg1 = "_"+reg1;
+				reg1 = reg1.replace(".", "_");
+			}
+			return generarCodigoComparacion(salto, comparacion, caso, reg1, reg2); 
+		}
 		// INTEGER comp INTEGER
-		if (caso==3) { return generarSaltosInteger(comparacion, reg1, reg2).replace("label", salto); }
+		if (caso==3) { 
+			if (!reg1.contains("X") && (reg1.charAt(0) != '@') && !reg1.contains("@")) {
+				if (reg1.charAt(0) == '-')
+					reg1 = "__"+reg1;
+				else
+					if (reg1.charAt(0) != '_')
+						reg1 = "_"+reg1;
+				reg1 = reg1.replace(".", "_");
+			}
+			return generarSaltosInteger(comparacion, reg1, reg2).replace("label", salto); 
+		}
 		return null;
 	}
 	
