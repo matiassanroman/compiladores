@@ -1642,7 +1642,7 @@ case 18:
 //#line 220 "gramatica.y"
 {
 	PolacaInversa.bajarNivelProc();
-	polaca.borrarProcYParametros();
+	/*polaca.borrarProcYParametros();*/
 	/*int posProc = polaca.inicioProc();*/
 }
 break;

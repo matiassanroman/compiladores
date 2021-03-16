@@ -219,7 +219,7 @@ encabezadoProc : | PROC identificador '(' ')'  NA '=' CTE ',' NS '=' CTE
 bloqueProc : '{' bloque '}'
 {
 	PolacaInversa.bajarNivelProc();
-	polaca.borrarProcYParametros();
+	//polaca.borrarProcYParametros();
 	//int posProc = polaca.inicioProc();
 }
 		   ;

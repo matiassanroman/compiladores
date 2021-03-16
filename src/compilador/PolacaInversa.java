@@ -196,16 +196,21 @@ public class PolacaInversa {
 	}
 
 	public int inicioProc(String nombre) {
+						
 		int pos =  this.parametrosFormales.size()-1;
+		
 		while (pos>=0 && !parametrosFormales.get(pos).contains("PROC "+nombre)) {
 			pos--;
 		}
+		//System.out.println("POS: " + (pos-1));
 		return pos-1;
+		
 	}
 	
 	public void asignarParametros(ArrayList<String> parametrosInvocados, int inicio, String nombreProc) {
 		// 'parametros' son los parametros de la invocacion
 		// inicio es el nivel de ese procedimiento en la lista de 
+				
 		int cant = parametrosInvocados.size();
 		int posParamFormales = inicio+2;
 		for (int i=0; i < cant; i++) {
@@ -215,14 +220,13 @@ public class PolacaInversa {
 			this.agregarPaso(operando1);
 			this.agregarPaso(operando2);
 			this.agregarPaso(operador);
-			
 			String [] aux = operando2.getValor().split("\\@");
+			
 			for(int j=0; j<compilador.Compilador.tablaSimbolo.get(aux[0]).size(); j++){
 				if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).getAmbito().equals(operando2.getValor())) 
 					if(compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).isDeclarada())
 						compilador.Compilador.tablaSimbolo.get(aux[0]).get(j).setLineaConv(compilador.Compilador.nroLinea);
 			}
-			
 			posParamFormales++;
 		}
 	}
