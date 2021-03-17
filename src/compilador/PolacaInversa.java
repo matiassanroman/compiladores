@@ -194,15 +194,15 @@ public class PolacaInversa {
 	public void agregarParametro(String procParam) {
 		this.parametrosFormales.add(procParam);
 	}
-
+	
 	public int inicioProc(String nombre) {
-						
+		
 		int pos =  this.parametrosFormales.size()-1;
 		
-		while (pos>=0 && !parametrosFormales.get(pos).contains("PROC "+nombre)) {
+		while (pos>=0 && !parametrosFormales.get(pos).equals("PROC "+nombre)) {
 			pos--;
 		}
-		//System.out.println("POS: " + (pos-1));
+		
 		return pos-1;
 		
 	}
@@ -210,7 +210,7 @@ public class PolacaInversa {
 	public void asignarParametros(ArrayList<String> parametrosInvocados, int inicio, String nombreProc) {
 		// 'parametros' son los parametros de la invocacion
 		// inicio es el nivel de ese procedimiento en la lista de 
-				
+		
 		int cant = parametrosInvocados.size();
 		int posParamFormales = inicio+2;
 		for (int i=0; i < cant; i++) {

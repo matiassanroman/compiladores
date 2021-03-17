@@ -484,7 +484,7 @@ final static String yyrule[] = {
 "cteNegativa : '-' CTE",
 };
 
-//#line 1187 "gramatica.y"
+//#line 1150 "gramatica.y"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// DEFINICIONES PROPIAS///////////////////////////////////////////////////////////////////////////////////////////
@@ -861,6 +861,8 @@ boolean verificarParamFormales(String sval, String proc){
 		return false;
 }
 */
+
+
 boolean verificarCantParam(String sval){
 
 	int cantLlamdor = compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getCantParametros();
@@ -883,6 +885,7 @@ boolean verificarCantParam(String sval){
 	}
 	return false;
 }
+
 
 boolean verficarCTEEnteras(String cte){
 	
@@ -984,8 +987,6 @@ void setearAmbito(String sval){
 			}
 		}*/
 		compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito();
-
-		
 	}	
 	else if(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).getTipo().equals("Var") && !(compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).isDeclarada())){
 		//compilador.Compilador.tablaSimbolo.get(sval).get(compilador.Compilador.tablaSimbolo.get(sval).size()-1).setAmbito(sval, false);
@@ -1189,6 +1190,66 @@ boolean verificarAnidamientos(String ambitoProc, String ambitoVar, int ns) {
 	return false;
 }
 
+public String ambitoSinNombre(String sval) {
+	String [] arreglo = sval.split("\\@");
+	String auxSinNombre = "";
+	boolean primero = true;
+	for(int z=1; z<arreglo.length; z++) {
+		if(primero) {
+			primero = false;
+			auxSinNombre = arreglo[z];
+		}
+		else
+			auxSinNombre = auxSinNombre + "@" + arreglo[z];
+	}
+	return auxSinNombre;
+}
+
+/*
+boolean verificarCantParam(String alcanceProc, int cantParam){
+
+	//sval llamado con su ambito => b@Main@a@b
+	String [] nombreProc = alcanceProc.split("\\@");
+
+	for(int i=compilador.Compilador.tablaSimbolo.get(nombreProc[0]).size()-1; i>=0; i--){
+		if((compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).isDeclarada()) && (compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getTipo().equals("Proc")))
+			if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getAmbito().equals(alcanceProc))
+				if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getCantParametros() == cantParam)
+					return true;
+	}
+	return false;
+}
+*/
+
+String comprobarAlcanceProc(String sval, int cantParam){
+
+	//sval llamador con su ambito => b@Main@a@b
+	String [] nombreProc = sval.split("\\@");
+	String ambitoSinNombreLlamador = ambitoSinNombre(sval);
+	for(int i=compilador.Compilador.tablaSimbolo.get(nombreProc[0]).size()-1; i>=0; i--){
+		//Si es un Proc declarado
+		if((compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).isDeclarada()) && (compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getTipo().equals("Proc"))){
+			//Caso Hermano: llamador esta en el mismo ambito que el llamado.
+			if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getAmbito().equals(sval)){
+				if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getCantParametros() == cantParam)
+					return sval;
+			}
+			//Caso Recursivo: llamador esta dentro del llamado.
+			else if(sval.equals(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getAmbito()+nombreProc[0])){
+				if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getCantParametros() == cantParam)
+					return compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getAmbito();
+			}
+			String ambitoSinNombreLlamado = compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).ambitoSinNombre();
+			//Esta al alcance?
+			if(ambitoSinNombreLlamador.indexOf(ambitoSinNombreLlamado) != -1){
+				if(compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getCantParametros() == cantParam)
+					return compilador.Compilador.tablaSimbolo.get(nombreProc[0]).get(i).getAmbito();							
+			}
+		}
+	}
+	return "";	
+}
+
 String comprobarAlcance(String sval) {
 	String ambito = "Main" + compilador.Compilador.ambito;
 	String [] ambitoAux = ambito.split("\\@");
@@ -1263,7 +1324,7 @@ void erroresIfAsignacion(int linea){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////FIN DEFINICIONES PROPIAS////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//#line 1195 "Parser.java"
+//#line 1256 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -1697,95 +1758,28 @@ break;
 case 27:
 //#line 262 "gramatica.y"
 {
-	/*mostrarMensaje("Llamda a procedimiento sin parametros en linea nro: "+compilador.Compilador.nroLinea);*/
-
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).setCantParametros(0);
 	setearAmbito(val_peek(3).sval);
+	String alcanceProc = comprobarAlcanceProc(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).getAmbito(),0);
 
-	/*Par nomProc = new Par($1.sval); */
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(3).sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
-
-	/*Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado*/
-	int aux = sePuedeUsar(val_peek(3).sval);
-	if(aux == 1 || aux == 2){
-		if(aux == 1){
-			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
-			yyerror("Procedimiento: " + val_peek(3).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-		else{
-			mostrarMensaje("Procedimiento " + val_peek(3).sval + " esta Redeclarado.");
-			yyerror("Procedimiento " + val_peek(3).sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
+	/*Compruebo que el nombre del llamador este al alcance y la cantidad de parametros sea la correcta.*/
+	if(alcanceProc == ""){
+		yyerror("Procedimiento: " + val_peek(3).sval + " No esta declarado o no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	else{
-		if(!verificarCantParam(val_peek(3).sval)){
-			mostrarMensaje("Llamador del procedimiento: " + val_peek(3).sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + val_peek(3).sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-	}
-}
-break;
-case 28:
-//#line 295 "gramatica.y"
-{
-	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setCantParametros(1);
-	setearAmbito(val_peek(4).sval);
-	setearAmbito(val_peek(2).sval);
-	int aux = sePuedeUsar(val_peek(4).sval);
-	String aux2 = comprobarAlcance(val_peek(2).sval); 
-
-	/*Compruebo que el nombre del llamador este al alcance.*/
-	if(aux == 1 || aux == 2){
-		if(aux == 1){
-			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
-			yyerror("Procedimiento: " + val_peek(4).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-		else{
-			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
-			yyerror("Procedimiento " + val_peek(4).sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-	}
-	/*Compruebo que el numero de parametros del llamado coincida con el llamador.*/
-	else if(!verificarCantParam(val_peek(4).sval)){
-		/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
-		yyerror("Llamador del procedimiento: " + val_peek(4).sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-	/*Compruebo que los parametros formales esten al alcance.*/
-	else if(aux2.equals("")){
-		/*mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");*/
-		yyerror("Procedimiento: " + val_peek(4).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-	else{
-		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(val_peek(4).sval), compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).getAmbito());
-
-		/*Par nomProc = new Par($1.sval); */
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).getAmbito());
+		/*Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
 	}
 
-
-	/*ACOMODAR QUE PARAMETROS INVOCADOS TOME BIEN EL AMBITO */
-	/*VER QUE EL PARAMETRO SEA VAR Y NO PROC*/
-	/*DALEEEE QUE YA ESTAMOS!!!*/
-
 	/*
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(0);
 	setearAmbito($1.sval);
 
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	
-	//mostrarMensaje("Llamada a procedimiento con 1 parametro en linea nro: " + compilador.Compilador.nroLinea);
-	
 	//Par nomProc = new Par($1.sval); 
 	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 	Par call = new Par("CALL");
@@ -1800,94 +1794,59 @@ case 28:
 			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 		else{
-			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
 			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
 	else{
 		if(!verificarCantParam($1.sval)){
-			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+			mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
 			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 		}
-	}
-	
-	//Compruebo que el parametro real se pueda usar
-	int aux2 = sePuedeUsar($3.sval);
-	if(aux2 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	*/
 
 }
 break;
-case 29:
-//#line 385 "gramatica.y"
+case 28:
+//#line 313 "gramatica.y"
 {
-	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(2);
-	setearAmbito(val_peek(6).sval);
+	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).setCantParametros(1);
 	setearAmbito(val_peek(4).sval);
 	setearAmbito(val_peek(2).sval);
-	int aux = sePuedeUsar(val_peek(6).sval);
-	String aux2 = comprobarAlcance(val_peek(4).sval); 
-	String aux3 = comprobarAlcance(val_peek(2).sval);
-
-	/*Compruebo que el nombre del llamador este al alcance.*/
-	if(aux == 1 || aux == 2){
-		if(aux == 1){
-			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
-			yyerror("Procedimiento: " + val_peek(6).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-		else{
-			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
-			yyerror("Procedimiento " + val_peek(6).sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-	}
-	/*Compruebo que el numero de parametros del llamado coincida con el llamador.*/
-	else if(!verificarCantParam(val_peek(6).sval)){
-		/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
-		yyerror("Llamador del procedimiento: " + val_peek(6).sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	String alcanceProc = comprobarAlcanceProc(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).getAmbito(),1);
+	String aux2 = comprobarAlcance(val_peek(2).sval); 
+	
+	/*Compruebo que el nombre del llamador este al alcance y la cantidad de parametros sea la correcta.*/
+	if(alcanceProc == ""){
+		yyerror("Procedimiento: " + val_peek(4).sval + " No esta declarado o no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	/*Compruebo que los parametros formales esten al alcance.*/
-	else if(aux2.equals("") || aux3.equals("")){
-		if(aux2.equals(""))
-			yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
-		else
-			yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	else if(aux2.equals("")){
+		yyerror("Procedimiento: " + val_peek(4).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	else{
-		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(val_peek(6).sval), compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).getAmbito());
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2));
+		/*polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito(),1), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(4).sval).size()-1).getAmbito());
 
-		/*Par nomProc = new Par($1.sval); */
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).getAmbito());
+		/*Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
 	}
 
 	/*
-	setearAmbito($3.sval);
-	setearAmbito($5.sval);
-
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
-	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(1);
 	setearAmbito($1.sval);
-
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());	
-
-	//mostrarMensaje("Llamada a procedimiento con 2 parametros en linea nro: " + compilador.Compilador.nroLinea);
-	
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
-
-	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
+	setearAmbito($3.sval);
 	int aux = sePuedeUsar($1.sval);
+	String aux2 = comprobarAlcance($3.sval); 
+
+	//Compruebo que el nombre del llamador este al alcance.
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
@@ -1898,30 +1857,114 @@ case 29:
 			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
+	//Compruebo que el numero de parametros del llamado coincida con el llamador.
+	else if(!verificarCantParam($1.sval)){
+		//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+	//Compruebo que los parametros formales esten al alcance.
+	else if(aux2.equals("")){
+		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
+		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
 	else{
-		if(!verificarCantParam($1.sval)){
-			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
-		}
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2));
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito()), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+
+		//Par nomProc = new Par($1.sval); 
+		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par call = new Par("CALL");
+		polaca.agregarPaso(nomProc);
+		polaca.agregarPaso(call);
+	}
+	*/
+}
+break;
+case 29:
+//#line 383 "gramatica.y"
+{
+
+	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).setCantParametros(2);
+	setearAmbito(val_peek(6).sval);
+	setearAmbito(val_peek(4).sval);
+	setearAmbito(val_peek(2).sval);
+	String alcanceProc = comprobarAlcanceProc(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).getAmbito(),2);
+	String aux2 = comprobarAlcance(val_peek(4).sval); 
+	String aux3 = comprobarAlcance(val_peek(2).sval);
+
+	/*Compruebo que el nombre del llamador este al alcance y la cantidad de parametros sea la correcta.*/
+	if(alcanceProc == ""){
+		yyerror("Procedimiento: " + val_peek(6).sval + " No esta declarado o no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+	/*Compruebo que los parametros formales esten al alcance.*/
+	else if(aux2.equals("") || aux3.equals("")){
+		if(aux2.equals(""))
+			yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+		if(aux3.equals(""))
+			yyerror("Procedimiento: " + val_peek(6).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	
+	}
+	else{
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(6).sval).size()-1).getAmbito());
+
+		/*Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+		Par nomProc =  new Par(alcanceProc);
+		Par call = new Par("CALL");
+		polaca.agregarPaso(nomProc);
+		polaca.agregarPaso(call);
 	}
 
-	//Compruebo que el parametro real se pueda usar
-	int aux2 = sePuedeUsar($3.sval);
-	int aux3 = sePuedeUsar($5.sval);
-	if(aux2 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	/*
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
+	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(2);
+	setearAmbito($1.sval);
+	setearAmbito($3.sval);
+	setearAmbito($5.sval);
+	int aux = sePuedeUsar($1.sval);
+	String aux2 = comprobarAlcance($3.sval); 
+	String aux3 = comprobarAlcance($5.sval);
+
+	//Compruebo que el nombre del llamador este al alcance.
+	if(aux == 1 || aux == 2){
+		if(aux == 1){
+			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
+			yyerror("Procedimiento: " + $1.sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
+		}
+		else{
+			//mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");
+			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
+		}
 	}
-	if(aux3 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
+	//Compruebo que el numero de parametros del llamado coincida con el llamador.
+	else if(!verificarCantParam($1.sval)){
+		//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+	//Compruebo que los parametros formales esten al alcance.
+	else if(aux2.equals("") || aux3.equals("")){
+		if(aux2.equals(""))
+			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+		else
+			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+	else{
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito()), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+
+		//Par nomProc = new Par($1.sval); 
+		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par call = new Par("CALL");
+		polaca.agregarPaso(nomProc);
+		polaca.agregarPaso(call);
 	}
 	*/
 
 }
 break;
 case 30:
-//#line 482 "gramatica.y"
+//#line 464 "gramatica.y"
 {
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).setCantParametros(3);
@@ -1929,69 +1972,49 @@ case 30:
 	setearAmbito(val_peek(6).sval);
 	setearAmbito(val_peek(4).sval);
 	setearAmbito(val_peek(2).sval);
-	int aux = sePuedeUsar(val_peek(8).sval);
+	String alcanceProc = comprobarAlcanceProc(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).getAmbito(),3);
 	String aux2 = comprobarAlcance(val_peek(6).sval); 
 	String aux3 = comprobarAlcance(val_peek(4).sval);
 	String aux4 = comprobarAlcance(val_peek(2).sval);
 
-	/*Compruebo que el nombre del llamador este al alcance.*/
-	if(aux == 1 || aux == 2){
-		if(aux == 1){
-			/*mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");*/
-			yyerror("Procedimiento: " + val_peek(8).sval + " No esta declarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-		else{
-			/*mostrarMensaje("Procedimiento " + $1.sval + " esta Redeclarado.");*/
-			yyerror("Procedimiento " + val_peek(8).sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-	}
-	/*Compruebo que el numero de parametros del llamado coincida con el llamador.*/
-	else if(!verificarCantParam(val_peek(8).sval)){
-		/*mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");*/
-		yyerror("Llamador del procedimiento: " + val_peek(8).sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	/*Compruebo que el nombre del llamador este al alcance y la cantidad de parametros sea la correcta.*/
+	if(alcanceProc == ""){
+		yyerror("Procedimiento: " + val_peek(8).sval + " No esta declarado o no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	/*Compruebo que los parametros formales esten al alcance.*/
 	else if(aux2.equals("") || aux3.equals("") || aux4.equals("")){
 		if(aux2.equals(""))
 			yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(6).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
-		else if(aux3.equals(""))
+		if(aux3.equals(""))
 			yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(4).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
-		else
+		if(aux4.equals(""))
 			yyerror("Procedimiento: " + val_peek(8).sval + " tiene el parametro real " + val_peek(2).sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	
 	}
 	else{
 		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3,aux4));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(val_peek(8).sval), compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).getAmbito());
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).getAmbito());
 
-		/*Par nomProc = new Par($1.sval); */
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).get(compilador.Compilador.tablaSimbolo.get(val_peek(8).sval).size()-1).getAmbito());
+		/*Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());*/
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
 	}
 
 	/*
-	setearAmbito($3.sval);
-	setearAmbito($5.sval);
-	setearAmbito($7.sval);
-
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setTipo("Proc");
 	compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).setCantParametros(3);
 	setearAmbito($1.sval);
-
-	ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(compilador.Compilador.tablaSimbolo.get($3.sval).get(compilador.Compilador.tablaSimbolo.get($3.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($5.sval).get(compilador.Compilador.tablaSimbolo.get($5.sval).size()-1).getAmbito(),compilador.Compilador.tablaSimbolo.get($7.sval).get(compilador.Compilador.tablaSimbolo.get($7.sval).size()-1).getAmbito()));
-	polaca.asignarParametros(parametrosInvocados, polaca.inicioProc($1.sval), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	
-	//mostrarMensaje("Llamada a procedimiento con 3 parametros en linea nro: " + compilador.Compilador.nroLinea);
-
-	//Par nomProc = new Par($1.sval); 
-	Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
-	Par call = new Par("CALL");
-	polaca.agregarPaso(nomProc);
-	polaca.agregarPaso(call);
-
-	//Compruebo que el nombre del llamador este al alcance y coincida con el numero de parametros del llamado
+	setearAmbito($3.sval);
+	setearAmbito($5.sval);
+	setearAmbito($7.sval);
 	int aux = sePuedeUsar($1.sval);
+	String aux2 = comprobarAlcance($3.sval); 
+	String aux3 = comprobarAlcance($5.sval);
+	String aux4 = comprobarAlcance($7.sval);
+
+	//Compruebo que el nombre del llamador este al alcance.
 	if(aux == 1 || aux == 2){
 		if(aux == 1){
 			//mostrarMensaje("Procedimiento: " + $1.sval + " No esta declarado.");
@@ -2002,41 +2025,42 @@ case 30:
 			yyerror("Procedimiento " + $1.sval + " esta Redeclarado. Error en linea: " + compilador.Compilador.nroLinea);
 		}
 	}
+	//Compruebo que el numero de parametros del llamado coincida con el llamador.
+	else if(!verificarCantParam($1.sval)){
+		//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
+		yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
+	//Compruebo que los parametros formales esten al alcance.
+	else if(aux2.equals("") || aux3.equals("") || aux4.equals("")){
+		if(aux2.equals(""))
+			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+		else if(aux3.equals(""))
+			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+		else
+			yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado o es el Id de una funcion. Error en linea: " + compilador.Compilador.nroLinea);
+	}
 	else{
-		if(!verificarCantParam($1.sval)){
-			//mostrarMensaje("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion.");
-			yyerror("Llamador del procedimiento: " + $1.sval + " no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
-		}
-	}
+		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3,aux4));
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito()), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 
-	//Compruebo que el parametro real se pueda usar
-	int aux2 = sePuedeUsar($3.sval);
-	int aux3 = sePuedeUsar($5.sval);
-	int aux4 = sePuedeUsar($7.sval);
-	if(aux2 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $3.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-	if(aux3 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $5.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
-	}
-	if(aux4 == 1){
-		//mostrarMensaje("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado.");
-		yyerror("Procedimiento: " + $1.sval + " tiene el parametro real " + $7.sval +  " No declarado. Error en linea: " + compilador.Compilador.nroLinea);
+		//Par nomProc = new Par($1.sval); 
+		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par call = new Par("CALL");
+		polaca.agregarPaso(nomProc);
+		polaca.agregarPaso(call);
 	}
 	*/
 
 }
 break;
 case 31:
-//#line 589 "gramatica.y"
+//#line 552 "gramatica.y"
 {
 	yyerror("Error: Cantidad no permitida de parametros, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 32:
-//#line 593 "gramatica.y"
+//#line 556 "gramatica.y"
 {
 	if (PolacaInversa.getFlagITE()){
 		polaca.completarPolaca(PolacaInversa.getRetrocesosITE());
@@ -2047,19 +2071,19 @@ case 32:
 }
 break;
 case 33:
-//#line 603 "gramatica.y"
+//#line 566 "gramatica.y"
 {
 	yyerror("Error: las palabras reservadas van en mayuscula, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 34:
-//#line 608 "gramatica.y"
+//#line 571 "gramatica.y"
 {
 	/*mostrarMensaje("Ciclo FOR en linea nro: " + compilador.Compilador.nroLinea);*/
 }
 break;
 case 35:
-//#line 614 "gramatica.y"
+//#line 577 "gramatica.y"
 {
 	if(!erroresFor()){
 		polaca.borrarVariablesControl();
@@ -2078,7 +2102,7 @@ case 35:
 }
 break;
 case 36:
-//#line 633 "gramatica.y"
+//#line 596 "gramatica.y"
 {
 	if(!erroresFor()){
 		polaca.borrarPasoPolaca();
@@ -2086,7 +2110,7 @@ case 36:
 }
 break;
 case 37:
-//#line 641 "gramatica.y"
+//#line 604 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -2096,7 +2120,7 @@ case 37:
 }
 break;
 case 38:
-//#line 651 "gramatica.y"
+//#line 614 "gramatica.y"
 {		
 	setearAmbito(val_peek(2).sval);
 	String aux = comprobarAlcance(val_peek(2).sval); 
@@ -2127,7 +2151,7 @@ case 38:
 }
 break;
 case 39:
-//#line 682 "gramatica.y"
+//#line 645 "gramatica.y"
 {	
 	erroresForAsignacion(compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(2).sval);
@@ -2149,7 +2173,7 @@ case 39:
 }
 break;
 case 40:
-//#line 702 "gramatica.y"
+//#line 665 "gramatica.y"
 {
 	
 	setearAmbito(val_peek(2).sval);
@@ -2190,7 +2214,7 @@ case 40:
 }
 break;
 case 41:
-//#line 741 "gramatica.y"
+//#line 704 "gramatica.y"
 {
 	setearAmbito(val_peek(2).sval);
 	String aux = comprobarAlcance(val_peek(2).sval); 
@@ -2221,7 +2245,7 @@ case 41:
 }
 break;
 case 42:
-//#line 772 "gramatica.y"
+//#line 735 "gramatica.y"
 {	
 	if(verficarCTEEnteras(val_peek(0).sval)){
 		polaca.agregarVariableControl("+");
@@ -2232,7 +2256,7 @@ case 42:
 }
 break;
 case 43:
-//#line 781 "gramatica.y"
+//#line 744 "gramatica.y"
 {
 	if(verficarCTEEnteras(val_peek(0).sval)){
 		polaca.agregarVariableControl("-");
@@ -2243,29 +2267,29 @@ case 43:
 }
 break;
 case 44:
-//#line 790 "gramatica.y"
+//#line 753 "gramatica.y"
 {
 	yyerror("Error: incremento/decremento mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 45:
-//#line 796 "gramatica.y"
+//#line 759 "gramatica.y"
 {
 }
 break;
 case 46:
-//#line 799 "gramatica.y"
+//#line 762 "gramatica.y"
 {
 }
 break;
 case 47:
-//#line 804 "gramatica.y"
+//#line 767 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(true);
 }
 break;
 case 48:
-//#line 808 "gramatica.y"
+//#line 771 "gramatica.y"
 {
 	PolacaInversa.setFlagITE(false); 
 	polaca.borrarPasoPolaca();
@@ -2275,27 +2299,27 @@ case 48:
 }
 break;
 case 49:
-//#line 818 "gramatica.y"
+//#line 781 "gramatica.y"
 {
 }
 break;
 case 50:
-//#line 821 "gramatica.y"
+//#line 784 "gramatica.y"
 {
 }
 break;
 case 51:
-//#line 824 "gramatica.y"
+//#line 787 "gramatica.y"
 {
 }
 break;
 case 52:
-//#line 827 "gramatica.y"
+//#line 790 "gramatica.y"
 {
 }
 break;
 case 53:
-//#line 833 "gramatica.y"
+//#line 796 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -2306,12 +2330,12 @@ case 53:
 }
 break;
 case 54:
-//#line 844 "gramatica.y"
+//#line 807 "gramatica.y"
 {
 }
 break;
 case 55:
-//#line 853 "gramatica.y"
+//#line 816 "gramatica.y"
 {	
 	erroresIfAsignacion(compilador.Compilador.nroLinea);
 	setearAmbito(val_peek(2).sval);
@@ -2328,7 +2352,7 @@ case 55:
 }
 break;
 case 56:
-//#line 868 "gramatica.y"
+//#line 831 "gramatica.y"
 {	
 	setearAmbito(val_peek(2).sval);
 	setearAmbito(val_peek(0).sval);
@@ -2356,7 +2380,7 @@ case 56:
 }
 break;
 case 57:
-//#line 894 "gramatica.y"
+//#line 857 "gramatica.y"
 {
 	setearAmbito(val_peek(2).sval);
 	String aux = comprobarAlcance(val_peek(2).sval); 
@@ -2373,7 +2397,7 @@ case 57:
 }
 break;
 case 58:
-//#line 914 "gramatica.y"
+//#line 877 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -2383,7 +2407,7 @@ case 58:
 }
 break;
 case 59:
-//#line 924 "gramatica.y"
+//#line 887 "gramatica.y"
 {
 	Par pasoEnBlanco = new Par(""); 
 	polaca.agregarPaso(pasoEnBlanco);
@@ -2394,22 +2418,22 @@ case 59:
 }
 break;
 case 60:
-//#line 935 "gramatica.y"
+//#line 898 "gramatica.y"
 {
 }
 break;
 case 61:
-//#line 940 "gramatica.y"
+//#line 903 "gramatica.y"
 {
 }
 break;
 case 62:
-//#line 943 "gramatica.y"
+//#line 906 "gramatica.y"
 {
 }
 break;
 case 63:
-//#line 948 "gramatica.y"
+//#line 911 "gramatica.y"
 {
 	setearAmbito(val_peek(3).sval);
 	String aux = comprobarAlcance(val_peek(3).sval); 
@@ -2450,62 +2474,62 @@ case 63:
 }
 break;
 case 64:
-//#line 987 "gramatica.y"
+//#line 950 "gramatica.y"
 {
 	yyerror("Error: identificador mal escrito, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 65:
-//#line 991 "gramatica.y"
+//#line 954 "gramatica.y"
 {
 	yyerror("Error: asignacion mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 66:
-//#line 997 "gramatica.y"
+//#line 960 "gramatica.y"
 {
 	Par suma =  new Par("+");
 	polaca.agregarPaso(suma);
 }
 break;
 case 67:
-//#line 1002 "gramatica.y"
+//#line 965 "gramatica.y"
 {
 	Par resta =  new Par("-");
 	polaca.agregarPaso(resta);
 }
 break;
 case 68:
-//#line 1007 "gramatica.y"
+//#line 970 "gramatica.y"
 {
 }
 break;
 case 69:
-//#line 1012 "gramatica.y"
+//#line 975 "gramatica.y"
 {
 	Par multi =  new Par("*");
 	polaca.agregarPaso(multi);
 }
 break;
 case 70:
-//#line 1017 "gramatica.y"
+//#line 980 "gramatica.y"
 { 
 	Par division =  new Par("/");
 	polaca.agregarPaso(division);
 }
 break;
 case 71:
-//#line 1022 "gramatica.y"
+//#line 985 "gramatica.y"
 {
 }
 break;
 case 72:
-//#line 1027 "gramatica.y"
+//#line 990 "gramatica.y"
 {
 }
 break;
 case 73:
-//#line 1030 "gramatica.y"
+//#line 993 "gramatica.y"
 { 
 	setearAmbito(val_peek(0).sval);
 	String aux = comprobarAlcance(val_peek(0).sval); 
@@ -2535,68 +2559,68 @@ case 73:
 }
 break;
 case 74:
-//#line 1060 "gramatica.y"
+//#line 1023 "gramatica.y"
 {
 }
 break;
 case 75:
-//#line 1063 "gramatica.y"
+//#line 1026 "gramatica.y"
 {
 }
 break;
 case 76:
-//#line 1066 "gramatica.y"
+//#line 1029 "gramatica.y"
 {
 }
 break;
 case 77:
-//#line 1069 "gramatica.y"
+//#line 1032 "gramatica.y"
 {
 }
 break;
 case 78:
-//#line 1072 "gramatica.y"
+//#line 1035 "gramatica.y"
 {
 }
 break;
 case 79:
-//#line 1075 "gramatica.y"
+//#line 1038 "gramatica.y"
 {
 }
 break;
 case 80:
-//#line 1078 "gramatica.y"
+//#line 1041 "gramatica.y"
 {
 	yyerror("Error: comparador no permitido, en linea nro: "+ compilador.Compilador.nroLinea);
 }
 break;
 case 81:
-//#line 1084 "gramatica.y"
+//#line 1047 "gramatica.y"
 {
 }
 break;
 case 82:
-//#line 1087 "gramatica.y"
+//#line 1050 "gramatica.y"
 {
 }
 break;
 case 83:
-//#line 1092 "gramatica.y"
+//#line 1055 "gramatica.y"
 {
 }
 break;
 case 84:
-//#line 1097 "gramatica.y"
+//#line 1060 "gramatica.y"
 {
 }
 break;
 case 85:
-//#line 1100 "gramatica.y"
+//#line 1063 "gramatica.y"
 {
 }
 break;
 case 86:
-//#line 1104 "gramatica.y"
+//#line 1067 "gramatica.y"
 {
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,false);
@@ -2632,13 +2656,13 @@ case 86:
 }
 break;
 case 87:
-//#line 1138 "gramatica.y"
+//#line 1101 "gramatica.y"
 {
 	/*yyerror("Error: constante positiva mal escrita, en linea nro: "+ compilador.Compilador.nroLinea);*/
 }
 break;
 case 88:
-//#line 1144 "gramatica.y"
+//#line 1107 "gramatica.y"
 {  
 	setearAmbito(val_peek(0).sval);
 	comprobarRango(val_peek(0).sval,true);
@@ -2676,7 +2700,7 @@ case 88:
 	*/
 }
 break;
-//#line 2603 "Parser.java"
+//#line 2627 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -193,7 +193,6 @@ public class GeneradorAssembler {
 	}
 	
 	private String generarCall(String nombreProc){
-		
 		String invocacion = "";
 		if (nombreProc.matches("[0-9]*"))
 			invocacion = plantillaCall.replace("F", "L"+nombreProc);
@@ -379,6 +378,8 @@ public class GeneradorAssembler {
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
+							this.code = this.code + generarCall(nProc);
+							/*
 							char separador = '@';
 							int posPrimerSeparador = nProc.indexOf("@");
 							String nombreABorrar = separador+nProc.substring(0,posPrimerSeparador);
@@ -395,6 +396,7 @@ public class GeneradorAssembler {
 								String ultraInstintoNombre = nombreDefinitivo.substring(1, principioIdDemas);
 								this.code = this.code + generarCall(ultraInstintoNombre);
 							}
+							*/
 						}
 						if (elemento.equals("BI")) {
 							String salto = pila.pop();
