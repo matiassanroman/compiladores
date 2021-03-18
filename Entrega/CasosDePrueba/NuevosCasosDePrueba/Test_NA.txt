@@ -1,0 +1,29 @@
+%% NA CORRECTO
+PROC a1() NA=5_i, NS=2_i { 
+	PROC b1() NA=3_i, NS=2_i {
+		FLOAT id1;
+		id1 = 2_i;
+		PROC b1() NA=2_i, NS=2_i {
+			FLOAT id1;
+			id1 = 2_i;
+		}
+	}
+	PROC c1() NA=4_i, NS=2_i {
+		FLOAT id1;
+	}
+}
+
+%% NA INCORRECTO
+PROC a2() NA=5_i, NS=2_i { 
+	PROC b2() NA=3_i, NS=2_i {
+		FLOAT id1;
+		id1 = 2_i;
+		PROC b2() NA=3_i, NS=2_i {
+			FLOAT id1;
+			id1 = 2_i;
+		}
+	}
+	PROC c2() NA=5_i, NS=2_i {
+		FLOAT id1;
+	}
+}

@@ -1,0 +1,8 @@
+INTEGER i;
+FLOAT f;
+
+i = -20_i;
+f = i + 20_i;
+
+
+f = -20_i + 20_i;

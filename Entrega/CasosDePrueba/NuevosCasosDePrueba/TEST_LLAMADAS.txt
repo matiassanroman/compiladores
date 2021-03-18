@@ -1,0 +1,37 @@
+INTEGER i;
+FLOAT f;
+
+PROC a(INTEGER ii, FLOAT ff) NA=5_i, NS=3_i{
+	PROC b(FLOAT ff) NA=4_i, NS=9_i{
+		PROC c(FLOAT ii) NA=3_i, NS=9_i{
+			PROC d() NA=2_i, NS=9_i{
+				PROC e(FLOAT ff) NA=1_i, NS=9_i{
+					OUT("A");
+				}
+				e(ii);
+			}
+		}
+	}
+}
+
+PROC b(FLOAT ff) NA=4_i, NS=9_i{
+		PROC c(FLOAT ii) NA=3_i, NS=9_i{
+			PROC d1() NA=2_i, NS=9_i{
+				PROC e(FLOAT ff) NA=1_i, NS=9_i{
+					OUT("A");
+				}
+				e(ii);
+			}
+		}
+		PROC d2(FLOAT ii) NA=3_i, NS=9_i{
+			OUT("A");
+		}
+		c(ff);
+		PROC d3(FLOAT ii) NA=3_i, NS=9_i{
+			OUT("A");
+		}
+		c(ff);
+}
+
+a(i,f);
+b(f);

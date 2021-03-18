@@ -1,0 +1,35 @@
+FLOAT ax;
+FLOAT h;
+
+PROC a(INTEGER id1) NA=0_i , NS=0_i {
+	ax=45_i+h;
+}
+
+
+
+PROC f3(INTEGER id4, INTEGER id5, INTEGER id6) NA=1_i , NS=1_i {
+	FLOAT ax2;
+	
+	PROC f1(INTEGER id2, INTEGER id3) NA=0_i , NS=1_i {
+		FLOAT ax1;
+		ax2 = 20_i*ax2;
+	}
+}
+
+PROC b() NA = 2_i, NS = 3_i{
+	FLOAT c;
+	PROC d() NA = 1_i, NS = 4_i{
+		FLOAT e;
+		PROC f() NA = 0_i, NS = 4_i{
+			FLOAT g;
+			c = c + g + e + h;
+			%%f3(c, d, e); 
+			f1(c, e); 
+		}
+	}
+}
+
+
+b();
+d(); 
+f();

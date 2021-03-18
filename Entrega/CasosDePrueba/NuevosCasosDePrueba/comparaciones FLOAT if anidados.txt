@@ -1,0 +1,30 @@
+FLOAT a,b,c;
+
+OUT("FLOTANTES");
+
+a=1.;
+b=1.;
+c=1.;
+
+c=a+b;
+IF(c==2.)
+    OUT("OK");
+  ELSE
+  {
+    IF (c>=2.)
+	  IF (c>2.)
+        OUT("MAYOR");    
+	  ELSE
+        OUT("IGUAL");
+      END_IF
+	END_IF
+    IF (c<=2.)
+	  IF (c<2.)
+        OUT("MENOR");    
+	  ELSE
+        OUT("IGUAL");
+      END_IF
+	END_IF
+  }
+END_IF
+

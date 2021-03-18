@@ -1,0 +1,15 @@
+INTEGER jj;
+
+INTEGER i;
+
+FOR(i=0_i; i<5_i; UP 2_i){
+			OUT("for 1");
+}
+
+FOR(i=0_i; i<5_i; UP 2_i){
+	OUT("for 2");
+}
+
+FOR(i=0_i; i<5_i; UP 2_i){
+	OUT("for 3");
+}

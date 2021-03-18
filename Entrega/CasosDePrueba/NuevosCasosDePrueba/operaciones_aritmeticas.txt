@@ -1,0 +1,26 @@
+
+INTEGER a,b,c;
+
+OUT("ENTERAS");
+
+c=a+b;
+c=a-b;
+c=a*b;
+c=a/b;
+c=a-c*a/c+a;
+
+OUT("FLOTANTES");
+
+FLOAT x,y,z;
+z=x+y;
+z=x-y;
+z=x*y;
+z=x/y;
+z=y-z*x/z+x;
+
+OUT("CON CONVERSIONES");
+
+z=a+b;
+y=z-b;
+y=a*z;
+x=x/y;

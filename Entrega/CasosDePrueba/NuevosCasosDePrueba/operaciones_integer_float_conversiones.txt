@@ -1,0 +1,35 @@
+
+INTEGER i1,i2,i3;
+
+FLOAT f1, f2, f3;
+
+i3=20_i;
+i1 = -20_i + 21_i;
+
+i2 = 22_i;
+
+f1 = i1 - i2;
+
+f2 = 20_i;
+
+f2 = f1 * -22_i;
+
+f3 = 1. + f2;
+
+INTEGER a,b,c;
+c=a+b;
+c=a-b;
+c=a*b;
+c=a/b;
+
+FLOAT x,y,z;
+z=x+y;
+z=x-y;
+z=x*y;
+z=x/y;
+
+
+z=a+b;
+c=z-b;
+c=a*z;
+a=x/y;

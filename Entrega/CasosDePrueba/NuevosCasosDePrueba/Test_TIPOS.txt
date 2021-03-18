@@ -1,0 +1,49 @@
+INTEGER i1,i2;
+FLOAT f1, f2;
+
+%% ASIGNACIONES CORRECTAS
+
+i1 = i1 + i2;
+f1 = f2;
+f1 = i1 + f1 + f2;
+
+
+PROC a1(INTEGER i1) NA=5_i, NS=2_i {
+	i1 = i1 + i2;
+}
+
+PROC a2(INTEGER i1, FLOAT f1) NA=5_i, NS=2_i {
+	f1 = i1 + 10_i + 1.5f+3;
+}
+
+PROC a3(INTEGER i1, FLOAT f1, FLOAT f2) NA=5_i, NS=2_i {
+	f2 = f1 + i1 + i2;
+}
+
+a1(i1);
+a2(i2,f2);
+a3(i2,f2,f1);
+
+%% ASIGNACIONES INCORRECTAS LA E DE ERROR
+
+INTEGER i1e, i2e;
+FLOAT f1e, f2e;
+
+PROC a1e(INTEGER i1e) NA=5_i, NS=2_i {
+	i1e = i1e + 10.5f+3;
+}
+
+PROC a2e(INTEGER i1e, FLOAT f1e) NA=5_i, NS=2_i {
+	i1e = f1e;
+}
+
+PROC a3e(INTEGER i1e, INTEGER i2e, INTEGER i3e) NA=5_i, NS=2_i {
+	i2e = f1e + i1e + i3e;
+}
+
+i1e = i2e + f1e;
+i2e = f2e;
+
+a1e(f1e);
+a2e(f2e,i2e);
+a3e(f2e,f2e,f1e);

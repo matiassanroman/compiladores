@@ -1,0 +1,78 @@
+
+INTEGER a,b,c;
+
+OUT("ENTERAS");
+
+a=1_i;
+b=1_i;
+c=1_i;
+
+c=a+b;
+IF(c==2_i)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+c=a-b;
+IF(c==0_i)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+c=a*b;
+IF(c==1_i)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+c=a/b;
+IF(c==1_i)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+OUT("FLOTANTES");
+
+FLOAT x,y,z;
+x=1.;
+y=1.;
+z=1.;
+
+z=x+y;
+IF(z==2.)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+z=x-y;
+IF(z==0.)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+z=x*y;
+IF(z==1.)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+z=x/y;
+IF(z==1.)
+  OUT("OK");
+  ELSE
+  OUT("MAL");
+END_IF
+
+OUT("CON CONVERSIONES");
+
+z=a+b;
+y=z-b;
+y=a*z;
+x=x/y;

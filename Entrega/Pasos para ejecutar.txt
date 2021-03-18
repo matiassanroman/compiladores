@@ -1,5 +1,7 @@
 1) Ir a la ruta del jar y poner el siguiente comando en cmd:
 
-java -jar Compilador.jar C:\Users\USUARIO\Desktop\Compiladores\Proyecto\compiladores\Entrega\CasosDePrueba\archivo.txt
+java -jar Compilador.jar C:\Users\USUARIO\Desktop\Compiladores\Proyecto\compiladores\Entrega\CasosDePrueba\NuevosCasosDePrueba\TEST_AMBITO_DE_VARIABLE.txt
 
-2)La Tabla de Simbolos se genera en la ruta donde se encuentra el jar
+2)La Tabla de Simbolos se genera en la ruta donde se encuentra el jar.
+
+2.1) El .asm con su correspondiente nombre tambien se genera en la ruta donde se encuentra el jar.

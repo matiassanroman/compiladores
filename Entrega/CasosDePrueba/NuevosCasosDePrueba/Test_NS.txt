@@ -1,0 +1,73 @@
+INTEGER i1,i2;
+
+%% NS CORRECTO -> TODOS LOCALES
+PROC a1() NA=5_i, NS=2_i {
+	INTEGER i1,i2;
+	i1 = i2;
+	PROC b1() NA=3_i, NS=2_i {
+		INTEGER i1,i2;
+		i1 = i2;	
+		PROC b1() NA=2_i, NS=2_i {
+			INTEGER i1,i2;
+			i1 = i2;
+		}
+	}
+	PROC c1() NA=4_i, NS=2_i {
+		INTEGER i1,i2;
+		i1=i2;
+	}
+}
+
+%% NS CORRECTO -> TODOS DE A2
+PROC a2() NA=5_i, NS=2_i {
+	INTEGER i1,i2;
+	i1 = i2;
+	PROC b2() NA=3_i, NS=2_i {
+		%%INTEGER i1,i2;
+		i1 = i2;	
+		PROC b2() NA=2_i, NS=2_i {
+			%%INTEGER i1,i2;
+			i1 = i2;
+		}
+	}
+	PROC c2() NA=4_i, NS=2_i {
+		%%INTEGER i1,i2;
+		i1=i2;
+	}
+}
+
+%% NS CORRECTO -> TODOS DE MAIN SALVO A3 QUE TOMA LOCAL
+PROC a3() NA=5_i, NS=0_i {
+	INTEGER i1,i2;
+	i1 = i2;
+	PROC b3() NA=3_i, NS=2_i {
+		%%INTEGER i1,i2;
+		i1 = i2;	
+		PROC b3() NA=2_i, NS=2_i {
+			%%INTEGER i1,i2;
+			i1 = i2;
+		}
+	}
+	PROC c3() NA=4_i, NS=2_i {
+		%%INTEGER i1,i2;
+		i1=i2;
+	}
+}
+
+%% NS CORRECTO -> A4 TOMA LOCAL Y C4 LOCAL DE A4. B4 TOMA LOCAL Y B4 TOMA DE SU PADRE B4.
+PROC a4() NA=5_i, NS=1_i {
+	INTEGER i1,i2;
+	i1 = i2;
+	PROC b4() NA=3_i, NS=1_i {
+		INTEGER i1,i2;
+		i1 = i2;	
+		PROC b4() NA=2_i, NS=2_i {
+			%%INTEGER i1,i2;
+			i1 = i2;
+		}
+	}
+	PROC c4() NA=4_i, NS=2_i {
+		%%INTEGER i1,i2;
+		i1=i2;
+	}
+}
