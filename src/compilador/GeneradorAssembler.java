@@ -236,6 +236,7 @@ public class GeneradorAssembler {
 	public String generarInvocacion(String label){
 		String abominacion = plantillaEtiqueta;
 		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
+		
 		return abominacion;
 	}
 		
@@ -366,7 +367,7 @@ public class GeneradorAssembler {
 				this.main = this.main + generarInvocacion(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarInvocacion(elemento); //AGREGA INVOCAION AL PROCEDIMIENTO DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -374,8 +375,8 @@ public class GeneradorAssembler {
 						pila.add(elemento);
 					if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
-								String cadena = pila.pop();
-								this.code = this.code + generarMensajePorPantalla(cadena);
+							String cadena = pila.pop();
+							this.code = this.code + generarMensajePorPantalla(cadena);
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
@@ -418,7 +419,11 @@ public class GeneradorAssembler {
 							// generar comparacion
 							generarComparadoresProc(salto, elemento, operando1, operando2);
 							// generar salto
-							this.code  =this.code + generarCall(salto);
+							
+							//this.code =this.code + generarCall(salto);
+							
+							System.out.println("1-->ELEMENTO: "+elemento);
+							System.out.println("1-->CODIGO: "+saltoDeLinea+this.code);
 						}
 					}
 					if (elemento.charAt(0) == 'L') {
@@ -432,8 +437,8 @@ public class GeneradorAssembler {
 		}
 	}
 
-	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACION DE ASSEMBLER /////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	private void generarAritmetica(String operador) {
 		///////////////////////////////////////////////////// revisar este metodo para lo controles del tp4
@@ -863,6 +868,8 @@ public class GeneradorAssembler {
 					///// la sig 2 lineas pueden no ir
 					if (operando1.charAt(0) =='-')
 						operando1 = operando1.replace("-", "__");
+					else if (Character.isDigit(operando1.charAt(0)))
+							operando1 = "_"+operando1;
 					//////////////////////////////////////////
 					codigo = codigo.replace("OP1", operando1);
 				}
