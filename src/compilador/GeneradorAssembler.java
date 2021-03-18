@@ -235,6 +235,7 @@ public class GeneradorAssembler {
 	public String generarInvocacion(String label){
 		String abominacion = plantillaEtiqueta;
 		abominacion = abominacion.replace("ETIQUETA", label.replace("PROC ", ""));
+		
 		return abominacion;
 	}
 		
@@ -365,7 +366,7 @@ public class GeneradorAssembler {
 				this.main = this.main + generarInvocacion(elemento);
 			}
 			if (elemento.contains(PROC)) {                            // Si el PROC. agrego todo ese codigo con su nombre de pro en la seccion .code
-				this.code = this.code + generarInvocacion(elemento);				  //AGREGA INVOCAION AL PROCEDIMIENTO DESDE DESDE EL MAIN
+				this.code = this.code + generarInvocacion(elemento); //AGREGA INVOCAION AL PROCEDIMIENTO DESDE EL MAIN
 				i++;
 				while (listaPolaca.get(i).getValor() != "RET") {  	  // mientras no llegue RET agrego todo ese codigo a la funcion en el code
 					elemento = listaPolaca.get(i).getValor();
@@ -373,8 +374,8 @@ public class GeneradorAssembler {
 						pila.add(elemento);
 					if (operadoresUnarios.contains(elemento)) {    // Si es un operador unario
 						if (elemento.equals("OUT")) {              // Si es OUT generar mensaje
-								String cadena = pila.pop();
-								this.code = this.code + generarMensajePorPantalla(cadena);
+							String cadena = pila.pop();
+							this.code = this.code + generarMensajePorPantalla(cadena);
 						}
 						if (elemento.equals("CALL")){              // Si es CALL generar llamado
 							String nProc = pila.pop();
@@ -420,7 +421,8 @@ public class GeneradorAssembler {
 							// generar comparacion
 							generarComparadoresProc(salto, elemento, operando1, operando2);
 							// generar salto
-							this.code  =this.code + generarCall(salto);
+							
+							//this.code =this.code + generarCall(salto);
 						}
 					}
 					if (elemento.charAt(0) == 'L') {
@@ -434,8 +436,8 @@ public class GeneradorAssembler {
 		}
 	}
 
-	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACIKON DE ASSEMBLER /////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////// FIN METODO PRINCIPAL DE GENERACION DE ASSEMBLER /////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	private void generarAritmetica(String operador) {
 		///////////////////////////////////////////////////// revisar este metodo para lo controles del tp4
@@ -523,7 +525,7 @@ public class GeneradorAssembler {
 				if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@")) {
 					if (operando1.charAt(0) != '_') {
 						if (operando1.charAt(0) == '-')
-							operando1 = "__"+operando1;
+							operando1 = operando1.replace("-", "__");
 						else
 							operando1 = "_"+operando1;
 					}
@@ -865,6 +867,8 @@ public class GeneradorAssembler {
 					///// la sig 2 lineas pueden no ir
 					if (operando1.charAt(0) =='-')
 						operando1 = operando1.replace("-", "__");
+					else if (Character.isDigit(operando1.charAt(0)))
+							operando1 = "_"+operando1;
 					//////////////////////////////////////////
 					codigo = codigo.replace("OP1", operando1);
 				}
@@ -1239,7 +1243,6 @@ public class GeneradorAssembler {
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
@@ -1317,8 +1320,9 @@ public class GeneradorAssembler {
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
 				//// CORECCION DE ALGUNOS GUIONES BAJOS QUE NO APARACIAN
-				if (Character.isDigit(operando2.charAt(0)))
-					operando2 = "_"+operando2;
+				
+//				if (Character.isDigit(operando2.charAt(0)))
+//					operando2 = "_"+operando2;
 				////////////////////////////////////////////////////////
 				this.code = this.code + generarAsignacion(operando2, operando1, 1);
 			}
@@ -1799,6 +1803,7 @@ public class GeneradorAssembler {
 		if (caso ==1) {
 			// Convertir lado derecho
 			// GENERACION DE CODIGO
+			
 			String linea1 = plantillaAsignacion;
 			String linea2 = plantillaCargaCompFLOAT;
 			linea1 = linea1.replace("MOV XX, OP1"+saltoDeLinea, "");
@@ -1808,7 +1813,7 @@ public class GeneradorAssembler {
 			linea1 = linea1.replace("OP1", operando1);
 			if (operando1.charAt(0)=='-')
 				operando1 = operando1.replace("-", "__");
-			if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@"))
+			if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@")&&(operando1.charAt(0) != '_'))
 				operando1 = "_"+operando1;
 			linea2 = linea2.replace("carga", "FILD");
 			linea2 = linea2.replace("op1", operando1);
