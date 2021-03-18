@@ -423,9 +423,6 @@ public class GeneradorAssembler {
 							// generar salto
 							
 							//this.code =this.code + generarCall(salto);
-							
-							System.out.println("1-->ELEMENTO: "+elemento);
-							System.out.println("1-->CODIGO: "+saltoDeLinea+this.code);
 						}
 					}
 					if (elemento.charAt(0) == 'L') {
@@ -528,7 +525,7 @@ public class GeneradorAssembler {
 				if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@")) {
 					if (operando1.charAt(0) != '_') {
 						if (operando1.charAt(0) == '-')
-							operando1 = "__"+operando1;
+							operando1 = operando1.replace("-", "__");
 						else
 							operando1 = "_"+operando1;
 					}
@@ -1246,7 +1243,6 @@ public class GeneradorAssembler {
 		String operando2 = pila.pop();
 		String codigo = "";
 		String operador = "";
-
 		//I(OPERANDO 2) = J (OPERANDO 1)
 		// SITACION 1 - OPERANDO 1 (REG/AUX) Y OPERANDO 2 (VAR)
 		if(this.getSimbolo(operando2) == null && this.getSimbolo(operando1) != null){
@@ -1324,8 +1320,9 @@ public class GeneradorAssembler {
 			//CONVERSION - OPERANDO 1 VAR(INTEGER) Y OPERANDO 2 VAR(FLOAT)
 			else if(this.getSimbolo(operando2).getTipoParametro().equals("INTEGER") && this.getSimbolo(operando1).getTipoParametro().equals("FLOAT") ) {
 				//// CORECCION DE ALGUNOS GUIONES BAJOS QUE NO APARACIAN
-				if (Character.isDigit(operando2.charAt(0)))
-					operando2 = "_"+operando2;
+				
+//				if (Character.isDigit(operando2.charAt(0)))
+//					operando2 = "_"+operando2;
 				////////////////////////////////////////////////////////
 				this.code = this.code + generarAsignacion(operando2, operando1, 1);
 			}
@@ -1806,6 +1803,7 @@ public class GeneradorAssembler {
 		if (caso ==1) {
 			// Convertir lado derecho
 			// GENERACION DE CODIGO
+			
 			String linea1 = plantillaAsignacion;
 			String linea2 = plantillaCargaCompFLOAT;
 			linea1 = linea1.replace("MOV XX, OP1"+saltoDeLinea, "");
@@ -1815,7 +1813,7 @@ public class GeneradorAssembler {
 			linea1 = linea1.replace("OP1", operando1);
 			if (operando1.charAt(0)=='-')
 				operando1 = operando1.replace("-", "__");
-			if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@"))
+			if (!operando1.contains("X") && (operando1.charAt(0) != '@') && !operando1.contains("@")&&(operando1.charAt(0) != '_'))
 				operando1 = "_"+operando1;
 			linea2 = linea2.replace("carga", "FILD");
 			linea2 = linea2.replace("op1", operando1);

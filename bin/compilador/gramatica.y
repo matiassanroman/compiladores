@@ -270,8 +270,8 @@ sentenciaEjecutable : asignacion
 		yyerror("Procedimiento: " + $1.sval + " No esta declarado o no coincide con la cantidad de parametros de su definicion. Error en linea: " + compilador.Compilador.nroLinea);
 	}
 	else{
-		//Par nomProc = new Par($1.sval); 
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
@@ -328,9 +328,11 @@ sentenciaEjecutable : asignacion
 	}
 	else{
 		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito(),1), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito(),1), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
@@ -403,10 +405,10 @@ sentenciaEjecutable : asignacion
 	}
 	else{
 		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito(),2), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 
-		//Par nomProc = new Par($1.sval); 
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
@@ -487,10 +489,10 @@ sentenciaEjecutable : asignacion
 	}
 	else{
 		ArrayList<String> parametrosInvocados = new ArrayList<String>(Arrays.asList(aux2,aux3,aux4));
-		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito(),3), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		polaca.asignarParametros(parametrosInvocados, polaca.inicioProc(alcanceProc), compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
 
-		//Par nomProc = new Par($1.sval); 
-		Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		//Par nomProc =  new Par(compilador.Compilador.tablaSimbolo.get($1.sval).get(compilador.Compilador.tablaSimbolo.get($1.sval).size()-1).getAmbito());
+		Par nomProc =  new Par(alcanceProc);
 		Par call = new Par("CALL");
 		polaca.agregarPaso(nomProc);
 		polaca.agregarPaso(call);
